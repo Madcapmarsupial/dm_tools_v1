@@ -1,0 +1,3 @@
+class Roll < ApplicationRecord
+  
+end
