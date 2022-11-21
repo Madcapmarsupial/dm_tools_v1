@@ -57,4 +57,6 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+    config.hosts << "bitter-pants-dance-136-25-17-82.loca.lt"
+
 end

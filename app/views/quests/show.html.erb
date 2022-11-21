@@ -1,17 +1,30 @@
- 
- <h1>Villain</h1>
-   <ul>
-    <%= @quest.villain%>
-  </ul>
-<h1>Objective</h1>
-  <ul>
-    <%= @quest.objective%>
-  </ul>
-<h1>Location</h1>
-  <ul>
-    <%= @quest.location%>
-  </ul>
-<h1>Timer</h1>
-  <ul>
-    <%= @quest.timer%>
-  </ul>
+<h3>show action</h3>
+<h1><%= @quest.id %></h1>
+<p><%= @quest.attributes.values.join(" ") %></p>
+
+<p><%=@quest.objective%></p>
+<p>In The <%=@quest.location%></p>
+<p>Before The <%=@quest.timer%></p>
+<p>Villain <%=@quest.villain%></p><br><br>
+
+
+<p><%=params%></p>
+<p><%= link_to "Save Quest", quest_path, :method => :post %></p>
+<p><%= link_to "Back to Quest builder", edit_quest_path(@quest.id)%></p>
+<p><%= link_to "Home", quests_path%></p>
+
+
+<%= form_with model: @quest do |form| %>
+
+  <div>
+   
+    <!-- #<%= form.select(:villain_mod, options_for_select([['Defeat the', 1], ['Escape the', 2]])) %> -->
+    <%=form.text_field :villain %><br>
+    <%=form.text_field :location %><br>
+    <%=form.text_field :objective %><br>
+    <%=form.text_field :timer %><br>
+    <%= form.submit %> 
+
+  </div>
+
+<% end %>

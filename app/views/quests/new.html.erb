@@ -1,0 +1,38 @@
+<h3>New Quest</h3>
+<%= form_with model: @quest do |form| %>
+  <div>
+    <p> <%= link_to "Roll All", new_quest_path('quest' => @quest.get_except('all'))%></p>  
+    <%=form.text_field :villain %><br>
+    <%=form.text_field :location %><br>
+    <%=form.text_field :objective %><br>
+    <%=form.text_field :timer %><br>
+    <!-- #<%= link_to 'update', new_quest_path('quest' => {"location" => :location} ) %>-->
+
+    <div>
+      <p><%= link_to "Roll-Villain", new_quest_path('quest' => @quest.get_except('villain') )%></p>  
+      <%=form.label 'Villain (defeat)'%>
+      <li><%=@quest.villain%></li> 
+
+      <p> <%= link_to "Roll-Location", new_quest_path('quest' => @quest.get_except('location'))%></p>
+      <%=form.label 'Location (within)'%>
+      <li><%=@quest.location %></li>
+
+      <p> <%= link_to "Roll-Objective", new_quest_path('quest' => @quest.get_except('objective'))%></p>  
+      <%=form.label 'Objective (complete)'%>
+      <li><%=@quest.objective %></li>
+
+      <p> <%= link_to "Roll-Timer", new_quest_path('quest' => @quest.get_except('timer'))%></p>  
+      <%=form.label 'Timer (before)'%>
+      <li><%=@quest.timer %></li>
+      
+     <!-- <%=form.submit 'Save Quest' %> -->
+
+    </div>
+
+   
+  </div>
+
+  <%=link_to 'Clear'%><br>
+  <%=link_to 'Home', quests_path()%>
+    
+<% end %>
