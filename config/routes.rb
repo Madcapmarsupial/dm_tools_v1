@@ -4,24 +4,26 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
    #root "quests#index"
 
-   #get '/quests', to: 'quests#index'
+   resources :quests, only: [:create, :show] do 
+      resources :fields, only: [:new, :index]
+      member do
+        get 'fields/new_setting'
+      end
+   end
 
+  resources :fields, only: [:show, :create, :update, :destroy] do
+    resources :traits, only: [ :new, :index]
+    member do 
+      
+      patch 'set_place'
+      #villain
+      patch 'edit'
+     
+    end
+  end
 
-   #get '/quests', to: 'quests#show'
+  resources :traits, only: [:show, :edit, :update, :create]
 
-
-   root "quests#index"
-
-   get "/quests/reroll(.:format)", to: "quests#reroll"
-
-   resources :quests 
-  #  do 
-  #  member do 
-  #   patch :reroll
-  #   put :reroll
-  #  end
-  #end
-   
 end
 
 
