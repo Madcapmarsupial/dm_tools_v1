@@ -1,0 +1,18 @@
+<h1><%= @field.value %></h1>
+<h2>Field Show</h2>
+
+<!-- <%# this should hold the fields that have been set
+have a link to the next step
+and a custom field %> -->
+
+
+<%= @field.attributes %> <br>
+<p><%=params%></p>
+
+
+<!--<%# we need to point to villain next %>-->
+
+
+<%= link_to 'Another New Field', new_quest_field_url(:quest_id =>@field.quest_id) %>
+<%= link_to 'new trait', new_field_trait_url(@field) %>
+<!-- <%#= link_to 'quest-over', quest_url(@field.quest_id) %> -->

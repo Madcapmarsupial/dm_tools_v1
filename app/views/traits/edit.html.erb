@@ -1,0 +1,57 @@
+#BLANK TEMPLATE THAT WILL be filled out and updated
+
+
+
+
+
+
+<%= form_with model: @trait do |form| %>
+<h1><%=@trait.label%></h1>
+  <div>
+   
+    <%= form.text_area :edge %>
+  </div>
+
+  <div>
+  
+    <%=link_to 'next', @trait, method: 'patch' %>
+
+
+    <%= form.submit %>
+  </div>
+<% end %>
+
+
+<form action="/traits" method="patch">
+
+  <label for="edge">Edge</label>
+  <input id="edge" type="text" name="edge">
+
+  <!-- <%# #these will then be passed into params %> -->
+  <input type="hidden" name="trait[feild_id]" value="">
+  <input type="hidden" name="trait[label]" value="">
+
+
+
+    <!-- <%# what ever is entered under the
+    Label 'Edge' will be passed into 
+    params with 'edge' as a key %> -->
+
+
+  <input type="submit" value="save trait">
+  <!-- so this sends data to the create action -->
+</form>
+
+
+
+  <label for="edge">Edge</label>
+  <input id="edge" type="text" name="villain[edge]">
+   
+  <label for="goal">Goal</label>
+  <input id="goal" type="text" name="villain[goal]">
+  
+  <input type="submit" value="save trait">
+  
+  <!-- so this sends data to the create action -->
+  <!-- so this sends data to the create action -->
+</form>

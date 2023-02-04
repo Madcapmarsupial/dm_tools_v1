@@ -1,0 +1,30 @@
+
+
+<!-- <%# this should hold the fields that have been set
+have a link to the next step
+and a custom field %> -->
+
+<%next_label = @queue[@pointer]%>
+
+<h1>Field <%=@pointer%>  new </h1>
+
+
+<p>this field --> <%=@pointer%></p>
+<p>next field --> <%=next_label%></p>
+
+<%= @field.attributes %> <br>
+<%= @field.label %>
+
+<p>the params will be nill because they are automatically set and are hidden</p>
+ <p><%=params%></p> <br>
+
+
+<form action="/fields" method="post">
+<input type="hidden" name="field[label]" value="<%=@pointer%>">
+<input type="hidden" name="field[quest_id]" value="<%=@field.quest_id%>">
+
+<h3><%=@field.label%></h3><br>
+<label for="value">input a value</label> 
+	<input id="value" type="text" name="field[value]">
+	<input type="submit">
+</form>

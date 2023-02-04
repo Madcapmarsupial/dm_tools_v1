@@ -1,0 +1,20 @@
+<h1>'New' Trait for <%=@field.value%></h1>
+
+<!-- <%# this should hold the fields that have been set
+have a link to the next step
+and a custom field %> -->
+
+<%= @trait.attributes %> <br>
+ <p><%=params%></p> <br>
+
+<form action="/traits" method="post">
+<input type="hidden" name="trait[label]" value="<%=@trait.label%>">
+<input type="hidden" name="trait[field_id]" value="<%=@trait.field_id%>">
+
+<h3><%=@trait.label%></h3><br>
+
+	<label for="value">input a value</label> 
+	<input id="value" type="text" name="trait[value]">
+	<input type="submit"> <br>
+  <%= link_to 'back', field_url(@field) %>
+</form>

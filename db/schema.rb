@@ -10,14 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_13_014103) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_21_035101) do
+  create_table "fields", force: :cascade do |t|
+    t.integer "quest_id"
+    t.string "value"
+    t.string "label"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quest_id"], name: "index_fields_on_quest_id"
+  end
+
   create_table "quests", force: :cascade do |t|
-    t.string "villain"
-    t.string "timer"
-    t.string "objective"
-    t.string "location"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  create_table "traits", force: :cascade do |t|
+    t.integer "field_id"
+    t.string "label"
+    t.string "value"
+    t.text "note"
+  end
+
+  add_foreign_key "fields", "quests"
+  add_foreign_key "traits", "fields"
 end
