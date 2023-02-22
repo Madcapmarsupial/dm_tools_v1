@@ -1,5 +1,5 @@
-<h1><%= @field.value %></h1>
 <h2>Field Show</h2>
+<h1><%= @field.value %></h1>
 
 <!-- <%# this should hold the fields that have been set
 have a link to the next step
@@ -9,10 +9,39 @@ and a custom field %> -->
 <%= @field.attributes %> <br>
 <p><%=params%></p>
 
+<ul>
+<% @traits.each do |trait| %>
+  <li><%= link_to "#{trait.label}", trait_url(trait) %></li>
+<% end %>
+</ul>
+
+
+
+<!--only show this if queue is empty-->
+
+<form action="<%=quest_url(@field.quest_id)%>" method="get">
+  <input type="submit" value="Go to Quest">
+</form> 
+
+
 
 <!--<%# we need to point to villain next %>-->
 
 
-<%= link_to 'Another New Field', new_quest_field_url(:quest_id =>@field.quest_id) %>
+
+<!--
+turn this into a partial and only render the link to the next field if 
+the trait queue is empty
+
+Link -> Next Field
+<%#= link_to 'Another New Field', new_quest_field_url(:quest_id =>@field.quest_id) %>
+
+ -->
+
+
+<%#= link_to 'Another New Field', new_quest_field_url(:quest_id =>@field.quest_id) %>
+
+
+
 <%= link_to 'new trait', new_field_trait_url(@field) %>
 <!-- <%#= link_to 'quest-over', quest_url(@field.quest_id) %> -->

@@ -1,30 +1,61 @@
-<h3>show action</h3>
-<h1><%= @quest.id %></h1>
-<p><%= @quest.attributes.values.join(" ") %></p>
-
-<p><%=@quest.objective%></p>
-<p>In The <%=@quest.location%></p>
-<p>Before The <%=@quest.timer%></p>
-<p>Villain <%=@quest.villain%></p><br><br>
+<h1>Quest Show</h1>
 
 
-<p><%=params%></p>
-<p><%= link_to "Save Quest", quest_path, :method => :post %></p>
-<p><%= link_to "Back to Quest builder", edit_quest_path(@quest.id)%></p>
-<p><%= link_to "Home", quests_path%></p>
+
+ <p><%=params%></p>
+
+<label>Response Fields</label>
+ <ul>
+  <li><%= @response.get("scenario_name")%></li>
+  <li><%= @response.get("description")%></li>
+  <li><%= @response.get("villain")%></li>
+  <li><%= @response.get("objective")%></li>
+  <li><%= @response.get("timer")%></li>
+  <li><%= @response.get("setting")%></li>
+  <li><%= @response.get("plot_twist")%></li><br>
 
 
-<%= form_with model: @quest do |form| %>
+  <label>Encounters</label>
+    <%@response.encounters_array.each do |encounter| %>
+    <li><%=encounter%></li> 
 
-  <div>
-   
-    <!-- #<%= form.select(:villain_mod, options_for_select([['Defeat the', 1], ['Escape the', 2]])) %> -->
-    <%=form.text_field :villain %><br>
-    <%=form.text_field :location %><br>
-    <%=form.text_field :objective %><br>
-    <%=form.text_field :timer %><br>
-    <%= form.submit %> 
 
-  </div>
+      <form action="<%=update_encounter_name_quest_url(@quest)%>" method="post"> <!--updates the response string quest/id/ -> update_response -->
+        <input type="hidden" name="_method" value="patch">
+        <input type="text" name="encounter[new_encounter_name]" value="<%=encounter['encounter_name']%>">
+        <input type="hidden" name="encounter[old_encounter_name]" value="<%=encounter["encounter_name"]%>">  <!--['encounter_name'] may have to add these back in -->
+        <input type="submit" value="update encounter name">
+      </form> 
 
-<% end %>
+      <form action="<%=quest_encounters_url(@quest)%>" method="post"> <!--pointsa to encounter.create action generates new encounter completion-->
+        <input type="hidden" name="encounter[target_encounter]" value="<%=encounter%>">
+        <input type="submit" value="generate this encounter $0.99">
+      </form>  
+      <br>
+
+      <!-- add new name. remove name, input name, generate_details -->
+      <!-- input new name. remove name, input name, generate_details -->
+      <!-- generate -->
+    <%end %><br>
+      <!-- context  -->
+  <%= @quest.context%>
+ </ul>
+
+<!-- links fields-->
+<!--add, edit, delete fields button-->
+<!-- links to encounters   points list page with all the encounters and their actions
+  clicking on 'encounters' can send the completion
+     'return the encounter_list -> 
+     list each encounter in this format'
+     this could lead to long loading times though just for trying to view an encounter
+     can we process responses after rendering?
+
+
+-->
+
+
+
+<!-- render a partial  add plot twist -->
+
+
+</ul>

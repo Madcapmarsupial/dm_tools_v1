@@ -1,0 +1,9 @@
+<h1>Encounter Show</h1>
+
+<h2><%=@encounter.name %></h2><br>
+
+<ul>
+  <%@encounter.text.each do |k, v|%>
+    <li><%=k%> -->  <%=v%></li>
+  <%end %>
+</ul>

@@ -1,38 +1,15 @@
-<h3>New Quest</h3>
-<%= form_with model: @quest do |form| %>
-  <div>
-    <p> <%= link_to "Roll All", new_quest_path('quest' => @quest.get_except('all'))%></p>  
-    <%=form.text_field :villain %><br>
-    <%=form.text_field :location %><br>
-    <%=form.text_field :objective %><br>
-    <%=form.text_field :timer %><br>
-    <!-- #<%= link_to 'update', new_quest_path('quest' => {"location" => :location} ) %>-->
+<h1>Quest new </h1>
 
-    <div>
-      <p><%= link_to "Roll-Villain", new_quest_path('quest' => @quest.get_except('villain') )%></p>  
-      <%=form.label 'Villain (defeat)'%>
-      <li><%=@quest.villain%></li> 
+<!-- <%# pointer set bny show action%> -->
+ 
+ 
+<form action="/quests" method="POST">
+  <label for="user_setting">Setting</label>
+    <input type="text" name="quest[setting]" id="user_setting">
+  <label for="user_villain">Villain</label>
+    <input type="text" name="quest[villain]" id="user_villain">
+  <label for="user_objectiv">Objective</label>
+  <input type="text" name="quest[objective]" id="user_villain">
+  <input type="submit">
+</form>
 
-      <p> <%= link_to "Roll-Location", new_quest_path('quest' => @quest.get_except('location'))%></p>
-      <%=form.label 'Location (within)'%>
-      <li><%=@quest.location %></li>
-
-      <p> <%= link_to "Roll-Objective", new_quest_path('quest' => @quest.get_except('objective'))%></p>  
-      <%=form.label 'Objective (complete)'%>
-      <li><%=@quest.objective %></li>
-
-      <p> <%= link_to "Roll-Timer", new_quest_path('quest' => @quest.get_except('timer'))%></p>  
-      <%=form.label 'Timer (before)'%>
-      <li><%=@quest.timer %></li>
-      
-     <!-- <%=form.submit 'Save Quest' %> -->
-
-    </div>
-
-   
-  </div>
-
-  <%=link_to 'Clear'%><br>
-  <%=link_to 'Home', quests_path()%>
-    
-<% end %>

@@ -1,20 +1,41 @@
-<h1>'New' Trait for <%=@field.value%></h1>
+<h1>'New' Trait</h1>
 
 <!-- <%# this should hold the fields that have been set
 have a link to the next step
 and a custom field %> -->
-
+<%next_label = @queue[@pointer]  %>
+<p>next trait --> <%=next_label %></p>
 <%= @trait.attributes %> <br>
- <p><%=params%></p> <br>
+<p><%=params%></p> <br>
+<h3><%=@pointer%></h3>
 
-<form action="/traits" method="post">
-<input type="hidden" name="trait[label]" value="<%=@trait.label%>">
+
+
+<form action="/traits" method="post"'>
+<input type="hidden" name="trait[label]" value="<%=@pointer%>">
 <input type="hidden" name="trait[field_id]" value="<%=@trait.field_id%>">
 
-<h3><%=@trait.label%></h3><br>
+	<h3><%= @trait.label%></h3><br>
+	<label for="trait_value">input a value</label>
+	<input id="trait_value" type="text" name="trait[value]">
+	
+	<label for="trait_note">additional notes</label>
+	<input id="trait_note" type="textfield"  name="trait[note]">
 
-	<label for="value">input a value</label> 
-	<input id="value" type="text" name="trait[value]">
-	<input type="submit"> <br>
+	<input type="submit">
+	<!-- this 'submit'points to the 'create' action 
+	-> which then routes to another view -->
+
   <%= link_to 'back', field_url(@field) %>
+
+
+
+<!-- if @field.type == "PlotTwist"
+	render plotwist partial 
+	else
+		render defualt field_form
+	end
+-->
+
+
 </form>

@@ -1,19 +1,14 @@
 class Timer < Field
   attr_accessor :fail_condition, :pass_condition
 
-  # def edge
-  #   @edge ||= Trait.new(label: 'edge',field_id: self.id)
-  # end 
-  def fail_condition
-    @fail_condition ||= Trait.create(label: 'fail_condition', field_id: self.id)
+   def set_pointer
+    #if its nil -> assigns 'who'
+    self.queue[last_created_trait.label] || 'cause'
   end
 
-  def pass_condition
-    @pass_condition ||= Trait.create(label: 'pass_condition', field_id: self.id)
-  end
-
-  def create_traits
-    [fail_condition, pass_condition]
+  def queue #for trait creation order
+    {'cause' => 'effect', 'effect' => 'duration',  
+     'duration' => 'empty', 'empty' => 'empty' }
   end
 
 end
