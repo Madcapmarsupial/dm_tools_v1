@@ -1,13 +1,4 @@
 class FieldsController < ApplicationController
-
-   #new_villain -> who_what
-        #who_what -> henchman
-         #henchman -> edge
-          #edge -> endgoal
-            #endgoal -> tragedy
-            # tragedy -> lair
-              # lair ->   next Field (GOAL)
-
     #find_by(id: params[:id], label: params[:trait][:label])
 
   def index
@@ -26,31 +17,34 @@ class FieldsController < ApplicationController
 
   def show 
     @field = Field.find_by(id: params[:id])
-    render :show
+    pointer = @field.type
+
+    t_pointer = @field.set_pointer
+
+     #check the check the quests queue of fields   /field's queue of traits
+      if t_pointer == "empty"
+          #if the the current fields trait-queue is empty
+          if (pointer == 'Custom') || pointer == ('Objective') 
+            #if the quests -field-queue is empty
+            #go to  quest/show
+            redirect_to quest_url(@field.quest_id) 
+          else 
+             #go to next field in quests queue
+            redirect_to new_quest_field_url(@field.quest_id) #fields/new
+          end
+      else
+          redirect_to new_field_trait_url(@field)
+      end
   end
 
   def new
-    #passed in from the Quest show action (not the view)
-    #passed in from link_to?
-    #@pointer = params[:pointer]
-
-
     quest = Quest.find_by(id: params[:quest_id])
     #last_field = quest.last_created_field
     
     @queue = quest.queue #{'setting' => 'villain', 'villain' => 'goal'}
     @pointer = quest.set_pointer #@queue[last_field.label] || 'setting'
-
     @field = Field.new(quest_id: params[:quest_id])
     render :new
-    #on submit points to create
-  end
-
-  def new_setting
-    @field = Field.new(quest_id: params[:id], label: 'setting')
-
-    render :new
-    #new_setting_quest POST   /quests/:id/new_setting(.:format)    quests#new_setting
     #on submit points to create
   end
 
@@ -58,12 +52,26 @@ class FieldsController < ApplicationController
      @field = Field.new(field_params)
 
       if @field.save
-        #set pointer
-       redirect_to @field
+      #need to go down trait queue
+
+      
+       redirect_to field_url(@field)   #show   'currently' [points to quest or next trait]
+
       else 
-        #add label back to front of queue
        render json: @field.errors.full_messages, status: :unprocessable_entity
       end
+  end
+
+  def edit 
+  end
+  
+  def update 
+    field = Field.find(params[:id])
+    if field.update(field_params)
+      render json: field
+    else
+      render json: field.errors.full_messages, status: :unprocessable_entity
+    end
   end
 
   def destroy
@@ -75,14 +83,7 @@ class FieldsController < ApplicationController
     end
   end
 
-  def update 
-    field = Field.find(params[:id])
-    if field.update(field_params)
-      render json: field
-    else
-      render json: field.errors.full_messages, status: :unprocessable_entity
-    end
-  end
+
 
 
 
@@ -152,7 +153,7 @@ class FieldsController < ApplicationController
 
 private
 def field_params
-  params.require(:field).permit(:quest_id, :value, :label)
+  params.require(:field).permit(:quest_id, :value, :label, :type)
 end  
 
 def inner_trait_params

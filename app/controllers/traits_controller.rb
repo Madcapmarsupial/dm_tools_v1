@@ -8,49 +8,41 @@ class TraitsController < ApplicationController
 
   def show 
     @trait = Trait.find_by(id: params[:id])
-    render :show
+
+      #@field = Field.find_by(id: @trait.field_id)
+      # @queue = @field.queue
+      # @pointer = @queue[@trait.label]
+
+      @field = @trait.parent
+      @queue = @field.queue
+      @pointer = @field.set_pointer
+
+      if @pointer == 'empty'   # we may have to set this to one before empty?
+        #returns to parent -> field->show action
+        redirect_to field_url(@field.id)
+      else 
+        #continues queue of traits
+        #redirect instead of render because this will be a new trait
+        redirect_to new_field_trait_url(@field.id)
+      end
   end 
 
-  def new_villain_trait
-    #label will need to be dynamic
-    # a set label function
-    #for traits we will need to check the parent label. maybe the last used trait?
-
-    #parent = Field.find_by(id: params[:field_id])
-
-    @trait = Trait.new(field_id: params[:field_id], label: 'some value' )
-    render :new
-  end
-
   def new #first_trait
-    #will we need to do Filter by specicif sublcass? VIllain/timer etc--> looks like
-    #could use label to do so.
-    # case    when "villain" then  Villain.find_by 
-    #add more tables? 
-    #polymorphic fields?
-
+    #last_label = @field.last_created_trait.label
     @field = Field.find_by(id: params[:field_id])
-    last_label = @field.last_created_trait.label
-    
-    #self.class == Villain...Timer etc
-    @queue = @feild.queue
+    @queue = @field.queue
     #pointer will be the new label
-    @pointer = @feild.set_pointer
+    @pointer = @field.set_pointer
 
-
-
-
-    @trait = Trait.new(field_id: params[:field_id], label: 'empty' )
+    @trait = Trait.new(field_id: params[:field_id])
     render :new
   end
 
   def create
     @trait = Trait.new(trait_params)
-    #trait_params  will be users inputs + the mandetory inputs
 
     if @trait.save
-      #render json: @trait
-      redirect_to @trait
+      redirect_to trait_url(@trait)
     else
       render json: @trait.errors.full_messages, status: :unprocessable_entity
     end
@@ -88,9 +80,7 @@ class TraitsController < ApplicationController
     params.require(:trait).permit(:value, :label, :note, :field_id)
   end
 
-  def set_pointer
-    #self.queue
-  end
+  
 end
 
 

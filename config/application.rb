@@ -5,6 +5,9 @@ require "rails/all"
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+if ['development', 'test'].include? ENV['RAILS_ENV']
+Dotenv::Railtie.load
+end
 
 module DMtools
   class Application < Rails::Application
@@ -19,6 +22,11 @@ module DMtools
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     
+
+
+    # this just for development  shouldne be needed once we get views going
+    config.action_controller.default_protect_from_forgery = false
+
 
   end
 end
