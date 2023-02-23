@@ -143,8 +143,11 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.13.8-arm64-darwin)
       racc (~> 1.4)
+<<<<<<< HEAD
     nokogiri (1.13.8-x86_64-linux)
       racc (~> 1.4)
+=======
+>>>>>>> 86b25795e213504a0b13ee040662c334e4898d43
     pg (1.4.5)
     pry (0.14.1)
       coderay (~> 1.1)
@@ -189,8 +192,13 @@ GEM
     reline (0.3.1)
       io-console (~> 0.5)
     rexml (3.2.5)
+<<<<<<< HEAD
     ruby-openai (3.3.0)
       httparty (>= 0.18.1)
+=======
+    ruby-openai (3.0.3)
+      httparty (>= 0.18.1, < 0.22.0)
+>>>>>>> 86b25795e213504a0b13ee040662c334e4898d43
     rubyzip (2.3.2)
     selenium-webdriver (4.5.0)
       childprocess (>= 0.5, < 5.0)

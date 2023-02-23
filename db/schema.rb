@@ -11,17 +11,20 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_02_19_013138) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "encounter_responses", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "encounter_id", null: false
+    t.bigint "encounter_id", null: false
     t.text "full_response", null: false
     t.text "prompt", null: false
     t.index ["encounter_id"], name: "index_encounter_responses_on_encounter_id"
   end
 
   create_table "encounters", force: :cascade do |t|
-    t.integer "quest_id", null: false
+    t.bigint "quest_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "name"
@@ -39,7 +42,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_013138) do
   end
 
   create_table "quest_responses", force: :cascade do |t|
-    t.integer "quest_id", null: false
+    t.bigint "quest_id", null: false
     t.text "response_text", null: false
     t.text "prompt", null: false
     t.datetime "created_at", null: false
@@ -54,7 +57,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_013138) do
   end
 
   create_table "traits", force: :cascade do |t|
-    t.integer "field_id"
+    t.bigint "field_id"
     t.string "label"
     t.string "value"
     t.text "note"
