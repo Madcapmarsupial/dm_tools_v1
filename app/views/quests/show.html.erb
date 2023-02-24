@@ -1,44 +1,48 @@
-<h1>Quest Show</h1>
+<h1><%= @response.get("scenario_name")%></h1>
+<h2>Narrative points</h2>
+<ul>
+  <li><%=@response.get("description")%></li>
+  <li>Success: <%=@response.get("success_consequence")%></li>
+  <li>Failure: <%=@response.get("fail_consequence")%></li>
+  <li><%=@response.get("plot_twist")%></li>
+  <li>Time until failure: <%=@response.get("timer")%></li>  
+</ul>
 
-
-
- <p><%=params%></p>
-
-<label>Response Fields</label>
+<h3>Quest Components</h3>
  <ul>
-  <li><%= @response.get("scenario_name")%></li>
-  <li><%= @response.get("description")%></li>
-  <li><%= @response.get("villain")%></li>
-  <li><%= @response.get("objective")%></li>
-  <li><%= @response.get("timer")%></li>
-  <li><%= @response.get("setting")%></li>
-  <li><%= @response.get("plot_twist")%></li><br>
+  <li>Villain: <%= @response.get("villain")['name']%></li>
+  <li>Objective: <%= @response.get("objective")%></li>
+  <li>Setting: <%= @response.get("setting")%></li>
+</ul>
 
-
-  <label>Encounters</label>
+<h3>Encounters</h3>
+  <ul>
     <%@response.encounters_array.each do |encounter| %>
     <li><%=encounter%></li> 
-
-
       <form action="<%=update_encounter_name_quest_url(@quest)%>" method="post"> <!--updates the response string quest/id/ -> update_response -->
         <input type="hidden" name="_method" value="patch">
-        <input type="text" name="encounter[new_encounter_name]" value="<%=encounter['encounter_name']%>">
-        <input type="hidden" name="encounter[old_encounter_name]" value="<%=encounter["encounter_name"]%>">  <!--['encounter_name'] may have to add these back in -->
+        <input type="text" name="encounter[new_encounter_name]" value="<%=encounter%>">
+        <input type="hidden" name="encounter[old_encounter_name]" value="<%=encounter%>">  <!--['encounter_name'] may have to add these back in -->
         <input type="submit" value="update encounter name">
       </form> 
 
       <form action="<%=quest_encounters_url(@quest)%>" method="post"> <!--pointsa to encounter.create action generates new encounter completion-->
         <input type="hidden" name="encounter[target_encounter]" value="<%=encounter%>">
-        <input type="submit" value="generate this encounter $0.99">
+        <input type="submit" value="generate this encounter">
       </form>  
-      <br>
 
+    <%id = @quest.encounter_name_id_pairs[encounter]%>
+    <!-- if id is nill encounter is empty and has not been generated yet-->
+    <%if id != nil %>
+      <!-- display extra deets-->
+      <%= link_to 'View Encounter', encounter_url(id) %>
+    <%end%>
+    <br><br>
       <!-- add new name. remove name, input name, generate_details -->
       <!-- input new name. remove name, input name, generate_details -->
       <!-- generate -->
     <%end %><br>
       <!-- context  -->
-  <%= @quest.context%>
  </ul>
 
 <!-- links fields-->
@@ -57,5 +61,3 @@
 
 <!-- render a partial  add plot twist -->
 
-
-</ul>

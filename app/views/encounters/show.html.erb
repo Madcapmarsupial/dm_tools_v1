@@ -1,9 +1,11 @@
-<h1>Encounter Show</h1>
+<h1><%=@encounter.name %></h1>
 
-<h2><%=@encounter.name %></h2><br>
+<h2></h2>
 
 <ul>
   <%@encounter.text.each do |k, v|%>
     <li><%=k%> -->  <%=v%></li>
   <%end %>
 </ul>
+
+<%= link_to 'Back to Quest', quest_url(@encounter.quest) %>

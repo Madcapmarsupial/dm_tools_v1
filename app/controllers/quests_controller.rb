@@ -19,13 +19,6 @@ class QuestsController < ApplicationController
         #JSON.parse(scenario_text)
         QuestResponse.create(prompt: new_quest_prompt, response_text: bot_response, quest_id: @quest.id)
         @quest.update(staged_response: bot_response["choices"][0]["text"])
-
-
-        # set @quest.staged_response
-
-        #completion sent
-        #QuestResponse.created
-
       redirect_to @quest   #--> quest show
     else 
        render json: @quest.errors.full_messages, status: :unprocessable_entity
