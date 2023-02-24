@@ -25,7 +25,8 @@ class Encounter < ApplicationRecord
     #the context is the response prompt and text of the encounters parent
     #self.quest.response
     <<~EOT
-    #{self.quest.context} Q: return the encounter with the name #{self.name}. your response should be in JSON format and each encounter should have 11 parameters 'encounter_name', 'description','location', 'creatures', 'items', 'consequences', 'obstacles', 'magic', 'secrets', 'lore', and 'active effects'
+    #{self.quest.context}
+    Return the encounter with the name #{self.name}. your response should be in JSON format and each encounter should have 11 parameters "encounter_name", "description","location", "creatures", "items", "consequences", "obstacles", "magic", "secrets", "lore", and "active effects"
     EOT
 
   end
@@ -48,6 +49,8 @@ class Encounter < ApplicationRecord
     #we must make sure the AI Response is parseable
     EncounterResponse.create(full_response: response, prompt: prompt, encounter_id: self.id)
     p "encounter response generated {context: encounter model}"
+
+    #slice(4..-1)
 
     #actually returns a HTTParty::Response
     #still need context

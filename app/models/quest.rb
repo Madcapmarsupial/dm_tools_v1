@@ -24,11 +24,11 @@ class Quest < ApplicationRecord
 
   def context
    #we need to manange the Q: A:
-    answer = JSON.parse(self.staged_response)
+    answer = self.staged_response
     #answer = responses.last.text_to_hash
     string = <<~EOT
-    Q: #{responses.last.prompt}
-    A: #{answer}
+    #{responses.last.prompt}
+    #{answer}
     EOT
   end
 
