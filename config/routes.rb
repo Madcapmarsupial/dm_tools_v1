@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
-   #root "quests#index"
+   root to: "home#landing_page"
 
    resources :quests, only: [:create, :new, :show] do 
     member do
