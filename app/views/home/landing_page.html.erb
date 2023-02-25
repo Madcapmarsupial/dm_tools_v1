@@ -1,1 +1,8 @@
-<h1>Home</h1>
+<% if user_signed_in? %> 
+ <div> Greetings <%= current_user.email %> </div> 
+ <!-- show quests/index-->
+  <%= button_to "Sign out", destroy_user_session_path, method: :delete %> 
+<% else %>
+  <%= button_to "Sign in", new_user_session_path %> 
+<% end %>
+<h1>home page</h1>

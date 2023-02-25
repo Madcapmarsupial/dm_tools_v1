@@ -1,20 +1,37 @@
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Defines the root path route ("/")
-   root to: "home#landing_page"
+  devise_for :users
+  #This is a useful method that defines all the required routes
+  #related to user authentication like /users/sign_in, /users/sign_out, and /users/password/new
+  
+  #stand alone
+  resources :encounters, only: [:show, :destroy, :create]
 
-   resources :quests, only: [:create, :new, :show] do 
+# you can use a hidden field to upload the magazine_id via the HTTP POST body. 
+#While you might prefer to encode the magazine_id in the URL rather than a hidden field,
+# having non-nested create routes will make it simpler to define our React components later on. 
+#
+
+
+  root to: "home#landing_page"
+  #what is accessed through a user
+  resources :users, only: [] do 
+   resources :quests, only: [:new, :index]
+  end
+
+  #what is accesed through a quest
+  resources :quests, only: [:create, :show] do 
+    #resources :fields, only: [:new, :index]
+    resources :encounters, only: [:new, :index]
     member do
       patch 'update_encounter_name'
     end
+  end
 
-      #resources :fields, only: [:new, :index]
-      resources :encounters, only: [:create, :index]
-   end
+  
 
-    resources :encounters, only: [:show, :destroy]
-
+end #class
 
   # resources :fields, only: [:show, :create, :update, :destroy] do
   #   resources :traits, only: [ :new, :index]
@@ -26,12 +43,7 @@ Rails.application.routes.draw do
 
   #resources :traits, only: [:show, :edit, :update, :create, :destory]
 
-
-end
-
-
-
-# Rails.application.routes.draw do
+# 
 #   resources :brands, only: [:index, :show] do
 #     resources :products, only: [:index, :show]
 #   end

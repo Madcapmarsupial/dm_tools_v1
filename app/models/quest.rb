@@ -14,7 +14,8 @@ class Quest < ApplicationRecord
   dependent: :destroy
 
   has_many :encounters,
-  class_name: 'Encounter'
+  class_name: 'Encounter',
+  dependent: :destroy
 
    #add a staged_respose column to the quest to (add edit remove) 
     # the staged_response can hold the response text and then be edited to refelct un-generated user changes. 

@@ -3,12 +3,15 @@ class QuestsController < ApplicationController
   #fields queue ends at 'Custom'   --> points sublcasses uses :type
 
   def new
-    @quest = Quest.new
+    #user_id here
+    @quest = Quest.new(user_id: params[:user_id])
     render :new
   end
 
+  #quests/user_id/index
+
   def create
-    @quest = Quest.new
+    @quest = Quest.new(user_id: params[:quest][:user_id])
      if @quest.save 
         #villain, setting and objective are present in quest_params
         new_quest_prompt = @quest.quest_prompt(quest_params)
@@ -18,7 +21,9 @@ class QuestsController < ApplicationController
         @quest.update(staged_response: bot_response["choices"][0]["text"])
 
         redirect_to @quest   #--> quest show
-    else 
+    else
+        #render :new
+        #redirect_to user_home
        render json: @quest.errors.full_messages, status: :unprocessable_entity
     end
   end
@@ -55,7 +60,7 @@ class QuestsController < ApplicationController
   end
 
   def quest_params
-     params.require(:quest).permit(:villain, :setting, :objective, :staged_response)
+     params.require(:quest).permit(:villain, :setting, :objective, :staged_response, :user_id)
   end
 end
 
