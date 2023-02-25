@@ -13,7 +13,7 @@ class EncountersController < ApplicationController
           #something is wrong with the completion/response situation
       #end
     else
-       redirect_to @quest #render json: #@encounter.errors.full_messages, status: :unprocessable_entity
+       redirect_to @quest 
     end
   end
 

@@ -41,9 +41,11 @@ class QuestsController < ApplicationController
     @quest.update(staged_response: edited_response) #quest_params
     
     #create a new QuestResponse with the staged_response as the choices[o]text
+    #but no new completion
     old_response = @quest.response
     old_response.create_new_quest_response_from_staged
       #creates a new questResponse to update context and provide some history
+      
     redirect_to @quest
   end
 

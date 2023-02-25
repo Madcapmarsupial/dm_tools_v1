@@ -8,7 +8,6 @@ class Encounter < ApplicationRecord
   class_name: 'EncounterResponse',
   dependent: :destroy
 
-
   def text
     responses.last.text_to_hash
   end
@@ -21,7 +20,6 @@ class Encounter < ApplicationRecord
     #{self.quest.context}
     Return the encounter with the name #{self.name}. your response should be in JSON format and each encounter should have 11 parameters "encounter_name", "description","location", "creatures", "items", "consequences", "obstacles", "magic", "secrets", "lore", and "active effects"
     EOT
-
   end
 
   #move to controller and make private?
@@ -33,17 +31,11 @@ class Encounter < ApplicationRecord
 
     myBot = OpenAI::Client.new
     response = myBot.completions(parameters: { model: "text-davinci-003", prompt: prompt, max_tokens: token_count})
-    #??? to_json
 
-    #prompt should equal defualt prompt plus parent context. which means we shouldnt have to pass args
-
-    #we must make sure the AI Response is parseable
+    #must make sure the AI Response is parseable
     EncounterResponse.create(full_response: response, prompt: prompt, encounter_id: self.id)
     p "encounter response generated {context: encounter model}"
 
-    #slice(4..-1)
-
     #actually returns a HTTParty::Response
-    #still need context
   end 
 end

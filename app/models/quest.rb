@@ -16,21 +16,15 @@ class Quest < ApplicationRecord
   has_many :encounters,
   class_name: 'Encounter'
 
-
    #add a staged_respose column to the quest to (add edit remove) 
     # the staged_response can hold the response text and then be edited to refelct un-generated user changes. 
     #   this will keep the response og and 'pure'
     #new encounter = prompt = (quest prompt + quest staged_response + encounter_lvl_prompt)
 
-
-
-
   def create_quest_completion(user_prompt)
     myBot = OpenAI::Client.new
     response = myBot.completions(parameters: { model: "text-davinci-003", prompt: user_prompt, max_tokens: 2000})
   end
-
-
 
   def context
    #we need to manange the Q: A:
