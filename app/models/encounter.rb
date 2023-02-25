@@ -13,13 +13,6 @@ class Encounter < ApplicationRecord
     responses.last.text_to_hash
   end
 
-
-
-
-
-
-
-
   def create_prompt
     #we need this to pass into the EncounterResponse object and the BOT
     #the context is the response prompt and text of the encounters parent
@@ -30,8 +23,6 @@ class Encounter < ApplicationRecord
     EOT
 
   end
-
-  
 
   #move to controller and make private?
   def create_completion_and_response #(prompt="this is a test", token_count=1)   #temperature #p_top???, #stop_limit

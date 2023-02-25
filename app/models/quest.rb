@@ -22,14 +22,13 @@ class Quest < ApplicationRecord
     #   this will keep the response og and 'pure'
     #new encounter = prompt = (quest prompt + quest staged_response + encounter_lvl_prompt)
 
-  def encounter_name_id_pairs
-    e_hash = {}
-    #be careful of creating multiple encounters
-    self.encounters.each { |encounter| e_hash[encounter.name] = encounter.id }
-    e_hash
+
+
+
+  def create_quest_completion(user_prompt)
+    myBot = OpenAI::Client.new
+    response = myBot.completions(parameters: { model: "text-davinci-003", prompt: user_prompt, max_tokens: 2000})
   end
-
-
 
 
 
@@ -67,6 +66,14 @@ class Quest < ApplicationRecord
     #may need to us update here
     #adds to staged
   end
+
+  def encounter_name_id_pairs
+    e_hash = {}
+    #be careful of creating multiple encounters
+    self.encounters.each { |encounter| e_hash[encounter.name] = encounter.id }
+    e_hash
+  end 
+
 
 
 
