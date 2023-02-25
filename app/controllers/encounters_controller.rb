@@ -1,6 +1,6 @@
 class EncountersController < ApplicationController
   def create
-    @encounter = Encounter.new(quest_id: params[:quest_id], name: params[:encounter]['target_encounter'])
+    @encounter = Encounter.new(encounter_params) #quest_id: params[:encounter][:quest_id], name: params[:encounter][:name])
     @quest = @encounter.quest
    
     if @encounter.save
@@ -20,6 +20,11 @@ class EncountersController < ApplicationController
   def show
     @encounter = Encounter.find_by(id: params[:id])
     render :show
+  end
+
+  private
+  def encounter_params
+    params.require(:encounter).permit(:name, :quest_id)
   end
 
 end

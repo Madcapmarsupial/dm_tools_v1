@@ -41,6 +41,10 @@ class Quest < ApplicationRecord
     responses.last
   end
 
+  def get_field(element)
+    response.get(element)
+  end
+
   def quest_prompt(param_hash) #(system='dnd', encounters=4, theme='fantasy', context='') #context = QuestResponse.find_by()
     prompt = <<~EOT
     Create a dnd scenario with a #{param_hash[:villain]} as the villain, the setting is a #{param_hash[:setting]} and the objective is a #{param_hash[:objective]} and limit the scenario to 4 encounters. 

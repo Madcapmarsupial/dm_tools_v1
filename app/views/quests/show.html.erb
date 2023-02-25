@@ -1,4 +1,6 @@
 <h1><%= @response.get("scenario_name")%></h1>
+  <%= link_to "Quest List", user_quests_url(current_user)%>
+
 <h2>Narrative points</h2>
 <ul>
   <li><%=@response.get("description")%></li>
@@ -16,7 +18,7 @@
 </ul>
 
 <h3>Encounters</h3>
-  <ul>
+  <ul> 
     <%@response.encounters_array.each do |encounter| %>
     <li><%=encounter%></li> 
       <form action="<%=update_encounter_name_quest_url(@quest)%>" method="post"> <!--updates the response string quest/id/ -> update_response -->
@@ -26,8 +28,9 @@
         <input type="submit" value="update encounter name">
       </form> 
 
-      <form action="<%=quest_encounters_url(@quest)%>" method="post"> <!--pointsa to encounter.create action generates new encounter completion-->
-        <input type="hidden" name="encounter[target_encounter]" value="<%=encounter%>">
+      <form action="/encounters" method="post"> <!--points a to encounter.create action generates new encounter completion-->
+        <input type="hidden" name="encounter[name]" value="<%=encounter%>">
+        <input type="hidden" name="encounter[quest_id]" value="<%=@quest.id%>">
         <input type="submit" value="generate this encounter">
       </form>  
 
@@ -44,6 +47,7 @@
     <%end %><br>
       <!-- context  -->
  </ul>
+
 
 <!-- links fields-->
 <!--add, edit, delete fields button-->

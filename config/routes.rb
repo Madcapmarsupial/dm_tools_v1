@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   #what is accessed through a user
   resources :users, only: [] do 
    resources :quests, only: [:new, :index]
+
   end
 
   #what is accesed through a quest

@@ -4,11 +4,23 @@ class QuestsController < ApplicationController
 
   def new
     #user_id here
-    @quest = Quest.new(user_id: params[:user_id])
+    @quest = Quest.new(user_id: current_user.id) #params[:user_id])
     render :new
   end
 
-  #quests/user_id/index
+  def index
+    #@user need access user
+    user =  User.find_by(id: current_user.id)#arams[:user][:id])
+    if user
+      @quests = user.quests
+      render :index
+    else
+      redirect_back(fallback_location: root_path)
+    end
+  end
+
+
+
 
   def create
     @quest = Quest.new(user_id: params[:quest][:user_id])
@@ -30,8 +42,12 @@ class QuestsController < ApplicationController
 
   def show 
     @quest = Quest.find_by(id: params[:id])
-    @response = @quest.response    
-    render :show
+    if @quest
+      @response = @quest.response    
+      render :show
+    else
+      redirect_back(fallback_location: root_path)
+    end
   end 
 
   #encounters are nested thus we have a specific route for it
