@@ -8,4 +8,7 @@ class User < ApplicationRecord
   has_many :quests,
   class_name: "Quest",
   dependent: :destroy
+
+  #encrypts :id would need to switch it to a string
+
 end

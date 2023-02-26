@@ -24,9 +24,17 @@ module DMtools
     
 
 
-    # this just for development  shouldne be needed once we get views going
+    # this just for development  should not be needed once we get views going  -> i put this in
     config.action_controller.default_protect_from_forgery = false
 
+    #dont have environments set up yet
+   config.active_record.encryption.key_derivation_salt = Rails.application.credentials.key_derivation_salt
+   config.active_record.encryption.primary_key = Rails.application.credentials.primary_key
+   config.active_record.encryption.deterministic_key = Rails.application.credentials.deterministic_key
+  #config.active_record.encryption.algorithm = 'aes-256-gcm'
+  #config.active_record.encryption.encode_iv_in_body = true
 
+
+    
   end
 end
