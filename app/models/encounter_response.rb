@@ -10,7 +10,7 @@ class EncounterResponse < ApplicationRecord
   #prompt
 
   #make a response module? 
-  
+   
   def return_text
     #JSON.parse(full_response)   # symbolize_names: true
 

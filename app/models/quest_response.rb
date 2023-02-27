@@ -7,29 +7,27 @@ class QuestResponse < ApplicationRecord
   primary_key: :id,
   foreign_key: :quest_id
 
-  def return_text    
-    text = JSON.parse(response_text)["choices"][0]["text"]
-  end
+  # def return_text    
+  #   text = JSON.parse(response_text)["choices"][0]["text"]
+  # end
+ 
+  # def text_to_hash
+  #   JSON.parse(staged_response)
+  # end
 
-  
+  #  def get(element)
+  #    self.text_to_hash[element]
+  #  end
 
-  def text_to_hash
-    JSON.parse(return_text)
-  end
+  # def encounters_array
+  #   self.text_to_hash["encounter_list"]
+  # end
 
-   def get(element)
-     self.text_to_hash[element]
-   end
-
-  def encounters_array
-    self.text_to_hash["encounter_list"]
-  end
-
-  def get_encounter(name)
-    #{'encounter_name' => name}
-    index = encounters_array.find_index(name)
-    encounters_array[index]
-  end
+  # def get_encounter(name)
+  #   #{'encounter_name' => name}
+  #   index = encounters_array.find_index(name)
+  #   encounters_array[index]
+  # end
 
   #quest action?
   def create_new_quest_response_from_staged

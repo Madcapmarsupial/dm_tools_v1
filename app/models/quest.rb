@@ -22,9 +22,26 @@ class Quest < ApplicationRecord
     #   this will keep the response og and 'pure'
     #new encounter = prompt = (quest prompt + quest staged_response + encounter_lvl_prompt)
 
+
+
+
+  #response = DmTool::Responsive.generate(type=encounter, prompt)
+  #grab the id  response.id
+
+    #creates associated response?
+    #creates ascciated charge?
+
+    #just generate responsees but still have the data objectes(quests, encounters, etc) still have a pointer to them?
+    #make the response the parent response 
+    #encounter.response_id quest_id
+    #quest.response_id user_id
+    #user.responses
+
+
+  # DmTools::Responsive.generate(type=quest, prompt)
   def create_quest_completion(user_prompt)
     myBot = OpenAI::Client.new
-    response = myBot.completions(parameters: { model: "text-davinci-003", prompt: user_prompt, max_tokens: 2000})
+    response = myBot.completions(parameters: { model: "text-davinci-003", prompt: user_prompt, max_tokens: 2000}) 
   end
 
   def context
@@ -40,10 +57,25 @@ class Quest < ApplicationRecord
   def response
     responses.last
   end
-
-  def get_field(element)
-    response.get(element)
+ 
+  def text_to_hash
+    JSON.parse(staged_response)
   end
+
+   def get(element)
+     self.text_to_hash[element]
+   end
+
+  def encounters_array
+    self.text_to_hash["encounter_list"]
+  end
+
+  def get_encounter(name)
+    #{'encounter_name' => name}
+    index = encounters_array.find_index(name)
+    encounters_array[index]
+  end
+
 
   def quest_prompt(param_hash) #(system='dnd', encounters=4, theme='fantasy', context='') #context = QuestResponse.find_by()
     prompt = <<~EOT
@@ -119,3 +151,15 @@ class Quest < ApplicationRecord
     fields.find_by(type: 'Objective')
   end
 end
+
+modified:   app/models/encounter_response.rb
+        modified:   app/models/quest.rb
+        modified:   app/models/quest_response.rb
+        modified:   app/models/user.rb
+        modified:   app/views/home/logged_in.html.erb
+        modified:   app/views/quests/index.html.erb
+        modified:   app/views/quests/show.html.erb
+        modified:   db/schema.rb
+
+#make a new one in the server evironment
+#        modified:   config/credentials.yml.enc
