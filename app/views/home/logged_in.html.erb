@@ -1,13 +1,17 @@
 <h1>User Home</h1>
 <p>hello <%=current_user.email%></p>
 
-<%= button_to "Sign out", destroy_user_session_path, method: :delete %>
-<%= button_to "New Quest", new_user_quest_url(current_user), method: :get%>
-  
-  
+<p>Bottle-caps  <%=current_user.balance %></p>
+
+<%= button_to "New Quest", new_user_quest_url(current_user), method: :get%>  
   <form action="<%=user_quests_url(current_user)%>" method="get">
     <input type="hidden" name="user[id]" value="<%=current_user.id%>">
     <input type="submit" value="Quest List">
   </form>
 
+<%= button_to "Sign out", destroy_user_session_path, method: :delete %>
+
+<p>pick up where you left off</p>
+<%  quest = current_user.quests.last %>
+<%=link_to "#{quest.scenario_name}", quest_url(quest.id)  %>
 <!-- (current_user.id)-->

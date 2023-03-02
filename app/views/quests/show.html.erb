@@ -1,27 +1,27 @@
-<h1><%= @response.get("scenario_name")%></h1>
+<h1><%= @quest.scenario_name%></h1>
   <%= link_to "Quest List", user_quests_url(current_user)%>
 
 <h2>Narrative points</h2>
 <ul>
-  <li><%=@response.get("description")%></li>
-  <li>Success: <%=@response.get("success_consequence")%></li>
-  <li>Failure: <%=@response.get("fail_consequence")%></li>
-  <li><%=@response.get("plot_twist")%></li>
-  <li>Time until failure: <%=@response.get("timer")%></li>  
+  <li><%=@quest.description%></li>
+  <li>Success: <%=@quest.success_consequence%></li>
+  <li>Failure: <%=@quest.fail_consequence%></li>
+  <li><%=@quest.plot_twist%></li>
+  <li>Time until failure: <%=@quest.timer%></li>  
 </ul>
 
 <h3>Quest Components</h3>
  <ul>
-  <li>Villain: <%= @response.get("villain")['name']%></li>
-  <li>Objective: <%= @response.get("objective")%></li>
-  <li>Setting: <%= @response.get("setting")%></li>
+  <li>Villain: <%= @quest.villain["name"]%></li>
+  <li>Objective: <%= @quest.objective%></li>
+  <li>Setting: <%= @quest.setting%></li>
 </ul>
 
 <h3>Encounters</h3>
   <ul> 
-    <%@response.encounters_array.each do |encounter| %>
+    <%@quest.encounter_list.each do |encounter| %>
     <li><%=encounter%></li> 
-      <form action="<%=update_encounter_name_quest_url(@quest)%>" method="post"> <!--updates the response string quest/id/ -> update_response -->
+      <form action="<%=update_encounter_name_quest_url(@quest)%>" method="post"> <!--updates the response||or staged_response string quest/id/ -> update_response -->
         <input type="hidden" name="_method" value="patch">
         <input type="text" name="encounter[new_encounter_name]" value="<%=encounter%>">
         <input type="hidden" name="encounter[old_encounter_name]" value="<%=encounter%>">  <!--['encounter_name'] may have to add these back in -->

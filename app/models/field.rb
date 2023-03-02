@@ -1,18 +1,5 @@
 class Field < ApplicationRecord
-   #deleteing a field will delete all the sub fields associated with it
-
-   #put in desc methods for each subclass???
    
-  has_many :children,
-  class_name: 'Trait',
-  dependent: :destroy,
-  primary_key: :id,
-  foreign_key: :field_id
-   
-  belongs_to :quest,
-  primary_key: :id,
-  foreign_key: :quest_id
-  
   def last_created_trait
     list = self.children
     result = list.order(created_at: :desc).first
