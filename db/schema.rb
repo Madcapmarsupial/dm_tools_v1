@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_26_015857) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_28_154856) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,57 +22,35 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_26_015857) do
     t.index ["owner_id"], name: "index_accounts_on_owner_id", unique: true
   end
 
-  create_table "encounter_responses", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "encounter_id", null: false
-    t.text "full_response", null: false
-    t.text "prompt", null: false
-    t.index ["encounter_id"], name: "index_encounter_responses_on_encounter_id"
-  end
-
   create_table "encounters", force: :cascade do |t|
     t.bigint "quest_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "name"
+    t.text "name", default: "untitled encounter"
+    t.jsonb "completion"
+    t.bigint "response_id"
     t.index ["quest_id"], name: "index_encounters_on_quest_id"
-  end
-
-  create_table "fields", force: :cascade do |t|
-    t.integer "quest_id"
-    t.string "value"
-    t.string "label"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "type"
-    t.index ["quest_id"], name: "index_fields_on_quest_id"
-  end
-
-  create_table "quest_responses", force: :cascade do |t|
-    t.bigint "quest_id", null: false
-    t.text "response_text", null: false
-    t.text "prompt", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["quest_id"], name: "index_quest_responses_on_quest_id"
+    t.index ["response_id"], name: "index_encounters_on_response_id"
   end
 
   create_table "quests", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "staged_response"
     t.bigint "user_id", null: false
+    t.jsonb "completion"
+    t.text "name", default: "untitled quest", null: false
+    t.bigint "response_id"
+    t.index ["response_id"], name: "index_quests_on_response_id"
     t.index ["user_id"], name: "index_quests_on_user_id"
   end
 
-  create_table "traits", force: :cascade do |t|
-    t.bigint "field_id"
-    t.string "label"
-    t.string "value"
-    t.text "note"
+  create_table "responses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.jsonb "completion", null: false
+    t.text "prompt", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_responses_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -83,15 +61,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_26_015857) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "accounts", "users", column: "owner_id"
-  add_foreign_key "encounter_responses", "encounters"
   add_foreign_key "encounters", "quests"
-  add_foreign_key "fields", "quests"
-  add_foreign_key "quest_responses", "quests"
+  add_foreign_key "encounters", "responses"
+  add_foreign_key "quests", "responses"
   add_foreign_key "quests", "users"
-  add_foreign_key "traits", "fields"
+  add_foreign_key "responses", "users"
 end

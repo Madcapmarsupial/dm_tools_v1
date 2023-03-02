@@ -1,89 +1,50 @@
 class Quest < ApplicationRecord
-  #attr_accessor :scenario_name, :description, :Encounter_list, :villain, :objective, :setting, :timer, :plottwist
-  #deleteing a quest will delete all fields and traits associatiated with it
-  has_many :fields,
-  dependent: :destroy
+  store_accessor :completion, [:scenario_name, :description, :setting, :villain, 
+    :timer, :objective, :success_consequence, :fail_consequence, :plot_twist, :encounter_list]
+    #prefix?
 
-  has_many :children,
-  through: :fields,
-  source: :children,
-  dependent: :destroy
+  #add an implemntation of a quest.id_list for response version control.
+  #stashed saved response for unsaved quests
+    
 
-  has_many :responses,
-  class_name: 'QuestResponse',
-  dependent: :destroy
+
+
+  belongs_to :response,
+  class_name: "Response",
+  foreign_key: :response_id,
+  primary_key: :id
 
   has_many :encounters,
   class_name: 'Encounter',
   dependent: :destroy
 
-   #add a staged_respose column to the quest to (add edit remove) 
-    # the staged_response can hold the response text and then be edited to refelct un-generated user changes. 
-    #   this will keep the response og and 'pure'
-    #new encounter = prompt = (quest prompt + quest staged_response + encounter_lvl_prompt)
 
-
-
-
-  #response = DmTool::Responsive.generate(type=encounter, prompt)
-  #grab the id  response.id
-
-    #creates associated response?
-    #creates ascciated charge?
-
-    #just generate responsees but still have the data objectes(quests, encounters, etc) still have a pointer to them?
-    #make the response the parent response 
-    #encounter.response_id quest_id
-    #quest.response_id user_id
-    #user.responses
-
-
-  # DmTools::Responsive.generate(type=quest, prompt)
-  def create_quest_completion(user_prompt)
-    myBot = OpenAI::Client.new
-    response = myBot.completions(parameters: { model: "text-davinci-003", prompt: user_prompt, max_tokens: 2000}) 
-  end
-
-  def context
-   #we need to manange the Q: A:
-    answer = self.staged_response
-    #answer = responses.last.text_to_hash
-    string = <<~EOT
-    #{responses.last.prompt}
-    #{answer}
+  def self.quest_prompt(param_hash) #(system='dnd', encounters=4, theme='fantasy', context='') #context = QuestResponse.find_by()
+    #quest_keys
+    #quest_keys.length
+    prompt = <<~EOT
+    Create an rpg scenario with a #{param_hash[:villain]} as the villain, the setting is a #{param_hash[:setting]} and the objective is a #{param_hash[:objective]}
+    Your response should be in JSON format with 10 parameters "scenario_name", "description", "villain", "setting", "objective", "timer" "success_consequence", "fail_consequence", "plot_twist", and "encounter_list"
+    The "villain" parameter should hold 1 parameter "name" 
+    The "encounter_list" parameter should be an array of encounter names like [name_one, name_two]...
+    Limit the scenario to 4 encounters. 
+    Don't use symbols as keys in your response
     EOT
   end
 
-  def response
-    responses.last
-  end
- 
-  def text_to_hash
-    JSON.parse(staged_response)
-  end
 
-   def get(element)
-     self.text_to_hash[element]
-   end
+  def context
+    #should return the context needed to create a new Response
+    #that reslates to this quest 
 
-  def encounters_array
-    self.text_to_hash["encounter_list"]
+    quest = self.completion
+    #"With this rpg quest in JSON format as contex: #{self.completion}\n ACTION "
   end
 
   def get_encounter(name)
     #{'encounter_name' => name}
-    index = encounters_array.find_index(name)
-    encounters_array[index]
-  end
-
-
-  def quest_prompt(param_hash) #(system='dnd', encounters=4, theme='fantasy', context='') #context = QuestResponse.find_by()
-    prompt = <<~EOT
-    Create a dnd scenario with a #{param_hash[:villain]} as the villain, the setting is a #{param_hash[:setting]} and the objective is a #{param_hash[:objective]} and limit the scenario to 4 encounters. 
-    Your response should be in JSON format with 10 paramaters "scenario_name", "description", "villain", "setting", "objective", "timer" "success_consequence", "fail_consequence", "plot_twist", and "encounter_list".
-    The "villain" parameter should hold 1 parameter: "name". 
-    The "encounter_list" parameter should be an array encounter names like [name_one, name_two]...
-    EOT
+    index = self.encounter_list.find_index(name)
+    self.encounter_list[index]
   end
 
   def edit_encounter_name(new_name, old_name) #deal with capitalization
@@ -109,57 +70,39 @@ class Quest < ApplicationRecord
 
 
 
-  #fields
-  def last_created_field
-    list = self.fields
-    result = list.order(created_at: :desc).first
-    if result == nil
-      result = Field.new
-    end
-    result
-  end
+  
+  # def set_pointer
+  #   #returns the type field that should be created next
+  #   queue[last_created_field.type] || 'Setting'
+  # end
 
-  def set_pointer
-    #returns the type field that should be created next
-    queue[last_created_field.type] || 'Setting'
-  end
-
-  def queue
-    { 'Setting' => 'Villain', 'Villain' => 'Objective', 
-      'Objective' => 'PlotTwist', 'PlotTwist'=> 'Custom', 'Custom' => 'Custom' }
-       #=> 'PlotTwist','PlotTwist' 
+  # def queue
+  #   { 'Setting' => 'Villain', 'Villain' => 'Objective', 
+  #     'Objective' => 'PlotTwist', 'PlotTwist'=> 'Custom', 'Custom' => 'Custom' }
+  #      #=> 'PlotTwist','PlotTwist' 
 
       
-  end
+  # end
 
   # def villain
   #   @villain ||= Villain.create(label: 'person', value: 'villain', quest_id: self.id)
   # end 
 
-  def villain_input
-    #gets all villains from quest
-    fields.find_by(type: 'Villain')
-  end
+  # def villain_input
+  #   #gets all villains from quest
+  #   fields.find_by(type: 'Villain')
+  # end
 
-  def setting_input
-    #gets all villains from quest
-    fields.find_by(type: 'Setting')
-  end
+  # def setting_input
+  #   #gets all villains from quest
+  #   fields.find_by(type: 'Setting')
+  # end
 
-  def objective_input
-    #gets all villains from quest
-    fields.find_by(type: 'Objective')
-  end
+  # def objective_input
+  #   #gets all villains from quest
+  #   fields.find_by(type: 'Objective')
+  # end
 end
 
-modified:   app/models/encounter_response.rb
-        modified:   app/models/quest.rb
-        modified:   app/models/quest_response.rb
-        modified:   app/models/user.rb
-        modified:   app/views/home/logged_in.html.erb
-        modified:   app/views/quests/index.html.erb
-        modified:   app/views/quests/show.html.erb
-        modified:   db/schema.rb
 
-#make a new one in the server evironment
-#        modified:   config/credentials.yml.enc
+

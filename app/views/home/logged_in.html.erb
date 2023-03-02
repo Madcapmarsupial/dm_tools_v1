@@ -11,4 +11,7 @@
 
 <%= button_to "Sign out", destroy_user_session_path, method: :delete %>
 
+<p>pick up where you left off</p>
+<%  quest = current_user.quests.last %>
+<%=link_to "#{quest.scenario_name}", quest_url(quest.id)  %>
 <!-- (current_user.id)-->
