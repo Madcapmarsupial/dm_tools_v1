@@ -1,7 +1,9 @@
 class Response < ApplicationRecord
-  validate :is_parseable?   
+  validate :is_parseable? 
   
   store_accessor :completion, [:usage, :choices] #
+
+  after_save :charge_user
   
   #has_many :quests,
   #dependent: :destroy
@@ -12,20 +14,17 @@ class Response < ApplicationRecord
   primary_key: :id,
   dependent: :destroy
  
-  def self.create_response(prompt, user_id)
+  def self.build_response(prompt, user_id)
       user = User.find_by(id: user_id)
       if user.has_enough_bottlecaps?  #check user balance
-        #tweak this method to pass in a error to Response to check at validation
-          #thus no charge and no save
-        v_hash = values_from_completion(prompt, user.id)
-        #create a completions and return the values in a hash 
-        response = Response.new(v_hash)
-        if response.save  # <-- custom validations will be checked here
-          user.charge(response.total_usage)  #$$$
-          return response
+        response_values = completion_values(prompt, user.id)
+          #create xscompletions and return the values in a hash 
+        response = Response.new(response_values)
+        if response.save #user charged only if validations are passed
+          response
         else
-          #add to response errors and still return response?
-          raise "#{response.errors.full_messages}" # response was not valid and was not saved
+          logger.error "#{response.errors.full_messages}"
+          response
         end
       else
         raise  "error"
@@ -33,8 +32,12 @@ class Response < ApplicationRecord
       end
   end
 
-  def text_to_hash
-    JSON.parse(self.choices.first['text'])
+  def text_to_hash    
+    begin
+      JSON.parse(self.choices.first['text'])
+    rescue JSON::ParserError => e
+      errors.add :completion, :not_parseable, message: "problem with the response with id=(#{self.id}). Check for: ':', '', and numerals, or check your prompt, the bot may be drifting out of bounds"
+    end
     #JSON.parse(self.choices.first['message']['content'])
   end
 
@@ -42,30 +45,43 @@ class Response < ApplicationRecord
     self.usage["total_tokens"]
   end
 
- 
-  private
-  def self.values_from_completion(contextulized_prompt, user_id) 
-    
 
+
+  private
+  def self.completion_values(contextulized_prompt, user_id) 
+    #temp options
+    #model options
+    #etc
     myBot = OpenAI::Client.new
     completion = myBot.completions(parameters: { model: "text-davinci-003", prompt: contextulized_prompt, max_tokens: 2000}) 
     values_hash = {user_id: user_id, prompt: contextulized_prompt, completion: completion}
   end
 
-  def craft_prompt(context, obj)
-   # prompt = <<~EOT   pass in (context, obj)
-    # context 
-    # Your response should be in JSON format with #{obj.key_length} paramaters: obj.list_keys
-    # {obj.list_specific_instructions
-      # The "villain" parameter should hold 1 parameter: "name". 
-      # The "encounter_list" parameter should be an array encounter names like [name_one, name_two]...
-    # EOT
+  
+  def charge_user
+    #calculate cost usage 
+    #cost must be based off quest and or the quests child_object context
+    #users.last request x2 unless its their first request. ie a Quest 
+    #cost = calc_cost(self.total_usage)
+    user.charge(cost=1)
   end
+ 
 
   def is_parseable?
-    # if (text_to_hash).is_a?(Hash) == false
-    # self.errors[:base] << 'completion is not parsable, check your prompt format'
-    #end
+    begin
+      if text_to_hash.is_a?(Hash) == false
+        errors.add :completion, :not_a_hash, message: "the text was parsed but is not a hash?"
+      else
+        true
+      end
+    rescue JSON::ParserError => e
+      errors.add :completion, :not_parseable, message: "problem with the response with id=(#{self.id}). Check for: ':', '', and numerals, or check your prompt, the bot may be drifting out of bounds"
+    end
   end
+  
+
+
+
+
 end #class
 

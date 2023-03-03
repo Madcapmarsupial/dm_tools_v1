@@ -18,28 +18,19 @@ class Quest < ApplicationRecord
   class_name: 'Encounter',
   dependent: :destroy
 
-
-  def self.quest_prompt(param_hash) #(system='dnd', encounters=4, theme='fantasy', context='') #context = QuestResponse.find_by()
-    #quest_keys
-    #quest_keys.length
+  def self.prompt(param_hash) #(system='dnd', encounters=4, theme='fantasy', context='') #context = QuestResponse.find_by()
     prompt = <<~EOT
     Create an rpg scenario with a #{param_hash[:villain]} as the villain, the setting is a #{param_hash[:setting]} and the objective is a #{param_hash[:objective]}
     Your response should be in JSON format with 10 parameters "scenario_name", "description", "villain", "setting", "objective", "timer" "success_consequence", "fail_consequence", "plot_twist", and "encounter_list"
     The "villain" parameter should hold 1 parameter "name" 
     The "encounter_list" parameter should be an array of encounter names like [name_one, name_two]...
     Limit the scenario to 4 encounters. 
-    Don't use symbols as keys in your response
+    Don't use any symbols as keys in your response.
+    Your response should contain no integers.
     EOT
   end
 
 
-  def context
-    #should return the context needed to create a new Response
-    #that reslates to this quest 
-
-    quest = self.completion
-    #"With this rpg quest in JSON format as contex: #{self.completion}\n ACTION "
-  end
 
   def get_encounter(name)
     #{'encounter_name' => name}

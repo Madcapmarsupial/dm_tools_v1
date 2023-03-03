@@ -13,17 +13,21 @@ class QuestsController < ApplicationController
   end
 
   def create
-    values_hash = new_quest_with_response #-> --> check funds -> generate complition -> create -> response -> charge Response $$$
-    @quest = Quest.new(values_hash)
+    prompt = Quest.prompt(quest_params)
+    response = create_response(prompt) 
+    values = {response_id: response.id, completion: response.text_to_hash, user_id: current_user.id}
+      # --> calls Response.create
+    @quest = Quest.new(values)
     if @quest.save
       #if we reach this point the validations have all passed
       redirect_to @quest   #--> quest show
     else
       #refund -> and render :new #redirect_to user_home  #render response.errors.full_messaged too?
+      @quest.errors.add :response, invalid_response: "#{response.errors.full_messages}"
       render json: @quest.errors.full_messages, status: :unprocessable_entity
-      fail
+    fail
         #quest not saved
-        #user charged    #refund_user?/salvage last response
+        #user not charged    #refund_user?/salvage last response
     end
   end
 
@@ -41,11 +45,19 @@ class QuestsController < ApplicationController
     end
   end
 
+
+
+
   private
-  def new_quest_with_response
-    #tweak this to be on Response side
-    response = Response.create_response(Quest.quest_prompt(quest_params), current_user.id)  #$$$ inside Response
-    v_hash = {response_id: response.id, completion: response.text_to_hash, user_id: current_user.id}
+  def create_response(prompt)
+    #filters  the output of the Response create to load into a new quest
+    response = Response.build_response(prompt, current_user.id)  #$$$ inside Response
+    #if response.save
+      #return values
+    #  return response
+     # {response_id: response.id, completion: response.text_to_hash, user_id: current_user.id}
+    #else
+      #add error to quest.errors      
   end
 
   def encounter_names
