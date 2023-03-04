@@ -10,9 +10,6 @@ class User < ApplicationRecord
     self.account.credit(50)
   end
 
-  #after_find :reward_user, if: :first_weekly_sign_in?
-
-
   has_many :quests,
   class_name: "Quest",
   dependent: :destroy
@@ -33,14 +30,12 @@ class User < ApplicationRecord
   #declare callback methods as protected or private. If left public,
    #they can be called from outside of the model and violate the principle of object encapsulation.
 
-  #encrypts :id would need to switch it to a string
   def balance
     account.account_balance
   end
 
   def charge(cost=1)
     #usage = responses.last.total_usage
-    
     account.debit(cost)
   end
 
@@ -70,113 +65,18 @@ class User < ApplicationRecord
     weeks_old = (days / 7)
   end
 
+  # def first_weekly_sign_in?
+  #   # When a user signs in:
+  #   current_time = DateTime.now
+  #   signed_in_week_start = current_time - current_time.wday
 
+  #   if signed_in_week_start > created_at
+  #   weeks_since_creation = ((signed_in_week_start - created_at).to_i / 7).to_i
+  #   last_weeks_sign_in = last_sign_in_at ? ((last_sign_in_at - created_at).to_i / 7).to_i : -1
 
-  def first_weekly_sign_in?
-
-        #how many days old is your account?  we moduleo(%) that by 6
-        #to make it account for the days of the week
-        #when did you last sign in? 
-        #user.find is gonna check (created_at) 
-        # if the age of the account meets the weekly criteria.
-        #and 
-
-        #14 days % 6 
-        # 2
-        # signed 1 day ago
-
-
-        #we need the first sign in of the week
-        #whats the week?
-        #we reward once every 7 days
-
-        #rewards don't stack
-        #
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    #1.hour.to_i  # 3600
-    #1.day        # ActiveSupport::Duration
-    #3.days.ago   # ActiveSupport::TimeWithZone
-
-    #Date.now
-    #self.last_sign_in_at
-    #self.current_sign_in_at  #7 = mon 14
-    #self.created_at  #days_old % 7 == 0 reward
-
-    # day of the week = account_age % 8 
-    #  15 days % 7 = 1
-    #
-
-    # if the account is (7) days old 
-    # reward the user
-    #if he hasnt signed in since those 7 days have passed 
-
-    #the account is 15 days old -> so two weeks
-
-    # age of account = now - self.created_at
-      # day_of_the_week = (day_counter % 6) 
-      # reward if day_of_the_week > 0 
-        # its a new week
-        # how do we check if you have signed in this week?
-        #if days_days_since_last_sign_in 
-      #&& (days_since_last_sign_in > day_of_the_week)
-  
-
-    # if week_num < 7 
-    #has the user signed in (week_num days)
-        #since the beginning of the week?
-    #yes no_reward
-
-    #no reward
-
-
-    #User.first.created_at.time.ago(1.week)
-    
-    # secs = (Time.now - self.created_at.to_i)
-    # mins = (secs / 60)
-    # hours = (mins / 60)
-    # days = (hours / 24)
-    # weeks_old = (days / 7)
-
-
-
-
-# When a user creates an account, store the account creation timestamp in the database
-
-# When a user signs in:
-current_time = DateTime.now
-signed_in_week_start = current_time - current_time.wday
-
-if signed_in_week_start > created_at
-  weeks_since_creation = ((signed_in_week_start - created_at).to_i / 7).to_i
-  last_weeks_sign_in = last_sign_in_at ? ((last_sign_in_at - created_at).to_i / 7).to_i : -1
-
-  if weeks_since_creation > last_weeks_sign_in
-    # Perform the action if this is the first sign-in of the new week
-    perform_action()
-  end
-end
-
-
-
-
-
-
-  end
-
-  def reward_user
-    self.account.credit(10)
-  end
+  #   if weeks_since_creation > last_weeks_sign_in
+  #     # Perform the action if this is the first sign-in of the new week
+  #   perform_action()
+  #   end
+  # end
 end

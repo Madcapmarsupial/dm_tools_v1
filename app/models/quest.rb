@@ -2,13 +2,10 @@ class Quest < ApplicationRecord
   store_accessor :completion, [:scenario_name, :description, :setting, :villain, 
     :timer, :objective, :success_consequence, :fail_consequence, :plot_twist, :encounter_list]
     #prefix?
-
+    
   #add an implemntation of a quest.id_list for response version control.
   #stashed saved response for unsaved quests
     
-
-
-
   belongs_to :response,
   class_name: "Response",
   foreign_key: :response_id,
@@ -30,8 +27,6 @@ class Quest < ApplicationRecord
     EOT
   end
 
-
-
   def get_encounter(name)
     #{'encounter_name' => name}
     index = self.encounter_list.find_index(name)
@@ -39,7 +34,7 @@ class Quest < ApplicationRecord
   end
 
   def edit_encounter_name(new_name, old_name) #deal with capitalization
-      #returns a string to be use in creating a new QuestResponse
+      #returns a string to be used in creating a new QuestResponse
     index = self.response.encounters_array.find_index(old_name) #{'encounter_name' => old_name}
         #[{"encounter_name"=>"The Wailing Wood"}, {"encounter_name"=>"The Harvest of Souls"}, {"encounter_name"=>"The Arboreal Abomination"}, {"encounter_name"=>"The Relic of Rot"}]
     text_hash = self.response.text_to_hash
@@ -56,44 +51,4 @@ class Quest < ApplicationRecord
     self.encounters.each { |encounter| e_hash[encounter.name] = encounter.id }
     e_hash
   end 
-
-
-
-
-
-  
-  # def set_pointer
-  #   #returns the type field that should be created next
-  #   queue[last_created_field.type] || 'Setting'
-  # end
-
-  # def queue
-  #   { 'Setting' => 'Villain', 'Villain' => 'Objective', 
-  #     'Objective' => 'PlotTwist', 'PlotTwist'=> 'Custom', 'Custom' => 'Custom' }
-  #      #=> 'PlotTwist','PlotTwist' 
-
-      
-  # end
-
-  # def villain
-  #   @villain ||= Villain.create(label: 'person', value: 'villain', quest_id: self.id)
-  # end 
-
-  # def villain_input
-  #   #gets all villains from quest
-  #   fields.find_by(type: 'Villain')
-  # end
-
-  # def setting_input
-  #   #gets all villains from quest
-  #   fields.find_by(type: 'Setting')
-  # end
-
-  # def objective_input
-  #   #gets all villains from quest
-  #   fields.find_by(type: 'Objective')
-  # end
 end
-
-
-

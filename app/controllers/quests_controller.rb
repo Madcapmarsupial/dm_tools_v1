@@ -13,21 +13,24 @@ class QuestsController < ApplicationController
   end
 
   def create
-    prompt = Quest.prompt(quest_params)
-    response = create_response(prompt) 
-    values = {response_id: response.id, completion: response.text_to_hash, user_id: current_user.id}
-      # --> calls Response.create
-    @quest = Quest.new(values)
-    if @quest.save
-      #if we reach this point the validations have all passed
-      redirect_to @quest   #--> quest show
+    if current_user.has_enough_bottlecaps?  #check user balance
+      prompt = Quest.prompt(quest_params)
+      response = create_response(prompt)  #user charged --> calls Response.create
+      values = {response_id: response.id, completion: response.text_to_hash, user_id: current_user.id}
+      @quest = Quest.new(values)
+      if @quest.save
+        #if we reach this point the validations have all passed
+        redirect_to @quest   #--> quest show
+      else
+        #refund -> and render :new #redirect_to user_home  #render response.errors.full_messaged too?
+        @quest.errors.add :response, invalid_response: "#{response.errors.full_messages}"
+        #render json: @quest.errors.full_messages, status: :unprocessable_entity
+        redirect_to root_path, alert: @quest.errors.full_messages
+          #quest not saved   #refund_user?/salvage last response
+      end
     else
-      #refund -> and render :new #redirect_to user_home  #render response.errors.full_messaged too?
-      @quest.errors.add :response, invalid_response: "#{response.errors.full_messages}"
-      render json: @quest.errors.full_messages, status: :unprocessable_entity
-    fail
-        #quest not saved
-        #user not charged    #refund_user?/salvage last response
+        redirect_to root_path, notice: "insufficient bottle caps"
+        #"insufficient funds"
     end
   end
 
@@ -41,23 +44,14 @@ class QuestsController < ApplicationController
         redirect_back(fallback_location: root_path)
       end
     else
-      redirect_to root_path
+      redirect_to root_path, notice: "You must sign in to continue"
     end
   end
-
-
-
 
   private
   def create_response(prompt)
     #filters  the output of the Response create to load into a new quest
-    response = Response.build_response(prompt, current_user.id)  #$$$ inside Response
-    #if response.save
-      #return values
-    #  return response
-     # {response_id: response.id, completion: response.text_to_hash, user_id: current_user.id}
-    #else
-      #add error to quest.errors      
+    response = Response.build_response(prompt, current_user.id)  #$$$ inside Response     
   end
 
   def encounter_names

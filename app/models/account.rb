@@ -8,18 +8,14 @@ class Account < ApplicationRecord
   foreign_key: :owner_id,
   primary_key: :id
 
-  #validates :user, presence: true
-
-  #transactions
-
   def debit(amnt)
     self.update(account_balance: self.account_balance -= amnt)
-    Transaction.create(amount: amnt, account_id: self.id)
+    #add a type column for charge or debit
+    Transaction.create(amount: -amnt, account_id: self.id)
   end
 
   def credit(amnt)
     self.update(account_balance: self.account_balance += amnt)
     Transaction.create( amount: amnt, account_id: self.id)
   end
-
 end
