@@ -24,7 +24,7 @@ module DMtools
     
 
 
-    # this just for development  should not be needed once we get views going  -> i put this in
+    # set to false for development  should not be needed once we get views going  -> i put this in
     config.action_controller.default_protect_from_forgery = true
     #set to false if you have to test postman routes for testing!
 
