@@ -28,7 +28,7 @@ module DMtools
     config.action_controller.default_protect_from_forgery = true
     #set to false if you have to test postman routes for testing!
 
-     config.force_ssl = false #forces https
+     #config.force_ssl = false #forces https
       # provide a secure connection over SSL.
 
 
