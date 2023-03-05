@@ -14,6 +14,7 @@ class Encounter < ApplicationRecord
     #context
     #keys
     #key count
+    #"test"
     <<~EOT
     #{self.quest.context}
     Return the encounter with the name #{self.name}. your response should be in JSON format and each encounter should have 11 parameters "encounter_name", "description","location", "creatures", "items", "consequences", "obstacles", "magic", "secrets", "lore", and "active effects"
