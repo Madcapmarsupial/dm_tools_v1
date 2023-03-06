@@ -38,3 +38,6 @@
 /config/master.key
 /config/credentials.yml.enc
 
+#on local database is set to dev, on server database is set to production
+/config/database.yml
+
