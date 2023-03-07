@@ -6,13 +6,32 @@
 #   quests = Quest.create([{ villain: "Darth Vader", objective: "The Lost Ark", location: "The Death Star", timer: "The World Ends"}])
 #   Character.create(name: "Luke", movie: movies.first)
 
-Trait.all.destroy_all 
-Field.all.destroy_all
-Villain.all.destroy_all
-EncounterResponse.all.destroy_all
-Encounter.all.destroy_all
-QuestResponse.all.destroy_all
-Quest.all.destroy_all
+# Trait.all.destroy_all 
+# Field.all.destroy_all
+# Villain.all.destroy_all
+# EncounterResponse.all.destroy_all
+# Encounter.all.destroy_all
+# QuestResponse.all.destroy_all
+# Quest.all.destroy_all
+
+
+# user_id: 2,
+#  completion:
+#   {"timer"=>"The sun is setting quickly, find El Dorado before nightfall.",
+#    "setting"=>"The Amazon Rainforest",
+#    "villain"=>{"name"=>"Tumi"},
+#    "objective"=>"Find El Dorado before Tumi does.",
+#    "plot_twist"=>
+#     "Tumi is relying on his advanced knowledge of the rainforest to stay one step ahead of you.",
+#    "description"=>
+#     "The sun god Tumi has awoken from his centuries-long slumber and has set his sights on the legendary city of El Dorado. According to legend, the city holds enough gold and precious gems to make his return from the shadows a truly legendary one. Follow the clues he has left behind and find El Dorado before it is too late!",
+#    "scenario_name"=>"The Search for El Dorado",
+#    "encounter_list"=>["Giant Spiders", "Ancient Ruins", "Forgotten Tribesmen", "Feral Beasts"],
+#    "fail_consequence"=>"Tumi will gain control of El Dorado and gain unimaginable wealth and power.",
+#    "success_consequence"=>
+#     "Tumi loses his opportunity to achieve infamy and riches and will return to his centuries-long slumber."},
+#  name: "untitled quest",
+#  response_id: 2>
 
 # q_prompt = <<~EOT
 # create a dnd scenario with a vampire as the villain, the setting is a swamp and the objective is a spellbook and limit the scenario to 4 encounters. your response should be in JSON format with 8 parameters ‘Scenario_name’, ’Description’, ‘Encounter_list’, ’Villain’, ’Setting’, ’Objective’, ‘Timer’, and ‘PlotTwist’. The 'Villain' parameter should hold 1 parameters 'name'. The 'Encounter_list' parameter should be a list of encounters. Each encounter should have only 1 parameter 'Encounter_name'. 
