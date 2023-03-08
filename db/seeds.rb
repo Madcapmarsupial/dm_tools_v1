@@ -6,14 +6,7 @@
 #   quests = Quest.create([{ villain: "Darth Vader", objective: "The Lost Ark", location: "The Death Star", timer: "The World Ends"}])
 #   Character.create(name: "Luke", movie: movies.first)
 
-# Trait.all.destroy_all 
-# Field.all.destroy_all
-# Villain.all.destroy_all
-# EncounterResponse.all.destroy_all
-# Encounter.all.destroy_all
-# QuestResponse.all.destroy_all
-# Quest.all.destroy_all
-
+# git 
 
 # user_id: 2,
 #  completion:

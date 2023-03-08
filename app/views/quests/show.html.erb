@@ -21,13 +21,16 @@
   <ul> 
     <%@quest.encounter_list.each do |encounter| %>
     <li><%=encounter%></li> 
-      <form action="<%=update_encounter_name_quest_url(@quest)%>" method="post"> <!--updates the response||or staged_response string quest/id/ -> update_response -->
+<!--
+      <form action="<%=update_encounter_name_quest_url(@quest)%>" method="post">  
+     //   -> updates the completion on the quest
+
         <input type="hidden" name="_method" value="patch">
         <input type="text" name="encounter[new_encounter_name]" value="<%=encounter%>">
-        <input type="hidden" name="encounter[old_encounter_name]" value="<%=encounter%>">  <!--['encounter_name'] may have to add these back in -->
+        <input type="hidden" name="encounter[old_encounter_name]" value="<%=encounter%>"> 
         <input type="submit" value="update encounter name">
       </form> 
-
+-->
       <form action="/encounters" method="post"> <!--points a to encounter.create action generates new encounter completion-->
         <input type="hidden" name="encounter[name]" value="<%=encounter%>">
         <input type="hidden" name="encounter[quest_id]" value="<%=@quest.id%>">
@@ -35,7 +38,7 @@
       </form>  
 
     <%id = @quest.encounter_name_id_pairs[encounter]%>
-    <!-- if id is nill encounter is empty and has not been generated yet-->
+      <!-- if id is nill encounter is empty and has not been generated yet-->
     <%if id != nil %>
       <!-- display extra deets-->
       <%= link_to 'View Encounter', encounter_url(id) %>
@@ -47,21 +50,5 @@
     <%end %><br>
       <!-- context  -->
  </ul>
-
-
-<!-- links fields-->
-<!--add, edit, delete fields button-->
-<!-- links to encounters   points list page with all the encounters and their actions
-  clicking on 'encounters' can send the completion
-     'return the encounter_list -> 
-     list each encounter in this format'
-     this could lead to long loading times though just for trying to view an encounter
-     can we process responses after rendering?
-
-
--->
-
-
-
 <!-- render a partial  add plot twist -->
 
