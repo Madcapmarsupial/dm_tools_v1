@@ -1,11 +1,30 @@
 <h1><%=@encounter.name %></h1>
 
-<h2></h2>
 
-<ul>
-  <%@encounter.completion.each do |k, v|%>
-    <li><%=k%> -->  <%=v%></li>
-  <%end %>
-</ul>
 
-<%= link_to 'Back to Quest', quest_url(@encounter.quest) %> 
+<h3><label for="desc">description:</label></h3>
+<textarea id="desc" name="desc" rows="8" cols="50">
+<%=@encounter.desc_bundle%>
+</textarea><br>
+
+
+
+<h3><label for="mechanincs">mechanics:</label></h3>
+<textarea id="mechanics" name="desc" rows="8" cols="50">
+<%=@encounter.mechanics_bundle%>
+</textarea><br>
+
+
+
+<h3><label for="aftermath">aftermath:</label></h3>
+<textarea id="aftermath" name="aftermath" rows="8" cols="50">
+<%=@encounter.reward_bundle%>
+</textarea><br>
+
+
+<%= link_to 'Back to Quest', quest_url(@encounter.quest) %>
+
+
+<!--top (desc room layout , room appeareance sights smells sounds)-->
+<!--mid  creatures(with enemy/ally tags), encounter_timer, ongoing effects,  -->
+<!--bottom  loot secrets, lore, creatures(neutral) -->
