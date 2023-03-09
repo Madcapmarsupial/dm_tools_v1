@@ -8,6 +8,12 @@ class Response < ApplicationRecord
   #has_many :quests,
   #dependent: :destroy
 
+    #pre req prompt
+    # add a timer up top as pre req
+    #layouts -> a timer should look like this 
+    # a quest should look like this etc Quest.prereq  etc
+    
+
   belongs_to :user,
   class_name: "User",
   foreign_key: :user_id,
@@ -21,6 +27,7 @@ class Response < ApplicationRecord
         if response.save #user charged only if validations are passed
           response
         else
+          logger.info response.completion
           logger.error "#{response.errors.full_messages}"
           response
         end

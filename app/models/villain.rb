@@ -1,18 +1,18 @@
 class Villain < Field
   #attr_accessor :edge, :endgoal, :lair, :henchman, :backstory, :who
   
-  def set_pointer
-    #if its nil -> assigns 'who'
-    self.queue[last_created_trait.label] || 'empty' #'henchman'
-  end
+  # def set_pointer
+  #   #if its nil -> assigns 'who'
+  #   self.queue[last_created_trait.label] || 'empty' #'henchman'
+  # end
 
-  def queue #for trait creation order
-    {'henchman' => 'endgoal',  
-      'endgoal' => 'tragedy', 'tragedy'  => 'empty', 'empty' => 'empty' }
-    #'edge', 'edge' => 
-    #=> 'lair', 'lair'
+  # def queue #for trait creation order
+  #   {'henchman' => 'endgoal',  
+  #     'endgoal' => 'tragedy', 'tragedy'  => 'empty', 'empty' => 'empty' }
+  #   #'edge', 'edge' => 
+  #   #=> 'lair', 'lair'
 
-  end
+  # end
 
   # def edge
   #   @edge ||= Trait.create(label: 'edge',field_id: self.id)

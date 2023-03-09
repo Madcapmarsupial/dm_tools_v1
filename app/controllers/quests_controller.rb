@@ -48,6 +48,10 @@ class QuestsController < ApplicationController
     end
   end
 
+  def update_encounter_name
+    #update the completion with a new name
+  end
+
   private
   def create_response(prompt)
     #filters  the output of the Response create to load into a new quest

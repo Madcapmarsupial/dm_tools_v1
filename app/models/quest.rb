@@ -15,6 +15,13 @@ class Quest < ApplicationRecord
   class_name: 'Encounter',
   dependent: :destroy
 
+  def context
+    text = <<~EOT
+    #{self.completion}
+    EOT
+  end
+
+
   def self.prompt(param_hash) #(system='dnd', encounters=4, theme='fantasy', context='') #context = QuestResponse.find_by()
     prompt = <<~EOT
     Create an rpg scenario with a #{param_hash[:villain]} as the villain, the setting is a #{param_hash[:setting]} and the objective is a #{param_hash[:objective]}
@@ -48,6 +55,8 @@ class Quest < ApplicationRecord
   def encounter_name_id_pairs
     e_hash = {}
     #be careful of creating multiple encounters
+    #multiple genrations with the same name will overwrite each other
+    
     self.encounters.each { |encounter| e_hash[encounter.name] = encounter.id }
     e_hash
   end 

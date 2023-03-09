@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_03_204055) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_07_050648) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,15 +22,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_204055) do
     t.index ["owner_id"], name: "index_accounts_on_owner_id", unique: true
   end
 
-  create_table "encounters", force: :cascade do |t|
+  create_table "fields", force: :cascade do |t|
     t.bigint "quest_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "name", default: "untitled encounter"
+    t.text "name", default: "untitled"
     t.jsonb "completion"
     t.bigint "response_id"
-    t.index ["quest_id"], name: "index_encounters_on_quest_id"
-    t.index ["response_id"], name: "index_encounters_on_response_id"
+    t.string "type", null: false
+    t.index ["quest_id"], name: "index_fields_on_quest_id"
+    t.index ["response_id"], name: "index_fields_on_response_id"
   end
 
   create_table "quests", force: :cascade do |t|
@@ -80,8 +81,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_204055) do
   end
 
   add_foreign_key "accounts", "users", column: "owner_id"
-  add_foreign_key "encounters", "quests"
-  add_foreign_key "encounters", "responses"
+  add_foreign_key "fields", "quests"
+  add_foreign_key "fields", "responses"
   add_foreign_key "quests", "responses"
   add_foreign_key "quests", "users"
   add_foreign_key "responses", "users"
