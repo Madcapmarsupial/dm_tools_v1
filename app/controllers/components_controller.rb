@@ -14,11 +14,14 @@ class ComponentsController < ApplicationController
   }
 
   def create
+    #test
 
 
       #this is list_item specific will need to be tweaked
 
       #this can be done on the model
+
+      field = Field.find_by(id: params[:component][:field_id])
      
       model_type = COMPONENTS[list_component_params[:type]].call
       
@@ -26,7 +29,7 @@ class ComponentsController < ApplicationController
       prompt = model_type.prompt(list_component_params)
 
       if [Reward, ActiveEffect, SpecialMechanic].include?(model_type)
-        redirect_to encounters_url(params[:component][:field_id]), notice: "that function isn't built yet"
+        redirect_to encounters_url(field), notice: "that function isn't built yet"
       else
 
 
@@ -36,9 +39,13 @@ class ComponentsController < ApplicationController
         values = {response_id: response.id, completion: response.text_to_hash, field_id: params[:component][:field_id], alignment: alignment}
 
         new_component = model_type.new(values)
+
+        # if save
         new_component.save!
      
-       redirect_to encounters_url(params[:component][:field_id])
+
+        #redirect is not properly  
+       redirect_to encounters_url(field)
       end
   end
   
