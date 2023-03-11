@@ -1,5 +1,4 @@
 class EncountersController < ApplicationController
-  before_action :authenticate_user!
   
   def create
     if current_user.has_enough_bottlecaps?  #check user balance
