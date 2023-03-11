@@ -5,7 +5,7 @@
  
 <form action="/quests" method="POST">
   <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
-  
+
   <input type="hidden" name="quest[user_id]" value="<%=@quest.user_id%>">
   <label for="user_setting">Setting</label>
     <input type="text" name="quest[setting]" id="user_setting">
@@ -15,4 +15,7 @@
   <input type="text" name="quest[objective]" id="user_villain">
   <input type="submit">
 </form>
+
+  <%= link_to "Home", root_url%><br><br>
+
 

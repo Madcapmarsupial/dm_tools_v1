@@ -29,7 +29,7 @@ class ComponentsController < ApplicationController
       prompt = model_type.prompt(list_component_params)
 
       if [Reward, ActiveEffect, SpecialMechanic].include?(model_type)
-        redirect_to encounters_url(field), notice: "that function isn't built yet"
+        redirect_to encounter_url(field), notice: "that function isn't built yet"
       else
 
 
@@ -45,7 +45,7 @@ class ComponentsController < ApplicationController
      
 
         #redirect is not properly  
-       redirect_to encounters_url(field)
+       redirect_to encounter_url(field)
       end
   end
   
