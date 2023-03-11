@@ -15,6 +15,8 @@
   because we have already reneder the full modle for it
   -->
       <form action="/components" method="post">
+        <input name="authenticity_token"  type="hidden" value="<%= form_authenticity_token %>"/>
+
         <input type="text" name="component[name]" value='<%="#{component['name']}"%>'>
         <br>
         <label for="c_desc"></label>
