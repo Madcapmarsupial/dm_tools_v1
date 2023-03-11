@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery prepend: true
+  protect_from_forgery with: :exception, prepend: true
+  before_action :authenticate_user!
+
   #skip_before_action :verify_authenticity_token
   #  rescue_from ActionController::InvalidAuthenticityToken do |exception|
   #    current_user.forget_me!   # Example method that will destroy the user cookies

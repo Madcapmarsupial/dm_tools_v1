@@ -1,6 +1,5 @@
 class QuestsController < ApplicationController
   # if you redirect to a URL, check it with a permitted list (strong params) or a regular expression.
-  before_action :authenticate_user!
 
   def index
       @quests = current_user.quests
