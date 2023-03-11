@@ -1,0 +1,13 @@
+
+<!--Lists generated models -->
+<%@encounter.creature_models.each do |creature| %>
+
+<ul>
+    <h3><%=creature.name%></h3>
+    <%creature.completion.each do |k, v|%>
+        <li><%= "#{k} --> #{v}"%></li>
+    <%end %>
+</ul>
+ 
+       
+<%end%>

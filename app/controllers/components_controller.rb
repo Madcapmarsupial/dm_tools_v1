@@ -2,10 +2,10 @@ class ComponentsController < ApplicationController
 
 
   COMPONENTS = { 
-    "reward" => Proc.new {},
+    "reward" => Proc.new {Reward},
     "creature" => Proc.new {Creature},
-    "active_effect" => Proc.new {},
-    "special_mechanic" => Proc.new {}
+    "active_effect" => Proc.new {ActiveEffect},
+    "special_mechanic" => Proc.new {SpecialMechanic}
 
     #"area_layout" => Proc.new
     #"location_description" = Proc.new
@@ -25,17 +25,23 @@ class ComponentsController < ApplicationController
       alignment = list_component_params[:alignment]
       prompt = model_type.prompt(list_component_params)
 
+      if [Reward, ActiveEffect, SpecialMechanic].include?(model_type)
+        redirect_to encounters_url(params[:component][:field_id]), notice: "that function isn't built yet"
+      else
 
-      response = create_response(prompt)
+
+
+        response = create_response(prompt)
       #alignment is left out
-      values = {response_id: response.id, completion: response.text_to_hash, field_id: params[:component][:field_id], alignment: alignment}
+        values = {response_id: response.id, completion: response.text_to_hash, field_id: params[:component][:field_id], alignment: alignment}
 
-      new_component = model_type.new(values)
-      new_component.save!
-
-
-      redirect_to encounters_url(params[:component][:field_id]), notice: "that function isn't built yet"
+        new_component = model_type.new(values)
+        new_component.save!
+     
+       redirect_to encounters_url(params[:component][:field_id])
+      end
   end
+  
 
   private
    def list_component_params
@@ -49,15 +55,3 @@ class ComponentsController < ApplicationController
 
 
 end
-
-
-
-        modified:   app/controllers/encounters_controller.rb
-        modified:   app/models/encounter.rb
-        modified:   app/views/encounters/show.html.erb
-        modified:   config/routes.rb
-        modified:   db/schema.rb
-                    app/controllers/components_controller.rb
-                    app/models/component.rb
-                    app/models/creature.rb
-                    app/views/components/

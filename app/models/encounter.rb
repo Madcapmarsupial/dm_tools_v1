@@ -18,6 +18,22 @@ class Encounter < Field
     primary_key: :id,
     foreign_key: :field_id
 
+     has_many :reward_models,
+    class_name: 'Reward',
+    primary_key: :id,
+    foreign_key: :field_id
+
+     has_many :mechanic_models,
+    class_name: 'SpecialMechanic',
+    primary_key: :id,
+    foreign_key: :field_id
+
+     has_many :effect_models,
+    class_name: 'ActiveEffect',
+    primary_key: :id,
+    foreign_key: :field_id
+
+
     belongs_to :quest
 
 
@@ -26,7 +42,47 @@ class Encounter < Field
     #creatures
     #special_mechanics
 
-   
+    def list_of(type_str)
+     
+    end
+
+
+    def model_names(type_str)
+       model_lists = {
+        "creature" => self.creature_models,
+        "reward" => self.reward_models,
+        "special_mechanic" => self.mechanic_models,
+        "active_effect" => self.effect_models
+      }
+      list = model_lists[type_str.downcase]
+      list.map(&:name)
+    end
+
+
+
+    #encounter.comp_list_types -> 
+       #['creature', 'reward', 'active_effect'] 
+    #list_of(type)
+      #model collection
+    #name_list
+      #include?
+
+  
+    def comp_lists
+      component_list = []
+      completion.each do |list_type, list|
+       list.is_a?(Array) 
+       component_list << list_type.singularize
+       #['creature', 'reward', 'active_effect'] 
+      end
+    end
+
+    def comp_singles
+        completion.each do |list_type, list|
+       list.is_a?(Array) 
+       comp_type = list_type.singularize
+        end
+    end
 
 
 

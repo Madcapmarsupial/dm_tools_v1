@@ -6,6 +6,9 @@ class Creature < Component
   dependent: :destroy
   #has mnay details
 
+  store_accessor :completion, [:name, :equipment, :description, :quantity, :weaknesses, :bonuses,
+    :special_abilities, :key_chracteristic, :personality, :motivation, :alignment, :tactics]
+
   #listable
   
 
@@ -35,6 +38,8 @@ class Creature < Component
     EOT
     #add alterior motives loot aand secrets later
   end
+
+
 
   #has a tag
 
