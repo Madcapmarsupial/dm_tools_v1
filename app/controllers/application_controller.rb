@@ -8,11 +8,11 @@ class ApplicationController < ActionController::Base
   #  end
 
    # Resque form for invalid authentificitytoken
-  rescue_from ActionController::InvalidAuthenticityToken, :with => :bad_token
-  def bad_token
-    flash[:warning] = "Session expired"
-    redirect_to root_path
-  end
+  # rescue_from ActionController::InvalidAuthenticityToken, :with => :bad_token
+  # def bad_token
+  #   flash[:warning] = "Session expired"
+  #   redirect_to root_path
+  # end
 
   # API POST REGUEST ALLOW CROSS DOMAIN
   # before_filter :cor
