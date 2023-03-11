@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_07_050648) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_10_222852) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,6 +20,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_07_050648) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["owner_id"], name: "index_accounts_on_owner_id", unique: true
+  end
+
+  create_table "components", force: :cascade do |t|
+    t.bigint "field_id"
+    t.string "type"
+    t.string "alignment"
+    t.jsonb "completion"
+    t.string "label"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "response_id"
+    t.index ["field_id"], name: "index_components_on_field_id"
+    t.index ["response_id"], name: "index_components_on_response_id"
   end
 
   create_table "fields", force: :cascade do |t|
@@ -81,6 +94,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_07_050648) do
   end
 
   add_foreign_key "accounts", "users", column: "owner_id"
+  add_foreign_key "components", "fields"
+  add_foreign_key "components", "responses"
   add_foreign_key "fields", "quests"
   add_foreign_key "fields", "responses"
   add_foreign_key "quests", "responses"

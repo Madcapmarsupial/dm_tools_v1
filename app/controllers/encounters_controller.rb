@@ -42,7 +42,6 @@ class EncountersController < ApplicationController
   end
 
 
-  private
   #this could go on a parent controller with the bottle cap check
   def create_response(prompt)
     #filters  the output of the Response create to load into a new quest

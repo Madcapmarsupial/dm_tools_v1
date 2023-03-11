@@ -5,9 +5,9 @@ Rails.application.routes.draw do
   #This is a useful method that defines all the required routes
   #related to user authentication like /users/sign_in, /users/sign_out, and /users/password/new
   
-  #stand alone
-  resources :encounters, only: [:show, :destroy, :create]
-
+  #stand alone  --> probly need an :edit
+ resources :components, only: [:show, :create, :destroy]
+  
 # you can use a hidden field to upload the magazine_id via the HTTP POST body. 
 #While you might prefer to encode the magazine_id in the URL rather than a hidden field,
 # having non-nested create routes will make it simpler to define our React components later on. 
@@ -29,6 +29,11 @@ Rails.application.routes.draw do
       patch 'update_encounter_name'
     end
   end
+
+  resources :encounters, only: [:show, :destroy, :create] do 
+    resources :components, only: [:new, :index]
+  end
+
 
   
 

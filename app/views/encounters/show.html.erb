@@ -1,28 +1,22 @@
 <h1><%=@encounter.name %></h1>
+<!-- if their are no models-->
+<!-- what happens if there is one model for rewards but none for creatures?
+    might need move logic to the form
+-->
+<%= render "components/lists_new" %>
+<!-- else render /list_show-->
 
 
 
-<h3><label for="desc">description:</label></h3>
-<textarea id="desc" name="desc" rows="8" cols="50">
-<%=@encounter.desc_bundle%>
-</textarea><br>
 
 
 
-<h3><label for="mechanincs">mechanics:</label></h3>
-<textarea id="mechanics" name="desc" rows="8" cols="50">
-<%=@encounter.mechanics_bundle%>
-</textarea><br>
-
-
-
-<h3><label for="aftermath">aftermath:</label></h3>
-<textarea id="aftermath" name="aftermath" rows="8" cols="50">
-<%=@encounter.reward_bundle%>
-</textarea><br>
-
-
+<% @encounter.completion.each do |k, v| %>
+<%= "#{k} --> #{v} "%><br><br>
+<%end  %>
 <%= link_to 'Back to Quest', quest_url(@encounter.quest) %>
+
+
 
 
 <!--top (desc room layout , room appeareance sights smells sounds)-->

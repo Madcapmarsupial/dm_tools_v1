@@ -1,12 +1,43 @@
 class Encounter < Field
-   store_accessor :completion, [:items, :rewards, :creatures, :time_limits, 
-    :encounter_name, :location_description, :info, :fail_consequence, :threats, :area_layout]
+   store_accessor :completion, [:rewards, :creatures, :active_effects,
+    :encounter_name, :location_description, :area_layout]
+
+    #fields should be signle 
+    #or be lists have generic name and description keys
+
     #update encounter name
     #deal with encounter versions
     #encounter prompt 
     #encounter layout
     #how do we group and display?
     #by threat/obstacles 
+
+    #npcs
+    has_many :creature_models,
+    class_name: 'Creature',
+    primary_key: :id,
+    foreign_key: :field_id
+
+    belongs_to :quest
+
+
+    #active_effects
+    #rewards
+    #creatures
+    #special_mechanics
+
+   
+
+
+
+#LOCATION
+#   "location_description"=>
+#     {"sights"=>"The air is heavy with dust and smoke and you can see a throne atop a high dais in the center of the room.",
+#      "smells"=>"Strong, sweet incense permeates the room.",
+#      "sounds"=>"Echoing chants and incantations fill the air.",
+#      "surroundings"=>"A high and sour cave, encrusted with ancient minerals and lined with large, burning candles."}},
+
+
 
   
   def self.prompt(quest_id, name)
@@ -22,58 +53,64 @@ class Encounter < Field
     # Your response should be in JSON format and each encounter should have 11 parameters "encounter_name", "description","location", "creatures", "items", "consequences", "obstacles", "magic", "secrets", "lore", and "active effects"
     # EOT
 
-
+    # title cause penelty turn duration 
   
+    # <<~EOT
+    # #{quest.context}
+    # Return the encounter with the name #{name}.
+    # Your response should be in JSON format and each encounter should have 10 parameters "encounter_name", "location_description", "secrets", "lore" "area_layout", "creatures", "rewards", "threats", "time_limits", and "items"
+    # The "area_layout" parameter should have 2 parameters, "encounter-mechanics", "status_effects"
+    # The "location_description" parameter should should have 4 parameters "surroundings", "sights", "sounds", and "smells"
+    # The "creatures" parameter should be a list of JSON hashes representing the creatures present in the encounter IE. [{name: "goblin", count: "3", attitude: "hostile"}, {name: "butler", count: "1", "neutral"}, {name: "princess", count: "1", attitude: "helpful"}]
+    # The parameter "time_limits" should be a list of "timers"
+    # A "timer" should be a JSON hash with 3 parameters "title", "description", and "penalty"
+    # Add at least one timer to "time_limits"
+    # EOT
+
+
     <<~EOT
     #{quest.context}
     Return the encounter with the name #{name}.
-    Your response should be in JSON format and each encounter should have 9 parameters "encounter_name", "location_description", "info", "area_layout", "creatures", "rewards", "threats", "time_limits", and "items"
-    The "area_layout" parameter should have 2 parameters, "encounter-mechanics", "status-effects"
-    The "info" parameter should have 3 parameters "secrets", and "lore", "consequences" 
+    Your response should be in JSON format and each encounter should have 7 parameters "encounter_name", "location_description", "area_layout", "creatures", "rewards" "active_effects", and "special_mechanics"
+    The "creatures", "rewards", "active_effects" and "special_mechanics" parameters should all be a lists
+    Each "creature", "reward", "active_effect", and  "special_mechanic" should have 2 parameters "name", and "description"
     The "location_description" parameter should should have 4 parameters "surroundings", "sights", "sounds", and "smells"
-    The "creatures" parameter should be a list of JSON hashes representing the creatures present in the encounter IE. [{name: "goblin", count: "3", attitude: "hostile"}, {name: "butler", count: "1", "neutral"}, {name: "princess", count: "1", attitude: "helpful"}]
-    The parameter "time_limits" should be a list of "timers"
-    A "timer" should be a JSON hash with 5 parameters "title", "description", "cause", "effect", and "turn duration"
-    Add at least one timer to "time_limits"
+    make the encounter time sensitive somehow using the "active_effects" and or "special_mechanics" parameters
     EOT
   end
 
-  def desc_bundle
-    timers = time_limits.map { |timer| timer["description"]}
 
-    <<~EOT
-    #{location_description["surroundings"]}
-    #{location_description["sights"]}
-    #{location_description["sounds"]}
-    #{location_description["smells"]}
-    #{timers.join(" ")}
+  #cascading responses.
+    #broadstrokes encounter response
+    #broad strokes creature response
+    #etc
+    #bundle 
+    #then deliver
 
-    EOT
-  end
 
-  def creature_list
-    #creatures.each do 
-      #Creature.new(name goblin, count 3, attitude: hostile)
-  end
 
-  def mechanics_bundle
-    str = time_limits.map do |timer|
-      "#{timer["title"]} - in #{timer["turn_duration"]} rounds\n #{timer["effect"]} - #{timer["cause"]}"
+    def context_for_component
+      quest_context = self.quest.completion.to_json  
+      encounter_contex = self.completion.to_json
+      component_context = <<~EOT
+      #{quest_context}
+      #{encounter_contex}
+      EOT
+       #self.quest.encounter_contex 
+       #its just the completion for now
     end
 
-    <<~EOT
-    #{str.join(" ")}
-    #{area_layout}
-    #{creatures}
-    EOT
-  end
 
-  def reward_bundle
-    <<~EOT
-    #{items}
-    #{info["lore"]}
-    #{info["secrets"]}
-    #{info["consequences"]}
-    EOT
-  end
+#CREATURE
+#    "creatures"=>[{"name"=>"High Priest", "count"=>"1", "attitude"=>"Neutral"}],
+#creature type
+
+#    "area_layout"=> {
+ #    "status_effects"=>"Intimidation and fear can be used to speed up your mission, but greed and vanity will slow things down.",
+#      "encounter_mechanics"=>  "The High Priest will offer little resistance and requires no battle, but will still present a challenge. You must gather the relic from his clutches."},
+
+ 
+
+
+
 end

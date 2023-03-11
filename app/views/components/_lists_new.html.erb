@@ -1,0 +1,46 @@
+
+
+<%@encounter.completion.each do |list_type, list| %>
+  <% if list.is_a?(Array)  %>
+    <%comp_type = list_type.singularize%>
+    <h3><%=list_type%></h3>
+    <%list.each do |component| %>
+
+    <!--if there is a model renderthe specific component view? -->
+
+      <form action="/components" method="post">
+        <input type="text" name="component[name]" value='<%="#{component['name']}"%>'>
+        <br>
+        <label for="c_desc"></label>
+        <textarea name="component[description]" id="c_desc" cols="30" rows="5">
+        <%="#{component['description']}"%>
+        </textarea>
+        <br>
+        <input type="hidden" name="component[type]" value="<%=comp_type%>">  
+        <input type="hidden" name="component[field_id]" value="<%=@encounter.id%>">  
+        
+        <label >this <%=comp_type%> is a...</label>
+        <br>
+        <input type="hidden" name="component[alignment]" value="">
+        <input type="radio" id="threat" name="component[alignment]" value="a threat">
+        <label for="threat">A Threat</label><br>
+        <input type="radio" id="helpful" name="component[alignment]" value="helpful">
+        <label for="helpful">Helpful</label><br>
+        <input type="radio" id="neutral" name="component[alignment]" value="neutral">
+        <label for="neutral">Neutral</label>
+        <br>
+        <input type="submit" value="generate more details">
+      </form>
+      <br>
+    <%end %>
+  <%end%>
+<%end%>
+
+
+
+
+
+
+
+
+
