@@ -26,11 +26,11 @@
         <input type="hidden" name="component[type]" value="<%=type_str%>">  
         <input type="hidden" name="component[field_id]" value="<%=@encounter.id%>">  
         
-        <label >this <%=type_str%> is a...</label>
+        <label >this <%=type_str%> is...</label>
         
         <input type="hidden" name="component[alignment]" value="">
-        <input type="radio" id="threat" name="component[alignment]" value="a threat">
-        <label for="threat">A Threat</label>
+        <input type="radio" id="harmful" name="component[alignment]" value="harmful">
+        <label for="threat">Harmful</label>
         <input type="radio" id="helpful" name="component[alignment]" value="helpful">
         <label for="helpful">Helpful</label>
         <input type="radio" id="neutral" name="component[alignment]" value="neutral">

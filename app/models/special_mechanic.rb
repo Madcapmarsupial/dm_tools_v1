@@ -11,7 +11,8 @@ class SpecialMechanic < Component
 
   #listable
   
-
-  def self.prompt(params)
+  def self.get_type
+    "special_mechanic"
   end
+ 
 end

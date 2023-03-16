@@ -7,7 +7,7 @@
         <ul>
             <h3><%=model.name%></h3> 
             <%model.completion.each do |k, v|%>
-                <li><%= "#{k} --> #{v}"%></li>
+                <li><%= "* --> #{v}"%></li>
             <%end %>
         </ul>
     <%end%>

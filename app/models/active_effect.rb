@@ -7,13 +7,14 @@ class ActiveEffect < Component
   #has mnay details
 
   store_accessor :completion, [:name, :description] #, :quantity, :weaknesses,:equipment, 
+  #duration, effect, cause, prevention, secrets,  lore,  appearance, 
+
     #:special_abilities, :key_chracteristic, :personality, :motivation, :alignment, :tactics]
 
   #listable
   
-
-  def self.prompt(params)
-    
-
+  def self.get_type
+    "active_effect"
   end
+
 end

@@ -24,9 +24,7 @@ class ComponentsController < ApplicationController
 
 
       
-      if [Reward, ActiveEffect, SpecialMechanic].include?(model_type)
-        redirect_to encounter_url(field), notice: "that function isn't built yet"
-      else
+     
 
         response = create_response(prompt)
         values = {response_id: response.id, completion: response.text_to_hash, field_id: params[:component][:field_id], alignment: alignment}
@@ -36,7 +34,6 @@ class ComponentsController < ApplicationController
         new_component.save!
     
        redirect_to encounter_url(field)
-      end
   end
   
 
