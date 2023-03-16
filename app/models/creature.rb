@@ -9,6 +9,14 @@ class Creature < Component
   store_accessor :completion, [:name, :equipment, :description, :quantity, :weaknesses, :bonuses,
     :special_abilities, :key_chracteristic, :personality, :motivation, :alignment, :tactics]
 
+    #put these under detail?
+    #backstory
+    #ties_to_the_plot
+    #conflicts_of_interest
+    #lore
+    #secrets
+
+
   #listable
   
     def self.get_type
