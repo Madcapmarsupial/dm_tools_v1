@@ -1,5 +1,5 @@
 <h1><%= @quest.scenario_name%></h1>
-  <%= link_to "Quest List", user_quests_url(current_user)%>
+  <%= link_to "Quest List", quests_url%>
 
 <h2>Narrative points</h2>
 <ul>
@@ -23,14 +23,19 @@
     <li><%=encounter%></li> 
 <!--
       <form action="<%=update_encounter_name_quest_url(@quest)%>" method="post">  
-     //   -> updates the completion on the quest
+      <input type="hidden" name="_method" value="patch">
+ -> updates the completion on the quest
 
-        <input type="hidden" name="_method" value="patch">
+        <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+
         <input type="text" name="encounter[new_encounter_name]" value="<%=encounter%>">
         <input type="hidden" name="encounter[old_encounter_name]" value="<%=encounter%>"> 
+
         <input type="submit" value="update encounter name">
       </form> 
+
 -->
+
       <form action="/encounters" method="post"> <!--points a to encounter.create action generates new encounter completion-->
         <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
 
@@ -40,7 +45,7 @@
       </form>  
 
     <%id = @quest.encounter_name_id_pairs[encounter]%>
-      <!-- if id is nill encounter is empty and has not been generated yet-->
+      <!-- if id is nil encounter is empty and has not been generated yet-->
     <%if id != nil %>
       <!-- display extra deets-->
       <%= link_to 'View Encounter', encounter_url(id) %>

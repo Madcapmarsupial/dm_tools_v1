@@ -16,13 +16,12 @@ Rails.application.routes.draw do
 
   root to: "home#landing_page"
   #what is accessed through a user
-  resources :users, only: [] do 
-   resources :quests, only: [:new, :index]
+  resources :users, only: [] 
 
-  end
+
 
   #what is accesed through a quest
-  resources :quests, only: [:create, :show] do 
+  resources :quests, only: [:create, :show, :new, :index] do 
     #resources :fields, only: [:new, :index]
     resources :encounters, only: [:new, :index]
     member do

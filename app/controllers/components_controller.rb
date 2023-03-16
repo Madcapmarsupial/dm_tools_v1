@@ -15,16 +15,10 @@ class ComponentsController < ApplicationController
 
   def create
     #test
-
-
       #this is list_item specific will need to be tweaked
-
       #this can be done on the model
-
       field = Field.find_by(id: params[:component][:field_id])
-     
       model_type = COMPONENTS[list_component_params[:type]].call
-      
       alignment = list_component_params[:alignment]
       prompt = model_type.prompt(list_component_params)
 
@@ -32,19 +26,13 @@ class ComponentsController < ApplicationController
         redirect_to encounter_url(field), notice: "that function isn't built yet"
       else
 
-
-
         response = create_response(prompt)
-      #alignment is left out
         values = {response_id: response.id, completion: response.text_to_hash, field_id: params[:component][:field_id], alignment: alignment}
-
         new_component = model_type.new(values)
 
         # if save
         new_component.save!
-     
-
-        #redirect is not properly  
+    
        redirect_to encounter_url(field)
       end
   end

@@ -3,8 +3,8 @@
 
 <p>Bottle-caps  <%=current_user.balance %></p>
 
-<%= button_to "New Quest", new_user_quest_url(current_user), method: :get%>  
-  <form action="<%=user_quests_url(current_user)%>" method="get">
+<%= button_to "New Quest", new_quest_url, method: :get%>  
+  <form action="<%=quests_url%>" method="get">
     <input type="hidden" name="user[id]" value="<%=current_user.id%>">
     <input type="submit" value="Quest List">
   </form>
