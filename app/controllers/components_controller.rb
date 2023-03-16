@@ -22,6 +22,8 @@ class ComponentsController < ApplicationController
       alignment = list_component_params[:alignment]
       prompt = model_type.prompt(list_component_params)
 
+
+      
       if [Reward, ActiveEffect, SpecialMechanic].include?(model_type)
         redirect_to encounter_url(field), notice: "that function isn't built yet"
       else

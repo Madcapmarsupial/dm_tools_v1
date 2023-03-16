@@ -1,0 +1,14 @@
+
+<!--model_names(creature)    component[type]  Lists generated models -->
+
+
+<%@encounter.component_list_types.each do |list_type| %>
+    <%@encounter.list_of(list_type).each do |model| %>
+        <ul>
+            <h3><%=model.name%></h3> 
+            <%model.completion.each do |k, v|%>
+                <li><%= "#{k} --> #{v}"%></li>
+            <%end %>
+        </ul>
+    <%end%>
+<%end%>

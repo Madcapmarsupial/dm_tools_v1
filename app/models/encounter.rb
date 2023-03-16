@@ -42,20 +42,26 @@ class Encounter < Field
     #creatures
     #special_mechanics
 
-    def list_of(type_str)
-     
+    def component_list_types
+      ["creature", "reward", "special_mechanic", "active_effect"]
     end
 
-
-    def model_names(type_str)
-       model_lists = {
+    def list_of(type_str)
+         model_lists = {
         "creature" => self.creature_models,
         "reward" => self.reward_models,
         "special_mechanic" => self.mechanic_models,
         "active_effect" => self.effect_models
-      }
-      list = model_lists[type_str.downcase]
-      list.map(&:name)
+       }
+       
+       model_lists[type_str.downcase]
+    end
+
+
+    def model_names(type_str)
+      #must be a list
+      #list items must have a name attribute
+      list_of(type_str).map(&:name)
     end
 
 

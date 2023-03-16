@@ -2,52 +2,47 @@
 
 <%@encounter.completion.each do |list_type, list| %>
   <% if list.is_a?(Array)  %>
+  <h3><%=list_type%></h3>
   <!--type string is pulled from a completion thus the syntax doesn not match the model exactly
   model = ActiveEffect vs completion = active_effect-->
     <%type_str = list_type.singularize%>
     <%list.each do |component| %>
     <!--if there is a model renderthe specific component view? -->
-
     <% unless @encounter.model_names(type_str).include?(component['name'])  %>
-    <h3><%=list_type%></h3>
-
+    
   <!--if there is a generated model that shares the 'name' with the completion['name'] we skip it
   because we have already reneder the full modle for it
   -->
       <form action="/components" method="post">
         <input name="authenticity_token"  type="hidden" value="<%= form_authenticity_token %>"/>
 
-        <input type="text" name="component[name]" value='<%="#{component['name']}"%>'>
+        <input type="text" name="component[name]" value='<%=component['name']%>'>
         <br>
         <label for="c_desc"></label>
         <textarea name="component[description]" id="c_desc" cols="30" rows="5">
-        <%="#{component['description']}"%>
+        <%= component['description']%>
         </textarea>
         <br>
         <input type="hidden" name="component[type]" value="<%=type_str%>">  
         <input type="hidden" name="component[field_id]" value="<%=@encounter.id%>">  
         
-
-<!-- <select name="city_id" id="city_id">
-  <option name="component[alignment]" value="a threat">Harmful</option>
-  <option value="1">Helpful</option>
-  <option value="2">Neutral</option>
-</select> -->
-
-
-
         <label >this <%=type_str%> is a...</label>
-        <br>
+        
         <input type="hidden" name="component[alignment]" value="">
         <input type="radio" id="threat" name="component[alignment]" value="a threat">
-        <label for="threat">A Threat</label><br>
+        <label for="threat">A Threat</label>
         <input type="radio" id="helpful" name="component[alignment]" value="helpful">
-        <label for="helpful">Helpful</label><br>
+        <label for="helpful">Helpful</label>
         <input type="radio" id="neutral" name="component[alignment]" value="neutral">
         <label for="neutral">Neutral</label>
         <br>
         <input type="submit" value="generate more details">
       </form>
+    <!-- <select name="city_id" id="city_id">
+      <option name="component[alignment]" value="a threat">Harmful</option>
+      <option value="1">Helpful</option>
+      <option value="2">Neutral</option>
+    </select> -->
     <%end%>
       <br>
     <%end %>
