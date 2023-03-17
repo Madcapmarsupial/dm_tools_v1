@@ -1,4 +1,6 @@
 class Quest < ApplicationRecord
+  validate :encounter_name_cannot_be_blank
+
   store_accessor :completion, [:scenario_name, :description, :setting, :villain, 
     :timer, :objective, :success_consequence, :fail_consequence, :plot_twist, :encounter_list]
     #prefix?
@@ -40,6 +42,13 @@ class Quest < ApplicationRecord
     self.encounter_list[index]
   end
 
+  def add_encounter(name)
+    self.encounter_list << name.titleize
+    self
+  end
+
+
+
   def edit_encounter_name(new_name, old_name) #deal with capitalization
       #returns a string to be used in creating a new QuestResponse
     index = self.response.encounters_array.find_index(old_name) #{'encounter_name' => old_name}
@@ -59,5 +68,12 @@ class Quest < ApplicationRecord
     
     self.encounters.each { |encounter| e_hash[encounter.name] = encounter.id }
     e_hash
-  end 
-end
+  end
+  
+  
+  def encounter_name_cannot_be_blank
+    if self.encounter_list.include?("")
+      errors.add :encounter_list, :empty_encounter_name, message: ": your new encounter (name) was blank."
+    end   
+  end
+end #class

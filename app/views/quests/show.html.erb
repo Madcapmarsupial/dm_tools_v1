@@ -19,22 +19,21 @@
 
 <h3>Encounters</h3>
   <ul> 
-    <%@quest.encounter_list.each do |encounter| %>
-    <li><%=encounter%></li> 
-<!--
-      <form action="<%=update_encounter_name_quest_url(@quest)%>" method="post">  
-      <input type="hidden" name="_method" value="patch">
- -> updates the completion on the quest
-
+    <li>New Encounter</li>
+    <form action="<%=update_encounter_list_quest_url(@quest)%>" method="post">
         <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+        <input type="hidden" name="_method" value="patch">
+         
+        <input type="text" name="quest[encounter_name]" placeholder="midnight ambush">
+        <input type="hidden" name="quest[id]" value="<%=@quest.id%>">
+        
+      <br>
+        <input type="submit" value="add new encounter">
+      </form>
+      <br>
 
-        <input type="text" name="encounter[new_encounter_name]" value="<%=encounter%>">
-        <input type="hidden" name="encounter[old_encounter_name]" value="<%=encounter%>"> 
-
-        <input type="submit" value="update encounter name">
-      </form> 
-
--->
+    <%@quest.encounter_list.each do |encounter| %>
+      <li><%=encounter%></li> 
 
       <form action="/encounters" method="post"> <!--points a to encounter.create action generates new encounter completion-->
         <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
@@ -44,13 +43,13 @@
         <input type="submit" value="generate this encounter">
       </form>  
 
-    <%id = @quest.encounter_name_id_pairs[encounter]%>
+      <%id = @quest.encounter_name_id_pairs[encounter]%>
       <!-- if id is nil encounter is empty and has not been generated yet-->
-    <%if id != nil %>
-      <!-- display extra deets-->
-      <%= link_to 'View Encounter', encounter_url(id) %>
-    <%end%>
-    <br><br>
+      <%if id != nil %>
+        <!-- display extra deets-->
+        <%= link_to 'View Encounter', encounter_url(id) %>
+      <%end%>
+      <br><br>
       <!-- add new name. remove name, input name, generate_details -->
       <!-- input new name. remove name, input name, generate_details -->
       <!-- generate -->
