@@ -30,7 +30,7 @@ Rails.application.routes.draw do
    
   end
 
-  resources :encounters, only: [:show, :destroy, :create] do 
+  resources :encounters, only: [:show, :destroy, :create, :update] do 
     resources :components, only: [:new, :index]
   end
 

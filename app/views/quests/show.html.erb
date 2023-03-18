@@ -19,18 +19,7 @@
 
 <h3>Encounters</h3>
   <ul> 
-    <li>New Encounter</li>
-    <form action="<%=update_encounter_list_quest_url(@quest)%>" method="post">
-        <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
-        <input type="hidden" name="_method" value="patch">
-         
-        <input type="text" name="quest[encounter_name]" placeholder="midnight ambush">
-        <input type="hidden" name="quest[id]" value="<%=@quest.id%>">
-        
-      <br>
-        <input type="submit" value="add new encounter">
-      </form>
-      <br>
+   
 
     <%@quest.encounter_list.each do |encounter| %>
       <li><%=encounter%></li> 
@@ -54,7 +43,18 @@
       <!-- input new name. remove name, input name, generate_details -->
       <!-- generate -->
     <%end %><br>
-      <!-- context  -->
+     <li>Add New Encounter</li>
+    <form action="<%=update_encounter_list_quest_url(@quest)%>" method="post">
+        <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+        <input type="hidden" name="_method" value="patch">
+         
+        <input type="text" name="quest[encounter_name]" placeholder="IE midnight ambush">
+        <input type="hidden" name="quest[id]" value="<%=@quest.id%>">
+        
+      <br>
+        <input type="submit" value="add new encounter">
+      </form>
+      <br>
  </ul>
 <!-- render a partial  add plot twist -->
 

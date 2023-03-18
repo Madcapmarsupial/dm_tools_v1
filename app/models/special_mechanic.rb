@@ -19,4 +19,18 @@ class SpecialMechanic < Component
     "special_mechanic"
   end
  
+  # * --> {"lore"=>nil, 
+  #   "name"=>"The Devil's Bargain",
+  #    "effect"=>nil, 
+  #    "defense"=>nil, 
+  #    "secrets"=>nil, 
+  #    "trigger"=>nil, 
+  #    "alignment"=>"harmful",
+  #     "appearance"=>nil, 
+  #     "description"=>"The Hooded Figure will offer the adventurers a deal: 
+  #     they can have the cure for the chieftain's son, 
+  #     but only if they agree to perform a task for him. 
+  #     The task will be dangerous and may involve doing something morally questionable.", "duration_in_rounds"=>nil}
+
+
 end

@@ -1,6 +1,6 @@
 class Encounter < Field
    store_accessor :completion, [:rewards, :creatures, :active_effects,
-    :encounter_name, :location_description, :area_layout]
+    :encounter_name, :location_description, :area_layout, :special_mechanics]
 
     #fields should be signle 
     #or be lists have generic name and description keys
@@ -18,29 +18,30 @@ class Encounter < Field
     primary_key: :id,
     foreign_key: :field_id
 
-     has_many :reward_models,
+    has_many :reward_models,
     class_name: 'Reward',
     primary_key: :id,
     foreign_key: :field_id
 
-     has_many :mechanic_models,
+    has_many :mechanic_models,
     class_name: 'SpecialMechanic',
     primary_key: :id,
     foreign_key: :field_id
 
-     has_many :effect_models,
+    has_many :effect_models,
     class_name: 'ActiveEffect',
     primary_key: :id,
     foreign_key: :field_id
 
-
     belongs_to :quest
 
+    def add_component(parameters)
+      #make sure name is present is valid 
+      new_component = {"name" => parameters[:name].titleize, "description" => parameters[:description].capitalize}
 
-    #active_effects
-    #rewards
-    #creatures
-    #special_mechanics
+      self.component_lists[parameters[:type]] << new_component
+      self.completion
+    end
 
     def component_list_types
       ["creature", "reward", "special_mechanic", "active_effect"]
@@ -57,40 +58,20 @@ class Encounter < Field
        model_lists[type_str.downcase]
     end
 
-
     def model_names(type_str)
       #must be a list
       #list items must have a name attribute
       list_of(type_str).map(&:name)
     end
 
-
-
-    #encounter.comp_list_types -> 
-       #['creature', 'reward', 'active_effect'] 
-    #list_of(type)
-      #model collection
-    #name_list
-      #include?
-
-  
-    def comp_lists
-      component_list = []
-      completion.each do |list_type, list|
-       list.is_a?(Array) 
-       component_list << list_type.singularize
-       #['creature', 'reward', 'active_effect'] 
-      end
-    end
-
-    def comp_singles
-        completion.each do |list_type, list|
-       list.is_a?(Array) 
-       comp_type = list_type.singularize
-        end
-    end
-
-
+    def component_lists
+     component_lists = {
+      "creature" => self.creatures,
+      "reward" => self.rewards,
+      "special_mechanic" => self.special_mechanics,
+      "active_effect" => self.active_effects
+    }
+  end
 
 #LOCATION
 #   "location_description"=>
@@ -98,9 +79,6 @@ class Encounter < Field
 #      "smells"=>"Strong, sweet incense permeates the room.",
 #      "sounds"=>"Echoing chants and incantations fill the air.",
 #      "surroundings"=>"A high and sour cave, encrusted with ancient minerals and lined with large, burning candles."}},
-
-
-
   
   def self.prompt(quest_id, name)
     #context  what needs to be context 
@@ -171,8 +149,6 @@ class Encounter < Field
  #    "status_effects"=>"Intimidation and fear can be used to speed up your mission, but greed and vanity will slow things down.",
 #      "encounter_mechanics"=>  "The High Priest will offer little resistance and requires no battle, but will still present a challenge. You must gather the relic from his clutches."},
 
- 
-
-
-
-end
+private
+  
+end#classq

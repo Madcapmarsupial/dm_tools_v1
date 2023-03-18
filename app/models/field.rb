@@ -13,6 +13,9 @@ class Field < ApplicationRecord
   primary_key: :id
 
    
+
+
+  
   # def last_created_trait
   #   list = self.children
   #   result = list.order(created_at: :desc).first
