@@ -35,12 +35,36 @@ class EncountersController < ApplicationController
     render :show
   end
 
+  def update
+    @encounter = Encounter.find_by(id: params[:id])
+    #what type of update?
+    #update completion
+      #control flow to decide what type of update params to call
+     new_completion = @encounter.add_component(component_params)
+        #component = {name = val, description = val}
+    #save might be better
+    #add validations
+    if @encounter.update(completion: new_completion)
+      redirect_to @encounter
+    else
+      redirect_to @encounter, alert: @encounter.errors.full_messages
+    end
+  end
+
+
+
+
+
+
+
   private
   def encounter_params
     params.require(:encounter).permit(:name, :quest_id, :completion, :response_id, :type)
   end
 
-
+  def component_params
+   params.require(:component).permit(:type, :description, :name)
+  end
   #this could go on a parent controller with the bottle cap check
   def create_response(prompt)
     #filters  the output of the Response create to load into a new quest

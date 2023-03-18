@@ -21,15 +21,16 @@ Rails.application.routes.draw do
 
 
   #what is accesed through a quest
-  resources :quests, only: [:create, :show, :new, :index] do 
+  resources :quests, only: [:create, :show, :new, :index, :update] do 
+    member do
+      patch 'update_encounter_list'
+    end
     #resources :fields, only: [:new, :index]
     resources :encounters, only: [:new, :index]
-    member do
-      patch 'update_encounter_name'
-    end
+   
   end
 
-  resources :encounters, only: [:show, :destroy, :create] do 
+  resources :encounters, only: [:show, :destroy, :create, :update] do 
     resources :components, only: [:new, :index]
   end
 

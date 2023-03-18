@@ -3,9 +3,6 @@ class Component < ApplicationRecord
   #belongs to field
   #has many details
 
-
-
-
    def self.prompt(params)
     encounter = Encounter.find_by(id: params[:field_id])
     parents_context = encounter.context_for_component
@@ -40,5 +37,9 @@ class Component < ApplicationRecord
   def self.param_string   
     param_list.slice(0...-1).join(", ") + " and #{param_list.last}"
   end
+  
+  
+
+
 
 end

@@ -129,3 +129,6 @@ end #class
 #     "total_tokens": 21
 #   }
 # }
+
+
+#your_client.models.list['data'].map { |model_hash| model_hash['id']}
