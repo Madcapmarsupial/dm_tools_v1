@@ -39,6 +39,8 @@ class Response < ApplicationRecord
       JSON.parse(self.choices.first['message']['content']) #chat model
     rescue JSON::ParserError => e
       errors.add :completion, :not_parseable, message: "problem with the response with id=(#{self.id}). Check for: ':', '', and numerals, or check your prompt, the bot may be drifting out of bounds"
+    rescue StandardError => e
+      errors.add :base, :api_connection, message: "response was not generated"
     end
     #JSON.parse(self.choices.first['message']['content'])
   end
@@ -48,34 +50,38 @@ class Response < ApplicationRecord
   end
 
   private
+
+
   def self.completion_values(contextulized_prompt, user_id) 
-    #temp options
-    #model options
-    #etc
-    myBot = OpenAI::Client.new
-    response = myBot.chat(
-    parameters: {
+    begin
+      myBot = OpenAI::Client.new
+      response = myBot.chat(
+      parameters: {
         model: "gpt-3.5-turbo", # Required.
         messages: [{ role: "user", content: contextulized_prompt}], # Required.
         temperature: 0.7,
-       #What sampling temperature to use, between 0 and 2.
+      })
+      #completion = myBot.completions(parameters: { model: "text-davinci-003", prompt: contextulized_prompt, max_tokens: 2000}) #completion
+      values_hash = {user_id: user_id, prompt: contextulized_prompt, completion: response}
+      #rescue OpenAI::Error::ServerError => e
+
+      # temperature  number Optional Defaults to 1
+      # What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
+      # We generally recommend altering this or top_p but not both.
+      # top_p  -> number Optional Defaults to 1
+      # An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
+      # We generally recommend altering this or temperature but not both.
+      #What sampling temperature to use, between 0 and 2.
        # Higher values like 0.8 will make the output more random, 
        #while lower values like 0.2 will make it more focused and deterministic.
-    })
-    #completion = myBot.completions(parameters: { model: "text-davinci-003", prompt: contextulized_prompt, max_tokens: 2000}) #completion
-    values_hash = {user_id: user_id, prompt: contextulized_prompt, completion: response}
-
-
-# temperature  number Optional Defaults to 1
-# What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
-
-# We generally recommend altering this or top_p but not both.
-
-# top_p  -> number Optional Defaults to 1
-# An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
-# We generally recommend altering this or temperature but not both.
-
     
+    rescue Net::OpenTimeout => e      
+      raise e
+    rescue Net::ReadTimeout => e
+      raise e
+    rescue StandardError => e
+      raise e
+    end
   end
 
   

@@ -1,6 +1,7 @@
 class ComponentsController < ApplicationController
 
 
+  # components list may depend upon feild type
   COMPONENTS = { 
     "reward" => Proc.new {Reward},
     "creature" => Proc.new {Creature},
@@ -14,26 +15,28 @@ class ComponentsController < ApplicationController
   }
 
   def create
-    #test
-      #this is list_item specific will need to be tweaked
-      #this can be done on the model
-      field = Field.find_by(id: params[:component][:field_id])
-      model_type = COMPONENTS[list_component_params[:type]].call
-      alignment = list_component_params[:alignment]
-      prompt = model_type.prompt(list_component_params)
+    begin
+      #test
+        #this is list_item specific will need to be tweaked
+        #this can be done on the model
+        field = Field.find_by(id: params[:component][:field_id])
+        model_type = COMPONENTS[list_component_params[:type]].call
+        alignment = list_component_params[:alignment]
+        prompt = model_type.prompt(list_component_params)
 
 
+          response = create_response(prompt)
+          values = {response_id: response.id, completion: response.text_to_hash, field_id: params[:component][:field_id], alignment: alignment}
+          new_component = model_type.new(values)
+
+          # if save
+          new_component.save!
       
-     
-
-        response = create_response(prompt)
-        values = {response_id: response.id, completion: response.text_to_hash, field_id: params[:component][:field_id], alignment: alignment}
-        new_component = model_type.new(values)
-
-        # if save
-        new_component.save!
-    
-       redirect_to encounter_url(field)
+          # this will need to be genralized to feild.
+        redirect_to encounter_url(field)
+    rescue StandardError => e
+      redirect_to encounter_url(field), alert: e
+    end
   end
   
 

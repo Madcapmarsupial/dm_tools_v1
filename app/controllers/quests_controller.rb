@@ -22,24 +22,28 @@ class QuestsController < ApplicationController
   end
 
   def create
-    if current_user.has_enough_bottlecaps?  #check user balance
-      prompt = Quest.prompt(quest_params)
-      response = create_response(prompt)  #user charged --> calls Response.create
-      values = {response_id: response.id, completion: response.text_to_hash, user_id: current_user.id}
-      @quest = Quest.new(values)
-      if @quest.save
-        #if we reach this point the validations have all passed
-        redirect_to @quest   #--> quest show
+    begin
+      if current_user.has_enough_bottlecaps?  #check user balance
+        prompt = Quest.prompt(quest_params)
+        response = create_response(prompt)  #user charged --> calls Response.create
+        values = {response_id: response.id, completion: response.text_to_hash, user_id: current_user.id}
+        @quest = Quest.new(values)
+        if @quest.save
+          #if we reach this point the validations have all passed
+          redirect_to @quest   #--> quest show
+        else
+          #refund -> and render :new #redirect_to user_home  #render response.errors.full_messaged too?
+          @quest.errors.add :response, invalid_response: "#{response.errors.full_messages}"
+          #render json: @quest.errors.full_messages, status: :unprocessable_entity
+          redirect_to root_path, alert: @quest.errors.full_messages
+            #quest not saved   #refund_user?/salvage last response
+        end
       else
-        #refund -> and render :new #redirect_to user_home  #render response.errors.full_messaged too?
-        @quest.errors.add :response, invalid_response: "#{response.errors.full_messages}"
-        #render json: @quest.errors.full_messages, status: :unprocessable_entity
-        redirect_to root_path, alert: @quest.errors.full_messages
-          #quest not saved   #refund_user?/salvage last response
+          redirect_to root_path, notice: "insufficient bottle caps"
+          #"insufficient funds"
       end
-    else
-        redirect_to root_path, notice: "insufficient bottle caps"
-        #"insufficient funds"
+    rescue StandardError => e
+      redirect_to new_quest_path, alert: e
     end
   end
 
