@@ -2,6 +2,16 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, prepend: true
   before_action :authenticate_user!
 
+
+  rescue_from ActionController::RoutingError, with: :handle_routing_error
+
+  def handle_routing_error
+    # I can edit the 404 view later
+    #render file: "#{Rails.root}/public/404.html", layout: false, status: :not_found
+    redirect_to root_path, notice: "routing error, there seems to be a problem with your url"
+  end
+
+
   #skip_before_action :verify_authenticity_token
   
   #  rescue_from ActionController::InvalidAuthenticityToken do |exception|
