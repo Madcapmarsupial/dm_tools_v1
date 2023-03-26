@@ -1,6 +1,7 @@
 class Villain < Field
   #attr_accessor :edge, :endgoal, :lair, :henchman, :backstory, :who
-    belongs_to :quest
+    belongs_to :quest,
+    optional: true
 
     store_accessor :completion, [:name, :description, :weaknesses, :motivation, 
     :special_abilities, :personality, :end_goal, :tragic_backstory, :redeeming_qualities, :lair, :henchman,

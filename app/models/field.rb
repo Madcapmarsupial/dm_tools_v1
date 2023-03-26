@@ -3,11 +3,13 @@ class Field < ApplicationRecord
   #custom_field       description (or this as part of setting?)
 
   belongs_to :quest,
+  optional: true,
   foreign_key: :quest_id,
   primary_key: :id,
   dependent: :destroy
 
   belongs_to :response,
+
   class_name: "Response",
   foreign_key: :response_id,
   primary_key: :id
