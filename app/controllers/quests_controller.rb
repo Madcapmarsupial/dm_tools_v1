@@ -23,7 +23,20 @@ class QuestsController < ApplicationController
 
   def create
     begin
-      if current_user.has_enough_bottlecaps?  #check user balance
+      if current_user.has_enough_bottlecaps?  #check user balance ->  5 ish generations
+        
+        #current_user.villains.last
+        #current_user.settings.last
+        #current_user.objectives.last
+
+      #create setting
+        #create objective
+          #create villain
+            #create completion
+
+
+
+
         prompt = Quest.prompt(quest_params)
         response = create_response(prompt)  #user charged --> calls Response.create
         values = {response_id: response.id, completion: response.text_to_hash, user_id: current_user.id}

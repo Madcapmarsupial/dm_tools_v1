@@ -1,9 +1,10 @@
 class EncountersController < ApplicationController
   
   def create
+    quest_id = params[:encounter][:quest_id]
+
     begin
       if current_user.has_enough_bottlecaps?  #check user balance
-        quest_id = params[:encounter][:quest_id]
         encounter_name = params[:encounter][:name]
         e_prompt = Encounter.prompt(quest_id, encounter_name)
         #name passed via params in view

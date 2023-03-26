@@ -1,6 +1,6 @@
 
 
-<%@encounter.completion.each do |list_type, list| %>
+<%encounter.completion.each do |list_type, list| %>
   <% if list.is_a?(Array)  %>
   <h3><%=list_type%></h3>
   <!--type string is pulled from a completion thus the syntax doesn not match the model exactly
@@ -8,7 +8,7 @@
     <%type_str = list_type.singularize%>
     <%list.each do |component| %>
     <!--if there is a model renderthe specific component view? -->
-    <% unless @encounter.model_names(type_str).include?(component['name'])  %>
+    <% unless encounter.model_names(type_str).include?(component['name'])  %>
     
   <!--if there is a generated model that shares the 'name' with the completion['name'] we skip it
   because we have already reneder the full modle for it
@@ -24,7 +24,7 @@
         </textarea>
         <br>
         <input type="hidden" name="component[type]" value="<%=type_str%>">  
-        <input type="hidden" name="component[field_id]" value="<%=@encounter.id%>">  
+        <input type="hidden" name="component[field_id]" value="<%=encounter.id%>">  
         
         <label >this <%=type_str%> is...</label>
         

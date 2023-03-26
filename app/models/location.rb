@@ -1,0 +1,2 @@
+class Location < Field
+end

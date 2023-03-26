@@ -1,7 +1,7 @@
 
 
 
-      <form action="<%=encounter_url(@encounter)%>" method="post">
+      <form action="<%=encounter_url(encounter)%>" method="post">
         <input name="authenticity_token"  type="hidden" value="<%= form_authenticity_token %>"/>
         <input type="hidden" name="_method" value="patch">
         

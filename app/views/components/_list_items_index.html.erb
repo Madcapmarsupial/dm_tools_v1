@@ -2,8 +2,8 @@
 <!--model_names(creature)    component[type]  Lists generated models -->
 
 
-<%@encounter.component_list_types.each do |list_type| %>
-    <%@encounter.list_of(list_type).each do |model| %>
+<%encounter.component_list_types.each do |list_type| %>
+    <%encounter.list_of(list_type).each do |model| %>
         <ul>
             <h3><%=model.name%></h3> 
             <!--render specefic component view pass in (model) -->

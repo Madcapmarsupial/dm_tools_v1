@@ -13,6 +13,37 @@ class Field < ApplicationRecord
   primary_key: :id
 
    
+  def self.get_class(type)
+    fields = {
+      "encounter" => Encounter,
+      "villain" => Villain,
+      "timer" => Timer,
+      "location" => Location,
+      "plotwist" => Plotwist,
+      "objective" => Objective
+    }
+    fields[type.downcase]
+  end
+
+  def self.prompt(options)
+    quest = Quest.find_by(id: options["quest_id"])
+
+    <<~EOT
+    #{quest.context}
+    Recreate "#{options["name"]}" in more detail.
+    Your response should have #{param_list.length} parameters #{param_string}
+    Your response should be in JSON format
+    EOT
+  end
+
+  private
+    def self.param_list
+      stored_attributes[:completion]
+    end
+
+    def self.param_string   
+      param_list.slice(0...-1).join(", ") + " and #{param_list.last}"
+    end
 
 
   

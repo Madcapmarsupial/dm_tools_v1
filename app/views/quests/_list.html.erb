@@ -1,0 +1,5 @@
+<%=list.each do |list_item|%>
+  <%if list_item.is_a?(Hash)%>
+    <%= render "quests/item", item: list_item%>
+  <%end %>
+<%end %>

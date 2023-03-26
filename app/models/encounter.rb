@@ -1,6 +1,6 @@
 class Encounter < Field
    store_accessor :completion, [:rewards, :creatures, :active_effects,
-    :encounter_name, :location_description, :area_layout, :special_mechanics]
+    :title, :location_description, :area_layout, :special_mechanics, :summary, :next_steps_for_players]
 
     #fields should be signle 
     #or be lists have generic name and description keys
@@ -80,13 +80,13 @@ class Encounter < Field
 #      "sounds"=>"Echoing chants and incantations fill the air.",
 #      "surroundings"=>"A high and sour cave, encrusted with ancient minerals and lined with large, burning candles."}},
   
-  def self.prompt(quest_id, name)
+  def self.prompt(options)
     #context  what needs to be context 
     #timer threat treat
     #sights sounds smells
     #keys
     #key count
-    quest = Quest.find_by(id: quest_id)
+    quest = Quest.find_by(id: options["quest_id"])
     # <<~EOT
     # #{quest.context}
     # Return the encounter with the name #{name}. 
@@ -110,8 +110,8 @@ class Encounter < Field
 
     <<~EOT
     #{quest.context}
-    Return the encounter with the name #{name}.
-    Your response should be in JSON format and each encounter should have 7 parameters "encounter_name", "location_description", "area_layout", "creatures", "rewards" "active_effects", and "special_mechanics"
+    Generate the encounter with the name #{options["name"]} and the description #{options["desc"]}.
+    Your response should be in JSON format and each encounter should have #{param_list.length} parameters #{param_string}
     The "creatures", "rewards", "active_effects" and "special_mechanics" parameters should all be a lists
     Each "creature", "reward", "active_effect", and  "special_mechanic" should have 2 parameters "name", and "description"
     The "location_description" parameter should should have 4 parameters "surroundings", "sights", "sounds", and "smells"

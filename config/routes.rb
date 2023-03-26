@@ -26,13 +26,19 @@ Rails.application.routes.draw do
       patch 'update_encounter_list'
     end
     #resources :fields, only: [:new, :index]
-    resources :encounters, only: [:new, :index]
+    #resources :encounters, only: [:new, :index]
+    resources :fields, only: [:new, :index]
+
    
   end
 
-  resources :encounters, only: [:show, :destroy, :create, :update] do 
+  resources :fields, only: [:show, :destroy, :create, :update] do 
     resources :components, only: [:new, :index]
   end
+
+   resources :encounters, only: [:show, :destroy, :create, :update] do 
+     resources :components, only: [:new, :index]
+   end
 
 
   

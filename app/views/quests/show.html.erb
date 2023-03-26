@@ -1,60 +1,55 @@
-<h1><%= @quest.scenario_name%></h1>
   <%= link_to "Quest List", quests_url%>
+  <%= @quest.completion %>
+  <br>
 
-<h2>Narrative points</h2>
-<ul>
-  <li><%=@quest.description%></li>
-  <li>Success: <%=@quest.success_consequence%></li>
-  <li>Failure: <%=@quest.fail_consequence%></li>
-  <li><%=@quest.plot_twist%></li>
-  <li>Time until failure: <%=@quest.timer%></li>  
-</ul>
+  <h3>Quest Components</h3>
+    <!--villain should be created -->
+    <!--setting should already be created -->
+    <!--objective should already be created -->
 
-<h3>Quest Components</h3>
- <ul>
-  <li>Villain: <%= @quest.villain["name"]%></li>
-  <li>Objective: <%= @quest.objective%></li>
-  <li>Setting: <%= @quest.setting%></li>
-</ul>
+
+
+<!-- <%#   <%@quest.completion.each do |k, v| %> -->
+<!-- <%#    <% type = v.class %> -->
+<!-- <%#      <%if type == String %> -->
+<!-- <%#        <%= render "quests/description", key: k, value: v %> -->
+<!-- <%#      <%elsif type == Array %> -->
+<!-- <%#        <%= render "quests/list", list: v%> -->
+<!-- <%#      <%elsif type == Hash %> -->
+<!-- <%#          <%= render "quests/item", item: v%> -->
+<!-- <%#      <%end%> -->
+<!-- <%#  <%end %> -->
+
+
 
 <h3>Encounters</h3>
+  <%= render @quest.fields %>
+
   <ul> 
-   
-
     <%@quest.encounter_list.each do |encounter| %>
-      <li><%=encounter%></li> 
-
-      <form action="/encounters" method="post"> <!--points a to encounter.create action generates new encounter completion-->
+      <form action="/fields" method="post"> <!--points a to field.create action generates new encounter completion with passed in type-->
         <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
-
-        <input type="hidden" name="encounter[name]" value="<%=encounter%>">
-        <input type="hidden" name="encounter[quest_id]" value="<%=@quest.id%>">
+        <input type="hidden" name="field[type]" value="encounter">
+        <input type="hidden" name="field[name]" value="<%=encounter["title"]%>">
+        <input type="hidden" name="field[quest_id]" value="<%=@quest.id%>">
+        <li><%=encounter["order_number"]%>:
+          <%=encounter["title"]%></li> 
+          <label for="description"></label>
+          <textarea name="field[description]" id="description" cols="30" rows="4">
+            <%=encounter["description"]%>
+          </textarea>  
+          <br>
+          <label for="pointer"></label>
+          <textarea id="pointer" cols="30" rows="4">
+            <%=encounter["next_steps"]%>
+          </textarea>  
+        <br>
         <input type="submit" value="generate this encounter">
       </form>  
-
-      <%id = @quest.encounter_name_id_pairs[encounter]%>
-      <!-- if id is nil encounter is empty and has not been generated yet-->
-      <%if id != nil %>
-        <!-- display extra deets-->
-        <%= link_to 'View Encounter', encounter_url(id) %>
-      <%end%>
-      <br><br>
-      <!-- add new name. remove name, input name, generate_details -->
-      <!-- input new name. remove name, input name, generate_details -->
-      <!-- generate -->
     <%end %><br>
-     <li>Add New Encounter</li>
-    <form action="<%=update_encounter_list_quest_url(@quest)%>" method="post">
-        <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
-        <input type="hidden" name="_method" value="patch">
-         
-        <input type="text" name="quest[encounter_name]" placeholder="IE midnight ambush">
-        <input type="hidden" name="quest[id]" value="<%=@quest.id%>">
-        
-      <br>
-        <input type="submit" value="add new encounter">
-      </form>
-      <br>
- </ul>
-<!-- render a partial  add plot twist -->
+  </ul>
+
+
+
+
 

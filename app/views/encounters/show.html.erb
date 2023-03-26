@@ -1,7 +1,10 @@
-<h1><%=@encounter.name %></h1>
+<h3><%=@encounter.name %></h1>
 <%= link_to 'Back to Quest', quest_url(@encounter.quest) %>
 
 <p>
+  <%= @encounter.summary %>
+    <br>
+
   <%= @encounter.area_layout%>
   <br><br>
   <%= @encounter.location_description['smells']%>
@@ -11,25 +14,20 @@
   <%= @encounter.location_description['sounds']%>
   <br><br>
   <%= @encounter.location_description['surroundings']%>
+
+  <br><br>
+  <%= @encounter.next_steps_for_players %>
+
   <br>
+  <br>
+
 </p>
 
 
-<%= render "components/custom_list_items" %>
+<%= render "components/custom_list_items", encounter: @encounter%>
 
-<%= render "components/list_items_index"%>
+<%= render "components/list_items_index", encounter: @encounter%>
 <!--list generated models-->
-<%= render "components/list_items_new" %>
+<%= render "components/list_items_new", encounter: @encounter %>
 <!-- list encounter fields with forms -->
 <br>
-<br>
-<br>
-
-<!-- #<%@encounter.completion.each do |k, v|%> -->
-<!-- #<%= "#{k} -> #{v}" %><br><br> -->
-<!-- #<% end  %> -->
-
-
-<!--top (desc room layout , room appeareance sights smells sounds)-->
-<!--mid  creatures(with enemy/ally tags), encounter_timer, ongoing effects,  -->
-<!--bottom  loot secrets, lore, creatures(neutral) -->
