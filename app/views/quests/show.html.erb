@@ -3,6 +3,10 @@
   <br>
 
   <h3>Quest Components</h3>
+    <%= render @quest.locations %>
+    <%= render @quest.objectives %>
+    <%= render @quest.villains %>
+
     <!--villain should be created -->
     <!--setting should already be created -->
     <!--objective should already be created -->
@@ -23,7 +27,7 @@
 
 
 <h3>Encounters</h3>
-  <%= render @quest.fields %>
+  <%= render @quest.encounters %>
 
   <ul> 
     <%@quest.encounter_list.each do |encounter| %>

@@ -1,12 +1,4 @@
 <!-- depending on type we render a different partial-->
-<h3>field view</h3>
-
-<!-- with @feild-->
-<% if @field.type == 'Encounter' %>
-<%= render "encounters/show" %>
-<% end %>
-
-<% if @field.type == 'Villian' %>
-<%= render "villian" %>
-
-<% end %>
+<%=@field.completion %>
+<br>
+<%= link_to 'Back to Quest', quest_url(@field.quest) %>

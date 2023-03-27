@@ -1,11 +1,10 @@
 <h1>User Home</h1>
 <p>hello <%=current_user.email%></p>
 
-<p>Bottle-caps  <%=current_user.balance %></p>
+<p>Coins:   <%=current_user.balance.to_i %></p>
 
 <%= button_to "New Quest", new_quest_url, method: :get%>  
   <form action="<%=quests_url%>" method="get">
-    <input type="hidden" name="user[id]" value="<%=current_user.id%>">
     <input type="submit" value="Quest List">
   </form>
 

@@ -24,24 +24,42 @@ class QuestsController < ApplicationController
   def create
     begin
       if current_user.has_enough_bottlecaps?  #check user balance ->  5 ish generations
-        
-        #current_user.villains.last
-        #current_user.settings.last
-        #current_user.objectives.last
 
-      #create setting
+        l_prompt = Location.blank_prompt(location_params)
+        response = create_response(l_prompt)  #user charged --> calls Response.create
+        l_values = {response_id: response.id, completion: response.text_to_hash}
+        location = Location.create(l_values)
+
+
+        o_prompt = Objective.blank_prompt(objective_params(location.completion, params))
+        response = create_response(o_prompt)
+        o_values = {response_id: response.id, completion: response.text_to_hash}
+        objective = Objective.create(o_values)
+
+        v_prompt = Villain.blank_prompt(villain_params(objective.completion, location.completion, params[:quest][:villain]))
+        response = create_response(v_prompt)
+        v_values = {response_id: response.id, completion: response.text_to_hash}
+        villain = Villain.create(v_values)
+        
+      
+        @quest = Quest.new()
+        #create setting
         #create objective
           #create villain
             #create completion
 
+        options = {"setting_completion"=> location.completion, "villain_completion" => villain.completion, "objective_completion"=> objective.completion}
 
 
-
-        prompt = Quest.prompt(quest_params)
+        prompt = Quest.prompt(options)  #import other prompts
         response = create_response(prompt)  #user charged --> calls Response.create
         values = {response_id: response.id, completion: response.text_to_hash, user_id: current_user.id}
         @quest = Quest.new(values)
         if @quest.save
+
+          villain.update(quest_id: @quest.id)
+          objective.update(quest_id: @quest.id)
+          location.update(quest_id: @quest.id)
           #if we reach this point the validations have all passed
           redirect_to @quest   #--> quest show
         else
@@ -96,6 +114,19 @@ class QuestsController < ApplicationController
 
   def quest_params  #only really prompt params right now
      params.require(:quest).permit(:villain, :setting, :objective, :completion, :response_id, :user_id, :name)
+  end
+
+  def location_params
+     params.require(:quest).permit(:villain, :setting, :objective)
+  end
+
+  def objective_params(l_completion, params)
+     q = params[:quest]
+     {"villain" => q[:villain], "objective" => q[:objective], "setting_completion" => l_completion}
+  end
+
+  def villain_params(o_completion, l_completion, villain)
+     {"villain" => villain, "objective_completion" => o_completion, "setting_completion" => l_completion}
   end
 end
 

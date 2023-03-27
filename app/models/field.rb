@@ -38,6 +38,29 @@ class Field < ApplicationRecord
     EOT
   end
 
+
+  # def self.blank_context(options)
+  #   str = <<~EOT
+  #   In an rpg scenario with a #{options["setting"]} as the setting, a #{options["objective"]} as the objective, and a #{options["villain"]} as the villain" 
+  #   EOT
+  #   str
+  # end
+
+
+# def self.blank_prompt(options)
+#   str = <<~EOT
+#   #{self.blank_context(options)}
+#   create the #{get_type} in more detail.
+#   Your response should have #{param_list.length} parameters #{param_string}
+#   #{self.specifics}
+#   Your response should be in JSON format
+#   EOT
+#   str
+# end
+
+def self.specifics
+end
+
   private
     def self.param_list
       stored_attributes[:completion]
@@ -46,6 +69,8 @@ class Field < ApplicationRecord
     def self.param_string   
       param_list.slice(0...-1).join(", ") + " and #{param_list.last}"
     end
+
+
 
 
   

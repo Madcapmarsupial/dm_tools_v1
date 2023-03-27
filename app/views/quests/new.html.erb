@@ -2,11 +2,12 @@
 
 <!-- <%# pointer set bny show action%> -->
  
+ <!--url_action points to fields-->
+ <!--setting -> objective -> villian -> quest -> SHOW -->
+ <!--in between it redirects back to Quest -->
  
 <form action="/quests" method="POST">
   <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
-
-  <input type="hidden" name="quest[user_id]" value="<%=@quest.user_id%>">
   <label for="user_setting">Setting</label>
   <br>
     <input type="text" name="quest[setting]" id="user_setting">
@@ -24,10 +25,37 @@
   <input type="text" name="quest[objective]" id="user_villain">
   <br>
   <br>
-  <input type="submit">
+  <input type="submit" value="create all">
   <br>
   <br>
 </form>
+
+
+<form action="/fields" method="POST">
+  <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+  <input type="hidden" name="field[type]" value="setting">
+  <label for="user_setting">Setting</label>
+  <br>
+    <input type="text" name="quest[setting]" id="user_setting">
+  <br>
+  <br>
+
+  <label for="user_villain">Villain</label>
+  <br>
+    <input type="text" name="quest[villain]" id="user_villain">
+  <br>
+  <br>
+
+  <label for="user_objective">Objective</label>
+  <br>
+  <input type="text" name="quest[objective]" id="user_villain">
+  <br>
+  <br>
+  <input type="submit" value="Create Setting">
+  <br>
+  <br>
+</form>
+
 
   <%= link_to "Home", root_url%><br><br>
 

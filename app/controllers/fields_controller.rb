@@ -46,7 +46,7 @@ class FieldsController < ApplicationController
     @field = Field.find_by(id: params[:id])
     #rework this to redirect to the type/show?
     # render fields/ show and pass in the type on view to detrmine which "type partial to render?"
-    render @field
+    render "show", field: @field
   end
 
   # def update

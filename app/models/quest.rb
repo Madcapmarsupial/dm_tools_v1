@@ -25,6 +25,14 @@ class Quest < ApplicationRecord
   class_name: 'Villain',
   dependent: :destroy
 
+    has_many :locations,
+  class_name: 'Location',
+  dependent: :destroy
+
+    has_many :objectives,
+  class_name: 'Objective',
+  dependent: :destroy
+
   has_many :fields,
   class_name: 'Field',
   dependent: :destroy
@@ -48,13 +56,14 @@ class Quest < ApplicationRecord
   #   EOT
   # end
 
-  def self.prompt(param_hash)
+  def self.prompt(options)
    prompt = <<~EOT
-    Create an rpg scenario with a #{param_hash[:villain]} as the villain, the setting is a #{param_hash[:setting]} and the objective is a #{param_hash[:objective]}
+    Create an rpg scenario with this data for the scenario setting #{options["setting_completion"]} 
+    This data for the scenario objective #{options["objective_completion"]}
+    And this data for the scenario villian #{options["villain_completion"]}
     Your response should be in JSON format with #{param_list.length} parameters #{param_string}
     Limit the scenario to 5 "events"
     #{specifics}
-
     EOT
   end
 
@@ -67,7 +76,6 @@ class Quest < ApplicationRecord
       The "sequence_of_events" parameter should be a list
       Each "event" should have 4 parameters "order_number", "title", "description", "next_steps"
       The "plot_twist" parameter should have "5" parameters "the liar",  "the lie", "the truth", "the consequences", and  "the clues"
-
     EOT
   end 
 
