@@ -35,7 +35,7 @@
 
 <%if @quest.response_id == nil %>
 <!-- add conditional logic -->
-<%if @quest.settings.empty? %>
+ <%if @quest.settings.empty? %>
   <p> generate setting</p>
   <%= render "/fields/new", quest: @quest, type: "setting", options: @quest.completion, name: @quest.completion["setting"], description: ""%>
   <% elsif @quest.objectives.empty?%>
@@ -44,12 +44,22 @@
   <% elsif @quest.villains.empty? %>
   <p> generate villian</p>
   <%= render "/fields/new", quest: @quest, type: "villain", options: @quest.completion, name: @quest.completion["villain"], description: ""%>
+  <% else %>
+    <form action="<%=generate_quest_url(@quest)%>" method="post">
+      <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+      <input type="hidden" name="_method" value="patch">
+      
+      <br>
+      <input type="submit" value="generate this quest">
+    </form>
 
-<% end %>
+ <% end %>
 
 
 
 <% else %>
+  <%= @quest.completion %>
+
   <h3>Encounters</h3>
 
   <%= render @quest.encounters %>
@@ -78,7 +88,6 @@
   </ul>
 <%end %>
 
-  <%= @quest.completion %>
 
 
 

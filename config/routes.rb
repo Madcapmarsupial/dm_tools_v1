@@ -24,6 +24,8 @@ Rails.application.routes.draw do
   resources :quests, only: [:create, :show, :new, :index, :update] do 
     member do
       patch 'update_encounter_list'
+      patch 'generate'
+
     end
     #resources :fields, only: [:new, :index]
     #resources :encounters, only: [:new, :index]

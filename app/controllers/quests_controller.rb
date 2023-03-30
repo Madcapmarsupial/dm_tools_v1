@@ -12,8 +12,8 @@ class QuestsController < ApplicationController
   end
 
   def update
-    @quest = Quest.find_by(id: params[:quest][:id])
-  
+    @quest = Quest.find_by(id: params[:id])
+
     if @quest.update(quest_params)
       redirect_to @quest
     else
@@ -102,6 +102,34 @@ class QuestsController < ApplicationController
     end
   end
 
+  def generate
+    @quest = Quest.find_by(id: params[:id])
+    begin
+      if current_user.has_enough_bottlecaps? 
+        response = create_response(Quest.prompt(@quest.id))
+
+        values = {response_id: response.id, completion: response.text_to_hash, name: response.text_to_hash["scenario_name"]}
+        if @quest.update(values)
+          redirect_to @quest   #--> quest show
+        else
+          #refund -> and render :new #redirect_to user_home  #render response.errors.full_messaged too?
+          @quest.errors.add :response, invalid_response: "#{response.errors.full_messages}"
+          #render json: @quest.errors.full_messages, status: :unprocessable_entity
+          redirect_to @quest, alert: @quest.errors.full_messages
+            #quest not saved   #refund_user?/salvage last response
+        end
+      else
+          redirect_to root_path, notice: "insufficient coins"
+          #"insufficient funds"
+      end
+   rescue StandardError => e
+      redirect_to root_path, alert: e
+    end
+  end
+
+
+
+
   private
   def create_response(prompt)
     #filters  the output of the Response create to load into a new quest
@@ -109,7 +137,7 @@ class QuestsController < ApplicationController
   end
 
   def quest_params  #only really prompt params right now
-     params.require(:quest).permit(:villain, :setting, :objective, :completion, :response_id, :user_id, :name)
+     params.require(:quest).permit(:villain, :setting, :objective, :completion, :new_completion, :response_id, :user_id, :name)
   end
 
   def location_params

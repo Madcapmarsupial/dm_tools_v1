@@ -54,7 +54,8 @@ class Quest < ApplicationRecord
    settings.last || []
   end
   
-  def self.prompt(options)
+  def self.prompt(quest_id)
+    #options = {quest_name, linked_quest, imports}
     # def self.prompt(param_hash) #(system='dnd', encounters=4, theme='fantasy', context='') #context = QuestResponse.find_by()
    #  prompt = <<~EOT
    #  Create an rpg scenario with a #{param_hash[:villain]} as the villain, the setting is a #{param_hash[:setting]} and the objective is a #{param_hash[:objective]}
@@ -66,10 +67,17 @@ class Quest < ApplicationRecord
    #  Your response should contain no integers.
    #  EOT
     # end
+
+    setting_completion = Setting.find_by(quest_id: quest_id).completion
+    objective_completion = Objective.find_by(quest_id: quest_id).completion
+    villain_completion = Villain.find_by(quest_id: quest_id).completion
+
+
+    
    prompt = <<~EOT
-    Create an rpg scenario with this data for the scenario setting #{options["setting_completion"]} 
-    This data for the scenario objective #{options["objective_completion"]}
-    And this data for the scenario villian #{options["villain_completion"]}
+    Create an rpg scenario with this data for the scenario setting #{setting_completion} 
+    This data for the scenario objective #{objective_completion}
+    And this data for the scenario villian #{villain_completion}
     Your response should be in JSON format with #{param_list.length} parameters #{param_string}
     Limit the scenario to 5 "events"
     #{specifics}

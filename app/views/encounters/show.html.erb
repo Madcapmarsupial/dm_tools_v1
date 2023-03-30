@@ -2,24 +2,54 @@
 <%= link_to 'Back to Quest', quest_url(@encounter.quest) %>
 
 <p>
+ <%= @encounter.location_description['surroundings']%>
+  <br>
+
+  <%= @encounter.location_description['smells']%>
+  <br>
+  <%= @encounter.location_description['sights']%>
+  <br>
+  <%= @encounter.location_description['sounds']%>
+  <br><br>
+
   <%= @encounter.summary %>
-    <br>
+  <br>
+  <%= @encounter.next_steps_for_players %>
+
+    <br><br>
 
   <%= @encounter.area_layout%>
   <br><br>
-  <%= @encounter.location_description['smells']%>
-  <br><br>
-  <%= @encounter.location_description['sights']%>
-  <br><br>
-  <%= @encounter.location_description['sounds']%>
-  <br><br>
-  <%= @encounter.location_description['surroundings']%>
+ 
+
+<h3>Components</h3>
+  <% @encounter.creatures.each do |creature| %>
+    <h4><%= creature["name"]%></h4>
+     <!--quantity, number_actions_per_turn, special_abilietes -->
+
+     <%= render "components/creatures/stat_block", creature: creature%> 
+  <%end %>
+  <br>
+
+    <% @encounter.rewards.each do |reward| %>
+    <%= reward["name"]%> |
+  <%end %>
+  <br>
+
+  <% @encounter.special_mechanics.each do |mech| %>
+    <%= mech["name"]%> |
+  <%end %>
+  <br>
+
+     <% @encounter.active_effects.each do |effect| %>
+    <%= effect["name"]%> |
+  <%end %>
+  <br>
 
   <br><br>
-  <%= @encounter.next_steps_for_players %>
 
-  <br>
-  <br>
+  
+
 
 </p>
 

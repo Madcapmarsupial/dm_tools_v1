@@ -2,9 +2,15 @@ class Villain < Field
   #attr_accessor :edge, :endgoal, :lair, :henchman, :backstory, :who
     belongs_to :quest
 
-    store_accessor :completion, [:name, :description, :weaknesses, :motivation, 
-    :special_abilities, :personality, :end_goal, :tragic_backstory, :redeeming_qualities, :lair, :henchman,
-    :misguided_ideals, :planned_use_for_the_objective, :heinous_crime]
+    store_accessor :completion, [
+      #info
+        :name, :description, :motivation, :appearance, 
+      #roleplay
+        :personality, :end_goal, :tragic_backstory, :redeeming_qualities,
+        :misguided_ideals, :planned_use_for_the_objective, :the_story_of_the_most_recent_victim,
+      #mechanics
+        :special_abilities, :weaknesses, :lair, :henchman
+    ]
    
      def self.get_type
        "villain"
