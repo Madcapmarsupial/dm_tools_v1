@@ -1,6 +1,5 @@
 class Objective < Field
-  belongs_to :quest,
-  optional: true
+  belongs_to :quest
 
     store_accessor :completion, [:name, :summary, :description, :lore, :current_owner, :current_location, 
       :effects_and_abilites, :use_cases, :interested_parties, :secrets, :conflicts_of_interest]
@@ -10,18 +9,20 @@ class Objective < Field
        "objective"
      end
 
-    def self.blank_context(options)
+    def self.blank_context(field)
+      setting = Setting.find_by(quest_id: field[:quest_id])
+      # setting should be a completion in this case
       str = <<~EOT
-      In an rpg scenario that has this data for the setting #{options["setting_completion"]}
-      And a #{options["objective"]} as the objective
-      And a #{options["villain"]} as the villain" 
+      In an rpg scenario that has this data for the setting #{setting.completion}
+      And a #{field["options"]["objective"]} as the objective
+      And a #{field["options"]["villain"]} as the villain" 
       EOT
       str
     end
 
-    def self.blank_prompt(options)
+    def self.prompt(field)
       str = <<~EOT
-      #{self.blank_context(options)}
+      #{self.blank_context(field)}
       create the #{get_type} in more detail.
       Your response should have #{param_list.length} parameters #{param_string}
       #{self.specifics}

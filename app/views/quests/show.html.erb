@@ -1,15 +1,22 @@
   <%= link_to "Quest List", quests_url%>
-  <%= @quest.completion %>
   <br>
 
   <h3>Quest Components</h3>
-    <%= render @quest.locations %>
+    <h4>location</h4>
+    <!--@quest.setting.all[i]  # i = (params[:setiing_index].to_i || -1) -->
+    <%= render @quest.current_setting %>
+
+    <h4>objective</h4>
     <%= render @quest.objectives %>
+
+    <h4>villain</h4>
+
     <%= render @quest.villains %>
 
     <!--villain should be created -->
     <!--setting should already be created -->
     <!--objective should already be created -->
+
 
 
 
@@ -26,9 +33,26 @@
 
 
 
-<h3>Encounters</h3>
-  <%= render @quest.encounters %>
+<%if @quest.response_id == nil %>
+<!-- add conditional logic -->
+<%if @quest.settings.empty? %>
+  <p> generate setting</p>
+  <%= render "/fields/new", quest: @quest, type: "setting", options: @quest.completion, name: @quest.completion["setting"], description: ""%>
+  <% elsif @quest.objectives.empty?%>
+  <p> generate objective</p>
+  <%= render "/fields/new", quest: @quest, type: "objective", options: @quest.completion, name: @quest.completion["objective"], description: ""%>
+  <% elsif @quest.villains.empty? %>
+  <p> generate villian</p>
+  <%= render "/fields/new", quest: @quest, type: "villain", options: @quest.completion, name: @quest.completion["villain"], description: ""%>
 
+<% end %>
+
+
+
+<% else %>
+  <h3>Encounters</h3>
+
+  <%= render @quest.encounters %>
   <ul> 
     <%@quest.encounter_list.each do |encounter| %>
       <form action="/fields" method="post"> <!--points a to field.create action generates new encounter completion with passed in type-->
@@ -52,6 +76,9 @@
       </form>  
     <%end %><br>
   </ul>
+<%end %>
+
+  <%= @quest.completion %>
 
 
 

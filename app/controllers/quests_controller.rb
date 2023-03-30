@@ -25,42 +25,38 @@ class QuestsController < ApplicationController
     begin
       if current_user.has_enough_bottlecaps?  #check user balance ->  5 ish generations
 
-        l_prompt = Location.blank_prompt(location_params)
-        response = create_response(l_prompt)  #user charged --> calls Response.create
-        l_values = {response_id: response.id, completion: response.text_to_hash}
-        location = Location.create(l_values)
+        # l_prompt = Location.blank_prompt(location_params)
+        # response = create_response(l_prompt)  #user charged --> calls Response.create
+        # l_values = {response_id: response.id, completion: response.text_to_hash}
+        # location = Location.create(l_values)
 
 
-        o_prompt = Objective.blank_prompt(objective_params(location.completion, params))
-        response = create_response(o_prompt)
-        o_values = {response_id: response.id, completion: response.text_to_hash}
-        objective = Objective.create(o_values)
+        # o_prompt = Objective.blank_prompt(objective_params(location.completion, params))
+        # response = create_response(o_prompt)
+        # o_values = {response_id: response.id, completion: response.text_to_hash}
+        # objective = Objective.create(o_values)
 
-        v_prompt = Villain.blank_prompt(villain_params(objective.completion, location.completion, params[:quest][:villain]))
-        response = create_response(v_prompt)
-        v_values = {response_id: response.id, completion: response.text_to_hash}
-        villain = Villain.create(v_values)
+        # v_prompt = Villain.blank_prompt(villain_params(objective.completion, location.completion, params[:quest][:villain]))
+        # response = create_response(v_prompt)
+        # v_values = {response_id: response.id, completion: response.text_to_hash}
+        # villain = Villain.create(v_values)
         
-      
-        @quest = Quest.new()
+      user_values =  {"setting"=> quest_params["setting"], "objective"=>quest_params["objective"], "villain"=> quest_params["villain"]}
+      @quest = Quest.new(user_id: current_user.id, completion: user_values)
         #create setting
         #create objective
           #create villain
             #create completion
 
-        options = {"setting_completion"=> location.completion, "villain_completion" => villain.completion, "objective_completion"=> objective.completion}
-
-
-        prompt = Quest.prompt(options)  #import other prompts
-        response = create_response(prompt)  #user charged --> calls Response.create
-        values = {response_id: response.id, completion: response.text_to_hash, user_id: current_user.id}
-        @quest = Quest.new(values)
+        #options = {"setting_completion"=> location.completion, "villain_completion" => villain.completion, "objective_completion"=> objective.completion}
+        # prompt = Quest.prompt(options)  #import other prompts
+        # response = create_response(prompt)  #user charged --> calls Response.create
+        # values = {response_id: response.id, completion: response.text_to_hash, user_id: current_user.id}
+        # @quest = Quest.new(values)
+        # @quest.name = @quest.scenario_name
         if @quest.save
+        
 
-          villain.update(quest_id: @quest.id)
-          objective.update(quest_id: @quest.id)
-          location.update(quest_id: @quest.id)
-          #if we reach this point the validations have all passed
           redirect_to @quest   #--> quest show
         else
           #refund -> and render :new #redirect_to user_home  #render response.errors.full_messaged too?

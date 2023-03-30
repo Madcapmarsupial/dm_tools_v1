@@ -3,7 +3,6 @@ class Field < ApplicationRecord
   #custom_field       description (or this as part of setting?)
 
   belongs_to :quest,
-  optional: true,
   foreign_key: :quest_id,
   primary_key: :id,
   dependent: :destroy
@@ -20,7 +19,7 @@ class Field < ApplicationRecord
       "encounter" => Encounter,
       "villain" => Villain,
       "timer" => Timer,
-      "location" => Location,
+      "setting" => Setting,
       "plotwist" => Plotwist,
       "objective" => Objective
     }
@@ -38,14 +37,12 @@ class Field < ApplicationRecord
     EOT
   end
 
-
   # def self.blank_context(options)
   #   str = <<~EOT
   #   In an rpg scenario with a #{options["setting"]} as the setting, a #{options["objective"]} as the objective, and a #{options["villain"]} as the villain" 
   #   EOT
   #   str
   # end
-
 
 # def self.blank_prompt(options)
 #   str = <<~EOT

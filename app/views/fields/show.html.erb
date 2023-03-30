@@ -1,4 +1,9 @@
 <!-- depending on type we render a different partial-->
-<%=@field.completion %>
-<br>
 <%= link_to 'Back to Quest', quest_url(@field.quest) %>
+<%@field.completion.each do |k, v| %>
+<br>
+<%="#{k} --> #{v}"%>
+<br>
+<br>
+<% end %>
+<br>

@@ -2,40 +2,35 @@ class FieldsController < ApplicationController
     
   def create
     quest_id = params[:field][:quest_id]#[:encounter][:quest_id]
-
+    #quest_id id name type completion response_id  description
     begin
-      if current_user.has_enough_bottlecaps?  #check user balance
+      if current_user.has_enough_bottlecaps? 
         field_name = params[:field][:name]#[:encounter][:name]
+        subclass = Field.get_class(params[:field][:type])
+          #old   field_options = {"quest_id" => quest_id, "name"=> field_name, "descripition"=>params[:field][:description]}
+        prompt = subclass.prompt(params[:field])
+          #we use the class specific prompt -> Villain.prompt to get instance specific completions from gpt
         
-        field_prompt = Field.get_class(params[:field][:type]).prompt({"quest_id" => quest_id, "name"=> field_name, "desc"=>params[:field][:description]})
-        #we use the class specific prompt -e Villain.prompt
-        #name passed via params in view
-
-        response = create_response(field_prompt)  #user charged --> calls Response.create
-        #possibility that the response is (new) and invalid
-
-        #values = {response_id: response.id, completion: response.text_to_hash, quest_id: quest_id, name: encounter_name}
-        #@encounter = Encounter.new(values)
+        response = create_response(prompt)  
+          #user charged --> calls Response.create
+          #possibility that the response is (new) and invalid
 
         values = {response_id: response.id, completion: response.text_to_hash, quest_id: quest_id, name: field_name} 
-        @field = Field.get_class(params[:field][:type]).new(values)
+        @field = subclass.new(values)
 
         if @field.save
           #if we reach this point the validations have all passed
-          
-          #redirect_to @field #points to created type
-          redirect_to quest_url(quest_id)
-
+          #redirect_to quest_url(quest_id)
+          redirect_to field_url(@field.id)
         else
-          #refund -> and render :new #redirect_to user_home  #render response.errors.full_messaged too?
           @field.errors.add :response, invalid_response: "#{response.errors.full_messages}"
-          #render json: @quest.errors.full_messages, status: :unprocessable_entity
           redirect_to quest_url(quest_id), alert: @field.errors.full_messages
             #quest not saved   #refund_user?/salvage last response
+            #refund
         end
       else
-          redirect_to quest_url(quest_id), notice: "insufficient bottle caps"
-          #"insufficient funds"
+          redirect_to quest_url(quest_id), notice: "insufficient coins"
+          #redirect_to  add coins 
       end
     rescue StandardError => e
       redirect_to quest_url(quest_id), alert: e
@@ -50,29 +45,22 @@ class FieldsController < ApplicationController
   end
 
   # def update
-  #   @encounter = Encounter.find_by(id: params[:id])
-  #   #what type of update?
-  #   #update completion
-  #     #control flow to decide what type of update params to call
-  #    new_completion = @encounter.add_component(component_params)
-  #       #component = {name = val, description = val}
-  #   #save might be better
-  #   #add validations
-  #   if @encounter.update(completion: new_completion)
-  #     redirect_to @encounter
-  #   else
-  #     redirect_to @field, alert: @encounter.errors.full_messages
-  #   end
+   #  @encounter = Encounter.find_by(id: params[:id])
+   #  #what type of update?
+   #  #update completion
+   #    #control flow to decide what type of update params to call
+   #   new_completion = @encounter.add_component(component_params)
+   #      #component = {name = val, description = val}
+   #  #save might be better
+   #  #add validations
+   #  if @encounter.update(completion: new_completion)
+   #    redirect_to @encounter
+   #  else
+   #    redirect_to @field, alert: @encounter.errors.full_messages
+   #  end
   # end
-
-
-
 
   private
-  # def encounter_params
-  #   params.require(:encounter).permit(:name, :quest_id, :completion, :response_id, :type)
-  # end
-
   def component_params
    params.require(:component).permit(:type, :description, :name)
   end
@@ -80,6 +68,12 @@ class FieldsController < ApplicationController
   def create_response(prompt)
     #filters  the output of the Response create to load into a new quest
     response = Response.build_response(prompt, current_user.id)  #$$$ inside Response     
+  end
+
+ 
+
+  def field_params
+    params.require(:field).permit(:type, :description, :name, :options) #setting_id, objective_id
   end
 
 end

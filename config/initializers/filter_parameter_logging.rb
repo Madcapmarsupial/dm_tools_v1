@@ -5,6 +5,8 @@
 # notations and behaviors.
 Rails.application.config.filter_parameters += [
   :passw, :secret, :token, :_key, :crypt, :salt, :certificate, :otp, :ssn,
-  # added 
-  :email, :encrypted_password, :reset_password_token
+  # devise added 
+  :email, :encrypted_password, :reset_password_token,
+  # me added
+  :user_id, :id, :owner_id
 ]
