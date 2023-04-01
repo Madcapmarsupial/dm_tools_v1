@@ -1,7 +1,7 @@
 class Quest < ApplicationRecord
   #validate :encounter_name_cannot_be_blank
 
-  store_accessor :completion,  [:scenario_name, :sequence_of_events, :summary, :outcomes, :key_emontional_moments, :overarching_themes, :plot_twist]
+  store_accessor :completion,  [:quest_name, :sequence_of_events, :summary, :outcomes, :key_emontional_moments, :overarching_themes, :plot_twist]
   #[:scenario_name, :description, :setting, :villain,
    # :timer, :objective, :success_consequence, :fail_consequence, :plot_twist, :encounter_list]
     #prefix?
@@ -37,7 +37,7 @@ class Quest < ApplicationRecord
     dependent: :destroy
 #associations
   
-  def context
+  def q_context
     text = <<~EOT
     #{self.completion}
     EOT
@@ -68,16 +68,16 @@ class Quest < ApplicationRecord
    #  EOT
     # end
 
-    setting_completion = Setting.find_by(quest_id: quest_id).completion
-    objective_completion = Objective.find_by(quest_id: quest_id).completion
-    villain_completion = Villain.find_by(quest_id: quest_id).completion
+    setting_context = Setting.find_by(quest_id: quest_id).s_context
+    objective_context = Objective.find_by(quest_id: quest_id).o_context
+    villain_context = Villain.find_by(quest_id: quest_id).v_context
 
 
     
    prompt = <<~EOT
-    Create an rpg scenario with this data for the scenario setting #{setting_completion} 
-    This data for the scenario objective #{objective_completion}
-    And this data for the scenario villian #{villain_completion}
+    Create an rpg scenario with this data for the scenario setting #{setting_context} 
+    This data for the scenario objective #{objective_context}
+    And this data for the scenario villian #{villain_context}
     Your response should be in JSON format with #{param_list.length} parameters #{param_string}
     Limit the scenario to 5 "events"
     #{specifics}
@@ -119,24 +119,45 @@ class Quest < ApplicationRecord
    #   self
   # end
 
-  # def edit_encounter_name(new_name, old_name) #deal with capitalization
-   #     #returns a string to be used in creating a new QuestResponse
-   #   index = self.response.encounters_array.find_index(old_name) #{'encounter_name' => old_name}
-   #       #[{"encounter_name"=>"The Wailing Wood"}, {"encounter_name"=>"The Harvest of Souls"}, {"encounter_name"=>"The Arboreal Abomination"}, {"encounter_name"=>"The Relic of Rot"}]
-   #   text_hash = self.response.text_to_hash
-   #   text_hash["encounter_list"][index] = new_name   #{'encounter_name' => new_name} be carful of this syntax
-   #     #text_hash now has the new name in the encounter_list list
-   #   self.staged_response = text_hash.to_json
-   #   #may need to us update here
-   #   #adds to staged
-  # end
+  #  key_history
+  #   k_list = Quest.all.map { |q| q.completion.keys }.uniq
+    #   [
+    #    ["timer", "setting", "villain", "objective", "plot_twist", "description", "scenario_name", "encounter_list", "fail_consequence", "success_consequence"],
+    #    ["summary", "outcomes", "scenario_name", "plot_structure", "overarching_theme", "sequence_of_events", "key_emotional_moments"],
+    #    ["summary", "outcomes", "scenario_name", "overarching_themes", "sequence_of_events", "key_emotional_moments"],
+    #    ["summary", "outcomes", "plot_twist", "scenario_name", "overarching_themes", "sequence_of_events", "key_emotional_moments"],
+    #    #["setting", "villain", "objective"],  should avoid these
+    #    {"description" => "summary", "scenario_name" => "quest_name", "encounter_list" => "sequence_events" }
+    #    ["summary", "outcomes", "plot_twist", "quest_name", "overarching_themes", "sequence_of_events", "key_emotional_moments"]
+    #   ]
+  # 
+
+  def update_completion_keys(keys_hash)
+    #need to build a hash of old_key -> new_key
+    updated_completion = self.completion.transform_keys(keys_hash)
+    self.update(completion: updated_completion)
+  end
+
+  def update_completion_sub_key(sub_key, keys_hash)
+    if self.completion[sub_key].is_a?(Hash)
+       updated_completion = self.completion[sub_key].transform_keys(keys_hash)
+      self.update(completion: updated_completion)
+    end
+    p "invalid sub key -> #{completion[sub_key]}"
+  end
+
+  def update_completion_value(key)
+  end
+
+
+
 
    def encounter_name_id_pairs
      e_hash = {}
     #   #be careful of creating multiple encounters
     #   #multiple genrations with the same name will overwrite each other
 
-    self.encounters.each { |encounter| e_hash[encounter.name] = encounter.id }
+    self.encounters.each { |encounter| e_hash[encounter.encounter_name] = encounter.id }
     e_hash
   end
 

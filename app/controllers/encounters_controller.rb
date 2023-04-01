@@ -1,5 +1,5 @@
 class EncountersController < ApplicationController
-  
+  #models have :name completions have "type_name"
   def create
     quest_id = params[:encounter][:quest_id]
 

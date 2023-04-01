@@ -1,6 +1,8 @@
 class Encounter < Field
-   store_accessor :completion, [:rewards, :creatures, :active_effects,
-    :title, :location_description, :area_layout, :special_mechanics, :summary, :next_steps_for_players]
+   store_accessor :completion, [:rewards, :creatures, :active_effects, :the_impressive_spectacle,
+    :encounter_name, :sense_of_danger, :location_description, :area_layout, :special_mechanics, :summary, :encounter_goal, :main_encounter_obstacle, :next_steps_for_players]
+    #sense_of_danger, :primary_encounter_threat, primary_threat
+
 
     #fields should be signle 
     #or be lists have generic name and description keys
@@ -73,6 +75,11 @@ class Encounter < Field
     }
   end
 
+  def get_component_by_name(type, name)
+    list_of(type).find_by(name: name)
+  end 
+
+
   def self.prompt(field)
     #field should be a hash from the params hash
 
@@ -83,20 +90,21 @@ class Encounter < Field
     #key count
     quest = Quest.find_by(id: field["quest_id"])
     <<~EOT
-    #{quest.context}
+    #{quest.q_context}
     Generate the encounter with the name #{field["name"]} and the description #{field["description"]}.
     Your response should be in JSON format and each encounter should have #{param_list.length} parameters #{param_string}
     The "creatures", "rewards", "active_effects" and "special_mechanics" parameters should all be a lists
     Each "creature", "reward", "active_effect", and  "special_mechanic" should have 2 parameters "name", and "description"
     The "location_description" parameter should should have 4 parameters "surroundings", "sights", "sounds", and "smells"
-    make the encounter time sensitive somehow using the "active_effects" and or "special_mechanics" parameters
+    The "sense_of_danger" parameter should have 4 parameters "the_primary_threat", "the_consequences_of_failure", "the_victims", and "added_complications_of_failure"
+    make the encounter time sensitive somehow using the "active_effects" and or "special_mechanics" and "sense_of_danger" parameters
     EOT
   end
 
 
     def context_for_component
-      quest_context = self.quest.completion.to_json  
-      encounter_contex = self.completion.to_json
+      quest_context = self.quest.completion
+      encounter_contex = self.completion
       component_context = <<~EOT
       #{quest_context}
       #{encounter_contex}

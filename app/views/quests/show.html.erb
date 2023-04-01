@@ -64,25 +64,25 @@
 
   <%= render @quest.encounters %>
   <ul> 
-    <%@quest.encounter_list.each do |encounter| %>
+    <%@quest.sequence_of_events.each do |event| %>
       <form action="/fields" method="post"> <!--points a to field.create action generates new encounter completion with passed in type-->
         <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
-        <input type="hidden" name="field[type]" value="encounter">
-        <input type="hidden" name="field[name]" value="<%=encounter["title"]%>">
+        <input type="hidden" name="field[type]" value="event">
+        <input type="hidden" name="field[name]" value="<%=event["title"]%>">
         <input type="hidden" name="field[quest_id]" value="<%=@quest.id%>">
-        <li><%=encounter["order_number"]%>:
-          <%=encounter["title"]%></li> 
+        <li><%=event["order_number"]%>:
+          <%=event["title"]%></li> 
           <label for="description"></label>
           <textarea name="field[description]" id="description" cols="30" rows="4">
-            <%=encounter["description"]%>
+            <%=event["description"]%>
           </textarea>  
           <br>
           <label for="pointer"></label>
           <textarea id="pointer" cols="30" rows="4">
-            <%=encounter["next_steps"]%>
+            <%=event["next_steps"]%>
           </textarea>  
         <br>
-        <input type="submit" value="generate this encounter">
+        <input type="submit" value="generate this event">
       </form>  
     <%end %><br>
   </ul>

@@ -13,6 +13,6 @@
 <%  quest = current_user.quests.last %>
 <% if quest != nil %>
 <p><%= "pick up where you left off"%></p>
-  <%=link_to "#{quest.scenario_name}", quest_url(quest.id)  %>
+  <%=link_to "#{quest.name}", quest_url(quest.id)  %>
 <%end %>
 <!-- (current_user.id)-->

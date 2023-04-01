@@ -1,7 +1,7 @@
 
 <form action="generate_timer" method="post">
   <%@encounter.time_limits.each do |timer|%>
-  <input type="text" name="timer[title]" value="<%=timer['title']%>">
+  <input type="text" name="timer[name]" value="<%=timer['timer_name']%>">
   <input type="hidden" name="timer[description]" value="<%=timer['description']%>">
   <input type="hidden" name="timer[penalty]" value="<%=timer['penalty']%>">
 

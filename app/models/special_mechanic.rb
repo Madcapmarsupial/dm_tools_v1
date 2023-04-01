@@ -6,7 +6,7 @@ class SpecialMechanic < Component
   dependent: :destroy
   #has mnay details
 
-  store_accessor :completion, [:name, :description, :alignment, :duration_in_rounds, :effect, :trigger, 
+  store_accessor :completion, [:special_mechanic_name, :description, :alignment, :duration_in_rounds, :effect, :trigger, 
     :defense, :secrets, :lore, :appearance]
     #, :quantity, :weaknesses,:equipment, 
     #:special_abilities, :key_chracteristic, :personality, :motivation, :alignment, :tactics]

@@ -53,7 +53,7 @@ class QuestsController < ApplicationController
         # response = create_response(prompt)  #user charged --> calls Response.create
         # values = {response_id: response.id, completion: response.text_to_hash, user_id: current_user.id}
         # @quest = Quest.new(values)
-        # @quest.name = @quest.scenario_name
+        # @quest.name = @quest.quest_name
         if @quest.save
         
 
@@ -108,7 +108,7 @@ class QuestsController < ApplicationController
       if current_user.has_enough_bottlecaps? 
         response = create_response(Quest.prompt(@quest.id))
 
-        values = {response_id: response.id, completion: response.text_to_hash, name: response.text_to_hash["scenario_name"]}
+        values = {response_id: response.id, completion: response.text_to_hash, name: response.text_to_hash["quest_name"]}
         if @quest.update(values)
           redirect_to @quest   #--> quest show
         else

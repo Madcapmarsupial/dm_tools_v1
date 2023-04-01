@@ -6,7 +6,7 @@ class ActiveEffect < Component
   dependent: :destroy
   #has mnay details
 
-  store_accessor :completion, [:name, :description, :alignment,
+  store_accessor :completion, [:active_effect_name, :description, :alignment,
   :duration_in_rounds, :effect, :cause, :prevention, :secrets, :lore, :appearance, :defense]
 
     #:special_abilities, :key_chracteristic, :personality, :motivation, :alignment, :tactics]

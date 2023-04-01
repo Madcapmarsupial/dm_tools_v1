@@ -6,7 +6,7 @@ class Creature < Component
   dependent: :destroy
   #has mnay details
 
-  store_accessor :completion, [:name, :equipment, :description, :quantity, :weaknesses, :bonuses,
+  store_accessor :completion, [:creature_name, :equipment, :description, :quantity, :weaknesses, :bonuses,
     :special_abilities, :key_chracteristic, :personality, :motivation, :alignment, :tactics]
 
     #put these under detail?

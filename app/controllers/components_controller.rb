@@ -26,7 +26,7 @@ class ComponentsController < ApplicationController
 
 
           response = create_response(prompt)
-          values = {response_id: response.id, completion: response.text_to_hash, field_id: params[:component][:field_id], alignment: alignment}
+          values = {response_id: response.id, completion: response.text_to_hash, field_id: params[:component][:field_id], alignment: alignment, name: response.text_to_hash["name"]}
           new_component = model_type.new(values)
 
           # if save
@@ -42,7 +42,7 @@ class ComponentsController < ApplicationController
 
   private
    def list_component_params
-    params.require(:component).permit(:name, :description, :alignment, :type, :field_id)
+    params.require(:component).permit(:name, :description, :alignment, :type, :field_id, :quantity)
    end
   #single_component_params
 

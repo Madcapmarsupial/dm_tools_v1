@@ -4,7 +4,7 @@ class Villain < Field
 
     store_accessor :completion, [
       #info
-        :name, :description, :motivation, :appearance, 
+        :villain_name, :description, :motivation, :appearance, 
       #roleplay
         :personality, :end_goal, :tragic_backstory, :redeeming_qualities,
         :misguided_ideals, :planned_use_for_the_objective, :the_story_of_the_most_recent_victim,
@@ -13,7 +13,7 @@ class Villain < Field
     ]
    
      def self.get_type
-       "villain"
+       "villain" 
      end
 
      def self.blank_context(field)
@@ -22,8 +22,8 @@ class Villain < Field
       objective = Objective.find_by(quest_id: field[:quest_id])
 
       str = <<~EOT
-      In an rpg scenario that has this data for the setting #{setting.completion}
-      And this data for the objective #{objective.completion} 
+      In an rpg scenario that has this data for the setting #{setting.s_context}
+      And this data for the objective #{objective.o_context} 
       And a #{field["options"]["villian"]} as the villain" 
       EOT
       str
@@ -37,6 +37,16 @@ class Villain < Field
       Your response should be in JSON format
       EOT
       str
+    end
+
+    def v_context
+      {
+        "villain_name" => self.villain_name,
+      "planned_use_for_the_objective" => self.planned_use_for_the_objective,
+      "end_goal" => self.end_goal,
+      "tragic_backstory" => self.tragic_backstory,
+      "the_story_of_the_most_recent_victim" => self.the_story_of_the_most_recent_victim,
+      "misguided_ideals" => self.misguided_ideals}
     end
 
   

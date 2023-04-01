@@ -1,7 +1,7 @@
 class Setting < Field
   belongs_to :quest
 
-    store_accessor :completion, [:name, :summary, :description, :layout, :dwellers,
+    store_accessor :completion, [:setting_name, :summary, :description, :layout, :dwellers,
     :secrets, :lore, :history, :hazards, :narrative_connections]
   
 
@@ -30,6 +30,9 @@ class Setting < Field
       str
     end
 
+    def s_context
+      self.completion
+    end
 
      def self.specifics
       str = <<~EOT

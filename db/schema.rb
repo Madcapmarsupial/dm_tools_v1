@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_28_033648) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_30_233234) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,10 +27,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_28_033648) do
     t.string "type"
     t.string "alignment"
     t.jsonb "completion"
-    t.string "label"
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "response_id"
+    t.integer "quantity"
     t.index ["field_id"], name: "index_components_on_field_id"
     t.index ["response_id"], name: "index_components_on_response_id"
   end

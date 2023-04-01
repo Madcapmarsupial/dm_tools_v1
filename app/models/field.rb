@@ -30,7 +30,7 @@ class Field < ApplicationRecord
     quest = Quest.find_by(id: options["quest_id"])
 
     <<~EOT
-    #{quest.context}
+    #{quest.q_context}
     Recreate "#{options["name"]}" in more detail.
     Your response should have #{param_list.length} parameters #{param_string}
     Your response should be in JSON format

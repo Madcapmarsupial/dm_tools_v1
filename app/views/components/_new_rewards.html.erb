@@ -9,7 +9,7 @@
   <%@encounter.rewards.each do |reward|%>
     <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
 
-    <input type="text" name="reward[name]" value="<%=reward['name']%>"><br>
+    <input type="text" name="reward[name]" value="<%=reward['reward_name']%>"><br>
     <label for="description"></label>
     <textarea name="component[description]" id="description" cols="30" rows="4"><%=reward["description"]%></textarea>
 
