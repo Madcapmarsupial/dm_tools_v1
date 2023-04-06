@@ -3,6 +3,10 @@ class Component < ApplicationRecord
   #belongs to field
   #has many details
 
+  def child_type
+    "detail"
+  end
+
    def self.prompt(params)
     encounter = Encounter.find_by(id: params[:field_id])
     parents_context = encounter.context_for_component

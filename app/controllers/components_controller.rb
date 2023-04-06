@@ -22,11 +22,17 @@ class ComponentsController < ApplicationController
         field = Field.find_by(id: params[:component][:field_id])
         model_type = COMPONENTS[list_component_params[:type]].call
         alignment = list_component_params[:alignment]
+        type_name = "#{list_component_params[:type]}_name"
         prompt = model_type.prompt(list_component_params)
 
 
           response = create_response(prompt)
-          values = {response_id: response.id, completion: response.text_to_hash, field_id: params[:component][:field_id], alignment: alignment, name: response.text_to_hash["name"]}
+          values = {response_id: response.id, completion: response.text_to_hash, 
+                    field_id: params[:component][:field_id], alignment: alignment, 
+                    name: response.text_to_hash[type_name]
+                    # , quantity: list_component_params["quantity"]
+                    }
+
           new_component = model_type.new(values)
 
           # if save
@@ -46,9 +52,10 @@ class ComponentsController < ApplicationController
    end
   #single_component_params
 
-  def create_response(prompt)
-    response = Response.build_response(prompt, current_user.id)  #$$$ inside Response     
-  end
+  include Generatable
+  # def create_response(prompt)
+  #   response = Response.build_response(prompt, current_user.id)  #$$$ inside Response      
+  # end
 
 
 end

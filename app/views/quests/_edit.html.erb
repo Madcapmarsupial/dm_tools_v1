@@ -1,0 +1,38 @@
+
+
+      <!--create user_response -->
+
+      <!--get the quests scene_list i = scenelist_length+1 -->
+<label for="">Scene_list</label>
+<% 1.times.each do |i| %>
+
+<form action="<%=quest_url(quest)%>" method="post">
+  <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+  <input type="hidden" name="_method" value="patch">
+
+  <%nesting ="quest[completion][sequence_of_events][#{i}]"%>
+
+  <br>
+  <label for="">scene: <%=i+1%></label>
+  <input type="hidden" name="<%=nesting%>[order_number]" value="<%=i+1%>" id="">
+  <br>
+
+  <label for="">title</label>
+  <input type="text" name="<%=nesting%>[title]" id="">
+  <br>
+
+  <label for="">description</label>
+  <br>
+  <textarea name="<%=nesting%>[description]" id="" cols="25" rows="5">
+  </textarea>
+  <br>
+
+  <label for="">connection to next scene</label>
+  <br>
+  <textarea name="<%=nesting%>[next_steps]" id="" cols="25" rows="5">
+  </textarea>
+
+  <br>
+  <input type="submit" value="add scene">
+</form>
+<%end %>

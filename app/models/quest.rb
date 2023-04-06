@@ -3,13 +3,14 @@ class Quest < ApplicationRecord
 
   store_accessor :completion,  [:quest_name, :sequence_of_events, :summary, :outcomes, :key_emontional_moments, :overarching_themes, :plot_twist]
   #[:scenario_name, :description, :setting, :villain,
+  #add spectacle here??
    # :timer, :objective, :success_consequence, :fail_consequence, :plot_twist, :encounter_list]
     #prefix?
 
   #encounters/events can have individual outcomes?  outcomes can be seperate generations? 
   #add an implementation of a quest.id_list for response version control.
   #stashed saved response for unsaved quests
-
+  
   belongs_to :response,
    optional: true,
    class_name: "Response",
@@ -43,7 +44,11 @@ class Quest < ApplicationRecord
     EOT
   end
 
-  def current_setting#(i)
+  def child_type
+    "field"
+  end
+
+  #def current_setting#(i)
     # to maintain a version history we would have to track an index for every child field.
       #or we pass a decrementer or an incrementor along params
       #instead of settings.last we do settings.all[index]  defualt being -1
@@ -51,8 +56,8 @@ class Quest < ApplicationRecord
       # <%= link_to '<', quest_url(@quest, :incrementor =>"-1", :current_id => @quest.current_setting(params).id) %>
       #we'd need a version history to store the working index
         #settings[-1 + i.to_i]
-   settings.last || []
-  end
+   #settings.last || []
+  #end
   
   def self.prompt(quest_id)
     #options = {quest_name, linked_quest, imports}
@@ -91,10 +96,12 @@ class Quest < ApplicationRecord
   def self.specifics
     str = <<~EOT
       The "sequence_of_events" parameter should be a list
-      Each "event" should have 4 parameters "order_number", "title", "description", "next_steps"
+      Each "event" should have 3 parameters "order_number", "title", "description"
       The "plot_twist" parameter should have "5" parameters "the liar",  "the lie", "the truth", "the consequences", and  "the clues"
     EOT
   end 
+
+  #on_completion, #on_success, 
 
   def self.param_string
     param_list.slice(0...-1).join(", ") + " and #{param_list.last}"

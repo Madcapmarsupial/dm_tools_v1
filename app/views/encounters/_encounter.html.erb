@@ -1,8 +1,17 @@
 
+<!--this is what is listed on a quest_view -->
+
+
 <div>
   <%= encounter.encounter_name %>
   <br>
-  <%= encounter.next_steps_for_players %>
-  <br>
+  <ul>
+  <li><%= encounter.next_steps_for_players %></li>
+  <li><%= encounter.encounter_goal %></li>
+  <li><%= encounter.main_encounter_obstacle %></li>
+  <li><%= encounter.sense_of_danger["the_primary_threat"] %></li>
+  <li><%= encounter.sense_of_danger["the_consequences_of_failure"] %></li>
+</ul>
   <%= link_to "View", encounter_url(encounter) %>
 </div>
+<br>

@@ -1,10 +1,10 @@
 class Encounter < Field
-   store_accessor :completion, [:rewards, :creatures, :active_effects, :the_impressive_spectacle,
-    :encounter_name, :sense_of_danger, :location_description, :area_layout, :special_mechanics, :summary, :encounter_goal, :main_encounter_obstacle, :next_steps_for_players]
+   store_accessor :completion, [:reward_list, :creature_list, :active_effect_list, :special_mechanic_list, :the_impressive_spectacle,
+    :encounter_name, :sense_of_danger, :area_description, :area_layout, :summary, :encounter_goal, :main_encounter_obstacle, :next_steps_for_players]
     #sense_of_danger, :primary_encounter_threat, primary_threat
 
 
-    #fields should be signle 
+    #fields should be single 
     #or be lists have generic name and description keys
 
     #update encounter name
@@ -49,7 +49,13 @@ class Encounter < Field
       ["creature", "reward", "special_mechanic", "active_effect"]
     end
 
-    def list_of(type_str)
+    def model_names(type_str)
+      #must be a list
+      #list items must have a name attribute
+      list_of(type_str).map(&:name)
+    end
+
+     def list_of(type_str)
          model_lists = {
         "creature" => self.creature_models,
         "reward" => self.reward_models,
@@ -60,18 +66,12 @@ class Encounter < Field
        model_lists[type_str.downcase]
     end
 
-    def model_names(type_str)
-      #must be a list
-      #list items must have a name attribute
-      list_of(type_str).map(&:name)
-    end
-
     def component_lists
      component_lists = {
-      "creature" => self.creatures,
-      "reward" => self.rewards,
-      "special_mechanic" => self.special_mechanics,
-      "active_effect" => self.active_effects
+      "creature_list" => self.creature_list,
+      "reward_list" => self.reward_list,
+      "special_mechanic_list" => self.special_mechanic_list,
+      "active_effect_list" => self.active_effect_list
     }
   end
 
@@ -93,9 +93,8 @@ class Encounter < Field
     #{quest.q_context}
     Generate the encounter with the name #{field["name"]} and the description #{field["description"]}.
     Your response should be in JSON format and each encounter should have #{param_list.length} parameters #{param_string}
-    The "creatures", "rewards", "active_effects" and "special_mechanics" parameters should all be a lists
-    Each "creature", "reward", "active_effect", and  "special_mechanic" should have 2 parameters "name", and "description"
-    The "location_description" parameter should should have 4 parameters "surroundings", "sights", "sounds", and "smells"
+    Each "creature", "reward", "active_effect", and  "special_mechanic"within their respictive list should have 2 parameters "name", and "description"
+    The "area_description" parameter should should have 4 parameters "surroundings", "sights", "sounds", and "smells"
     The "sense_of_danger" parameter should have 4 parameters "the_primary_threat", "the_consequences_of_failure", "the_victims", and "added_complications_of_failure"
     make the encounter time sensitive somehow using the "active_effects" and or "special_mechanics" and "sense_of_danger" parameters
     EOT
@@ -114,36 +113,29 @@ class Encounter < Field
     end
 
 
-#CREATURE
-#    "creatures"=>[{"name"=>"High Priest", "count"=>"1", "attitude"=>"Neutral"}],
-#creature type
 
-#    "area_layout"=> {
- #    "status_effects"=>"Intimidation and fear can be used to speed up your mission, but greed and vanity will slow things down.",
-#      "encounter_mechanics"=>  "The High Priest will offer little resistance and requires no battle, but will still present a challenge. You must gather the relic from his clutches."},
+    def create_user_response(user_id, field_hash)
+      user_completion =  {
+        "usage"=>{"total_tokens"=>0, "prompt_tokens"=>0, "completion_tokens"=>0},
+        "choices"=>
+        [
+          {
+            "index"=>0,
+            "message"=> {
+            "role"=>"assistant",
+            # sanitize user input
+            "content"=> field_hash.to_json
+          },
+        
+        "finish_reason"=>"stop"}
+        ],
+        "created"=>1680407028
+      }      
+      values = {user_id: user_id, completion: user_completion, prompt: "blank_#{self.type.downcase}"}
+    end
 
 private
   
-end#classq
+end#class
 
 
-
-    # <<~EOT
-    # #{quest.context}
-    # Return the encounter with the name #{name}. 
-    # Your response should be in JSON format and each encounter should have 11 parameters "encounter_name", "description","location", "creatures", "items", "consequences", "obstacles", "magic", "secrets", "lore", and "active effects"
-    # EOT
-
-    # title cause penelty turn duration 
-  
-    # <<~EOT
-    # #{quest.context}
-    # Return the encounter with the name #{name}.
-    # Your response should be in JSON format and each encounter should have 10 parameters "encounter_name", "location_description", "secrets", "lore" "area_layout", "creatures", "rewards", "threats", "time_limits", and "items"
-    # The "area_layout" parameter should have 2 parameters, "encounter-mechanics", "status_effects"
-    # The "location_description" parameter should should have 4 parameters "surroundings", "sights", "sounds", and "smells"
-    # The "creatures" parameter should be a list of JSON hashes representing the creatures present in the encounter IE. [{name: "goblin", count: "3", attitude: "hostile"}, {name: "butler", count: "1", "neutral"}, {name: "princess", count: "1", attitude: "helpful"}]
-    # The parameter "time_limits" should be a list of "timers"
-    # A "timer" should be a JSON hash with 3 parameters "title", "description", and "penalty"
-    # Add at least one timer to "time_limits"
-    # EOT

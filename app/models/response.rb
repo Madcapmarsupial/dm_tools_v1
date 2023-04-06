@@ -105,6 +105,21 @@ class Response < ApplicationRecord
       errors.add :completion, :not_parseable, message: "problem with the response with id=(#{self.id}). Check for: ':', '', and numerals, or check your prompt, the bot may be drifting out of bounds"
     end
   end
+
+
+  def self.blank
+    { "id"=>nil, 
+      "model"=>"user_response",
+      "usage"=>{
+        "total_tokens"=>0,
+        "prompt_tokens"=>0, 
+        "completion_tokens"=>0}, 
+      "choices"=> [ {"index"=>0, "message"=> {"role"=>"assistant","content"=>{} }, "finish_reason"=>"blank_stop"} ],
+      "object"=>"blank_completion",
+      "created"=>nil}
+  end
+
+
 end #class
 
 

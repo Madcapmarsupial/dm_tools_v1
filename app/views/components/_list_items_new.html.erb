@@ -1,34 +1,39 @@
 
+<!--each componet_model has a "name", "type", "description", "alignement", and "quantity" -->
+<!--each response from the Scene/encounter creates "name" and "descriptions"-->
+<!--each completion for a component uses a "type_name" instead -->
 
-<%encounter.completion.each do |list_type, list| %>
+
+<%encounter.completion.each do |key, list| %>
   <% if list.is_a?(Array)  %>
-  <h3><%=list_type%></h3>
+  <h3><%=key%></h3>
   <!--type string is pulled from a completion thus the syntax doesn not match the model exactly
   model = ActiveEffect vs completion = active_effect-->
-    <%type_str = list_type.singularize%>
-    <%component_name = "#{type_str}_name" %>
+    <%key_type = key.slice(0..-6)%>
+      <!--trim the "_list" of the key-->
     <%list.each do |component| %>
-    <!--if there is a model renderthe specific component view? -->
-    <% unless encounter.model_names(type_str).include?(component[component_name])  %>
+    <!--if there is a model render the specific component view? -->
+    <%= key_type%>
+      <% unless encounter.model_names(key_type).include?(component["#{key_type}_name"])  %>
     
-  <!--if there is a generated model that shares the 'name' with the completion['name'] we skip it
-  because we have already reneder the full modle for it
-  -->
+    <!--if there is a generated model that shares the 'name' with the completion['name'] we skip it
+    because we have already rendered the full model for it
+    -->
+
+      <!--gen more details -> needs  component, type, encounter.id-->
       <form action="/components" method="post">
         <input name="authenticity_token"  type="hidden" value="<%= form_authenticity_token %>"/>
-
-        <input type="text" name="component[name]" value='<%=component[component_name]%>'>
+        <input type="text" name="component[name]" value='<%=component["name"]%>'>
         <br>
         <label for="c_desc"></label>
         <textarea name="component[description]" id="c_desc" cols="30" rows="5">
         <%= component['description']%>
         </textarea>
         <br>
-        <input type="hidden" name="component[type]" value="<%=type_str%>">  
+        <input type="hidden" name="component[type]" value="<%=key_type%>">  
         <input type="hidden" name="component[field_id]" value="<%=encounter.id%>">  
-        
-        <label >this <%=type_str%> is...</label>
-        
+        <label >this <%=key_type%> is...</label>
+
         <input type="hidden" name="component[alignment]" value="">
         <input type="radio" id="harmful" name="component[alignment]" value="harmful">
         <label for="threat">Harmful</label>
@@ -39,12 +44,8 @@
         <br>
         <input type="submit" value="generate more details">
       </form>
-    <!-- <select name="city_id" id="city_id">
-      <option name="component[alignment]" value="a threat">Harmful</option>
-      <option value="1">Helpful</option>
-      <option value="2">Neutral</option>
-    </select> -->
-    <%end%>
+
+      <%end%>
       <br>
     <%end %>
   <%end%>

@@ -2,6 +2,8 @@ class Field < ApplicationRecord
   #objective, villain, plotwist, encounter, location, setting/location, roll table
   #custom_field       description (or this as part of setting?)
 
+  include Generatable  
+
   belongs_to :quest,
   foreign_key: :quest_id,
   primary_key: :id,
@@ -12,6 +14,11 @@ class Field < ApplicationRecord
   class_name: "Response",
   foreign_key: :response_id,
   primary_key: :id
+
+  def child_type
+    "component"
+  end
+
 
    
   def self.get_class(type)

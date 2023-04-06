@@ -1,5 +1,6 @@
 <div>
   <%= setting.name %>
+  <% @field = Field.find_by(id: setting.id)%>
   <br>
-  <%= link_to "View", field_url(setting) %>
+  <%= link_to "View", field_url(@field) %>
 </div>

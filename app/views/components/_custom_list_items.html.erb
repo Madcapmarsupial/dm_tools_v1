@@ -1,12 +1,10 @@
 
-
-
       <form action="<%=encounter_url(encounter)%>" method="post">
         <input name="authenticity_token"  type="hidden" value="<%= form_authenticity_token %>"/>
         <input type="hidden" name="_method" value="patch">
         
        
-      <h3>Add a new component</h3>
+        <h3>Add a new component</h3>
         <label>Name</label>
         <!--may need to be custom_name -->
         <input type="text" name="component[name]" placeholder="your value here">
@@ -17,7 +15,7 @@
         </textarea>
         <br> 
  
-          <label>this is a...</label>
+        <label>this is a...</label>
         <select name="component[type]">
           <option value="creature">Creature</option>
           <option value="reward">Reward</option>
@@ -25,7 +23,7 @@
           <option value="special_mechanic">Special-Mechanic</option>
         </select>
         <br>
-        <input type="submit" value="Add Encounter component">
+        <input type="submit" value="Add scene component">
       </form>
     <!-- <select name="city_id" id="city_id">
       <option name="component[alignment]" value="a threat">Harmful</option>

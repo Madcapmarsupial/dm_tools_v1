@@ -102,6 +102,8 @@ class QuestsController < ApplicationController
     end
   end
 
+  
+
   def generate
     @quest = Quest.find_by(id: params[:id])
     begin
@@ -131,10 +133,11 @@ class QuestsController < ApplicationController
 
 
   private
-  def create_response(prompt)
-    #filters  the output of the Response create to load into a new quest
-    response = Response.build_response(prompt, current_user.id)  #$$$ inside Response     
-  end
+  # def create_response(prompt)
+  #   #filters  the output of the Response create to load into a new quest
+  #   response = Response.build_response(prompt, current_user.id)  #$$$ inside Response      
+  # end
+  include Generatable
 
   def quest_params  #only really prompt params right now
      params.require(:quest).permit(:villain, :setting, :objective, :completion, :new_completion, :response_id, :user_id, :name)

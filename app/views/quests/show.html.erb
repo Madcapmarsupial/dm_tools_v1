@@ -1,38 +1,5 @@
   <%= link_to "Quest List", quests_url%>
-  <br>
-
-  <h3>Quest Components</h3>
-    <h4>location</h4>
-    <!--@quest.setting.all[i]  # i = (params[:setiing_index].to_i || -1) -->
-    <%= render @quest.current_setting %>
-
-    <h4>objective</h4>
-    <%= render @quest.objectives %>
-
-    <h4>villain</h4>
-
-    <%= render @quest.villains %>
-
-    <!--villain should be created -->
-    <!--setting should already be created -->
-    <!--objective should already be created -->
-
-
-
-
-<!-- <%#   <%@quest.completion.each do |k, v| %> -->
-<!-- <%#    <% type = v.class %> -->
-<!-- <%#      <%if type == String %> -->
-<!-- <%#        <%= render "quests/description", key: k, value: v %> -->
-<!-- <%#      <%elsif type == Array %> -->
-<!-- <%#        <%= render "quests/list", list: v%> -->
-<!-- <%#      <%elsif type == Hash %> -->
-<!-- <%#          <%= render "quests/item", item: v%> -->
-<!-- <%#      <%end%> -->
-<!-- <%#  <%end %> -->
-
-
-
+  
 <%if @quest.response_id == nil %>
 <!-- add conditional logic -->
  <%if @quest.settings.empty? %>
@@ -45,47 +12,44 @@
   <p> generate villian</p>
   <%= render "/fields/new", quest: @quest, type: "villain", options: @quest.completion, name: @quest.completion["villain"], description: ""%>
   <% else %>
-    <form action="<%=generate_quest_url(@quest)%>" method="post">
+     <form action="<%=generate_quest_url(@quest)%>" method="post">
       <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
       <input type="hidden" name="_method" value="patch">
-      
       <br>
       <input type="submit" value="generate this quest">
     </form>
+
+  <br>
+    <%= render @quest.villains.last %>
+    <%= render @quest.settings.last %>
+    <%= render @quest.objectives.last %>
+
 
  <% end %>
 
 
 
-<% else %>
-  <%= @quest.completion %>
+  <%else %>
+  <h3>Encounter list</h3>
+  <!-- <%# render @quest.encounters %> -->
 
-  <h3>Encounters</h3>
-
-  <%= render @quest.encounters %>
+  <h3>Encounter forms</h3>
   <ul> 
     <%@quest.sequence_of_events.each do |event| %>
-      <form action="/fields" method="post"> <!--points a to field.create action generates new encounter completion with passed in type-->
-        <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
-        <input type="hidden" name="field[type]" value="event">
-        <input type="hidden" name="field[name]" value="<%=event["title"]%>">
-        <input type="hidden" name="field[quest_id]" value="<%=@quest.id%>">
-        <li><%=event["order_number"]%>:
-          <%=event["title"]%></li> 
-          <label for="description"></label>
-          <textarea name="field[description]" id="description" cols="30" rows="4">
-            <%=event["description"]%>
-          </textarea>  
-          <br>
-          <label for="pointer"></label>
-          <textarea id="pointer" cols="30" rows="4">
-            <%=event["next_steps"]%>
-          </textarea>  
-        <br>
-        <input type="submit" value="generate this event">
-      </form>  
-    <%end %><br>
+      <%= render "encounters/new", event: event, quest: @quest%>
+    <br>
   </ul>
+
+  <%end %>    
+
+
+<h3>data<h3>
+  <%@quest.completion.each do |key, value| %>
+  <h3><%="#{key}"%></h3>
+  <%= render "completions/completion_object", parent: @quest, value: value %>
+  <br>
+  <%end %>
+  <br>
 <%end %>
 
 

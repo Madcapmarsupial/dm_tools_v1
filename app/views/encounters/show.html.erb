@@ -1,5 +1,9 @@
 <h3><%=@encounter.encounter_name %></h1>
+
+<p>"blank show from encounter"</p>
+<h3>full encounter</h3>
 <%= link_to 'Back to Quest', quest_url(@encounter.quest) %>
+
 
 <ul>
   <h3>primary threat</h3>
@@ -55,14 +59,14 @@
   <%= @encounter.the_impressive_spectacle%>
   <br>
 
- <%= @encounter.location_description['surroundings']%>
+ <%= @encounter.area_description['surroundings']%>
   <br>
 
-  <%= @encounter.location_description['smells']%>
+  <%= @encounter.area_description['smells']%>
   <br>
-  <%= @encounter.location_description['sights']%>
+  <%= @encounter.area_description['sights']%>
   <br>
-  <%= @encounter.location_description['sounds']%>
+  <%= @encounter.area_description['sounds']%>
   <br><br>
 
   <%= @encounter.summary %>
@@ -79,25 +83,18 @@
 <p>
 
 <h3>Components</h3>
-  <% @encounter.creatures.each do |creature| %>
-    <h4><%= creature["creature_name"]%></h4>
-     <!--quantity, number_actions_per_turn, special_abilietes -->
-     <%= render "components/creatures/stat_block", creature: creature%> 
+    <% @encounter.reward_list.each do |reward| %>
+    <%= reward["name"]%> |
   <%end %>
   <br>
 
-    <% @encounter.rewards.each do |reward| %>
-    <%= reward["reward_name"]%> |
+  <% @encounter.special_mechanic_list.each do |mech| %>
+    <%= mech["name"]%> |
   <%end %>
   <br>
 
-  <% @encounter.special_mechanics.each do |mech| %>
-    <%= mech["special_mechanic_name"]%> |
-  <%end %>
-  <br>
-
-     <% @encounter.active_effects.each do |effect| %>
-    <%= effect["active_effect_name"]%> |
+     <% @encounter.active_effect_list.each do |effect| %>
+    <%= effect["name"]%> |
   <%end %>
   <br>
 
@@ -116,3 +113,7 @@
 <%= render "components/list_items_new", encounter: @encounter %>
 <!-- list encounter fields with forms -->
 <br>
+<%@encounter.completion.each do |key, value| %>
+<h3><%="#{key}"%></h3>
+  <%= render "completions/completion_object",value: value, parent: @encounter%>
+<% end%>
