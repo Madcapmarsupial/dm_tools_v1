@@ -1,5 +1,5 @@
 class Field < ApplicationRecord
-  #objective, villain, plotwist, encounter, location, setting/location, roll table
+  #objective, villain, plotwist, scene, location, setting/location, roll table
   #custom_field       description (or this as part of setting?)
 
   include Generatable  
@@ -23,7 +23,7 @@ class Field < ApplicationRecord
    
   def self.get_class(type)
     fields = {
-      "encounter" => Encounter,
+      "scene" => Scene,
       "villain" => Villain,
       "timer" => Timer,
       "setting" => Setting,

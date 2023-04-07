@@ -1,6 +1,6 @@
 class Creature < Component
-  belongs_to :encounter,
-  class_name: 'Encounter',
+  belongs_to :scene,
+  class_name: 'Scene',
   foreign_key: :field_id,
   primary_key: :id,
   dependent: :destroy
@@ -24,9 +24,9 @@ class Creature < Component
     end
 
   # def self.prompt(params)
-  #   encounter = Encounter.find_by(id: params[:field_id])
-  #   parents_context = encounter.context_for_component
-  #   #encounter.creature_context    # component_context
+  #   scene = Scene.find_by(id: params[:field_id])
+  #   parents_context = scene.context_for_component
+  #   #scene.creature_context    # component_context
   #   #
   #   #build context
   #   if params[:alignment] != ""
@@ -38,7 +38,7 @@ class Creature < Component
   #   end
 
   #   <<~EOT
-  #   In the context of the below rpg scenario and the specified encounter
+  #   In the context of the below rpg scenario and the specified scene
   #   #{parents_context}
   #   The "creature" named #{params[:name]} 
   #   Recreate this creature in more detail 

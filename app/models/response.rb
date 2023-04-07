@@ -107,14 +107,14 @@ class Response < ApplicationRecord
   end
 
 
-  def self.blank
+  def self.blank(user_hash)
     { "id"=>nil, 
       "model"=>"user_response",
       "usage"=>{
         "total_tokens"=>0,
         "prompt_tokens"=>0, 
         "completion_tokens"=>0}, 
-      "choices"=> [ {"index"=>0, "message"=> {"role"=>"assistant","content"=>{} }, "finish_reason"=>"blank_stop"} ],
+      "choices"=> [ {"index"=>0, "message"=> {"role"=>"assistant","content"=>user_hash.to_json }, "finish_reason"=>"blank_stop"} ],
       "object"=>"blank_completion",
       "created"=>nil}
   end

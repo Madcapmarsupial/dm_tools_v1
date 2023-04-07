@@ -39,9 +39,9 @@ class ComponentsController < ApplicationController
           new_component.save!
       
           # this will need to be genralized to feild.
-        redirect_to encounter_url(field)
+        redirect_to scene_url(field)
     rescue StandardError => e
-      redirect_to encounter_url(field), alert: e
+      redirect_to scene_url(field), alert: e
     end
   end
   

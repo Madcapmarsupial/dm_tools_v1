@@ -1,22 +1,22 @@
-<h3><%=@encounter.encounter_name %></h1>
+<h3><%=@scene.scene_name %></h1>
 
-<p>"blank show from encounter"</p>
-<h3>full encounter</h3>
-<%= link_to 'Back to Quest', quest_url(@encounter.quest) %>
+<p>"blank show from scene"</p>
+<h3>full scene</h3>
+<%= link_to 'Back to Quest', quest_url(@scene.quest) %>
 
 
 <ul>
   <h3>primary threat</h3>
-  <%= @encounter.sense_of_danger %>
+  <%= @scene.sense_of_danger %>
   <h3>obstacle</h3>
-  <%= @encounter.main_encounter_obstacle %>
+  <%= @scene.main_scene_obstacle %>
   <h3>goal</h3>
-  <%= @encounter.encounter_goal %>
+  <%= @scene.scene_goal %>
 </ul>
 
   <h3>timer</h3>
 
-<h3>key_checks for the encounter</h3>
+<h3>key_checks for the scene</h3>
   <label>check one</label>
       <select>
         <option value="creature">Str</option>
@@ -56,44 +56,44 @@
 
 <h3>spectacle</h3>
 <p>
-  <%= @encounter.the_impressive_spectacle%>
+  <%= @scene.the_impressive_spectacle%>
   <br>
 
- <%= @encounter.area_description['surroundings']%>
+ <%= @scene.area_description['surroundings']%>
   <br>
 
-  <%= @encounter.area_description['smells']%>
+  <%= @scene.area_description['smells']%>
   <br>
-  <%= @encounter.area_description['sights']%>
+  <%= @scene.area_description['sights']%>
   <br>
-  <%= @encounter.area_description['sounds']%>
+  <%= @scene.area_description['sounds']%>
   <br><br>
 
-  <%= @encounter.summary %>
+  <%= @scene.summary %>
   <br>
 </p>
 
 <h3>paths</h3>
 
-  <%= @encounter.next_steps_for_players %>
+  <%= @scene.next_steps_for_players %>
   <br><br>
-  <%= @encounter.area_layout%>
+  <%= @scene.area_layout%>
   <br><br>
 
 <p>
 
 <h3>Components</h3>
-    <% @encounter.reward_list.each do |reward| %>
+    <% @scene.reward_list.each do |reward| %>
     <%= reward["name"]%> |
   <%end %>
   <br>
 
-  <% @encounter.special_mechanic_list.each do |mech| %>
+  <% @scene.special_mechanic_list.each do |mech| %>
     <%= mech["name"]%> |
   <%end %>
   <br>
 
-     <% @encounter.active_effect_list.each do |effect| %>
+     <% @scene.active_effect_list.each do |effect| %>
     <%= effect["name"]%> |
   <%end %>
   <br>
@@ -106,14 +106,14 @@
 </p>
 
 
-<%= render "components/custom_list_items", encounter: @encounter%>
+<%= render "components/custom_list_items", scene: @scene%>
 
-<%= render "components/list_items_index", encounter: @encounter%>
+<%= render "components/list_items_index", scene: @scene%>
 <!--list generated models-->
-<%= render "components/list_items_new", encounter: @encounter %>
-<!-- list encounter fields with forms -->
+<%= render "components/list_items_new", scene: @scene %>
+<!-- list scene fields with forms -->
 <br>
-<%@encounter.completion.each do |key, value| %>
+<%@scene.completion.each do |key, value| %>
 <h3><%="#{key}"%></h3>
-  <%= render "completions/completion_object",value: value, parent: @encounter%>
+  <%= render "completions/completion_object",value: value, parent: @scene%>
 <% end%>

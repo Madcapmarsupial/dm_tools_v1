@@ -23,12 +23,12 @@ Rails.application.routes.draw do
   #what is accesed through a quest
   resources :quests, only: [:create, :show, :new, :index, :update] do 
     member do
-      patch 'update_encounter_list'
+      patch 'update_scene_list'
       patch 'generate'
 
     end
     #resources :fields, only: [:new, :index]
-    #resources :encounters, only: [:new, :index]
+    #resources :scenes, only: [:new, :index]
     resources :fields, only: [:new, :index]
 
    
@@ -38,7 +38,7 @@ Rails.application.routes.draw do
     resources :components, only: [:new, :index]
   end
 
-   resources :encounters, only: [:show, :destroy, :create, :update] do 
+   resources :scenes, only: [:show, :destroy, :create, :update] do 
      resources :components, only: [:new, :index]
    end
 

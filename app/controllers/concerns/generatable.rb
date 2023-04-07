@@ -4,6 +4,9 @@ module Generatable
   included do
     # any code that you want inside your class
    def create_response(prompt)
+      #add is_user? condition 
+      #direct traffic from user or ai
+
     #filters  the output of the Response create to load into a new quest
     response = Response.build_response(prompt, current_user.id)  #$$$ inside Response     
   end

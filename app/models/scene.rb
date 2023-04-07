@@ -1,16 +1,16 @@
-class Encounter < Field
+class Scene < Field
    store_accessor :completion, [:reward_list, :creature_list, :active_effect_list, :special_mechanic_list, :the_impressive_spectacle,
-    :encounter_name, :sense_of_danger, :area_description, :area_layout, :summary, :encounter_goal, :main_encounter_obstacle, :next_steps_for_players]
-    #sense_of_danger, :primary_encounter_threat, primary_threat
+    :scene_name, :sense_of_danger, :area_description, :area_layout, :summary, :scene_goal, :main_scene_obstacle, :next_steps_for_players]
+    #sense_of_danger, :primary_scene_threat, primary_threat
 
 
     #fields should be single 
     #or be lists have generic name and description keys
 
-    #update encounter name
-    #deal with encounter versions
-    #encounter prompt 
-    #encounter layout
+    #update scene name
+    #deal with scene versions
+    #scene prompt 
+    #scene layout
     #how do we group and display?
     #by threat/obstacles 
 
@@ -91,24 +91,24 @@ class Encounter < Field
     quest = Quest.find_by(id: field["quest_id"])
     <<~EOT
     #{quest.q_context}
-    Generate the encounter with the name #{field["name"]} and the description #{field["description"]}.
-    Your response should be in JSON format and each encounter should have #{param_list.length} parameters #{param_string}
+    Generate the scene with the name #{field["name"]} and the description #{field["description"]}.
+    Your response should be in JSON format and each scene should have #{param_list.length} parameters #{param_string}
     Each "creature", "reward", "active_effect", and  "special_mechanic"within their respictive list should have 2 parameters "name", and "description"
     The "area_description" parameter should should have 4 parameters "surroundings", "sights", "sounds", and "smells"
     The "sense_of_danger" parameter should have 4 parameters "the_primary_threat", "the_consequences_of_failure", "the_victims", and "added_complications_of_failure"
-    make the encounter time sensitive somehow using the "active_effects" and or "special_mechanics" and "sense_of_danger" parameters
+    make the scene time sensitive somehow using the "active_effects" and or "special_mechanics" and "sense_of_danger" parameters
     EOT
   end
 
 
     def context_for_component
       quest_context = self.quest.completion
-      encounter_contex = self.completion
+      scene_contex = self.completion
       component_context = <<~EOT
       #{quest_context}
-      #{encounter_contex}
+      #{scene_contex}
       EOT
-       #self.quest.encounter_contex 
+       #self.quest.scene_contex 
        #its just the completion for now
     end
 

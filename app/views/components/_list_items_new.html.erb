@@ -1,10 +1,10 @@
 
 <!--each componet_model has a "name", "type", "description", "alignement", and "quantity" -->
-<!--each response from the Scene/encounter creates "name" and "descriptions"-->
+<!--each response from the Scene/scene creates "name" and "descriptions"-->
 <!--each completion for a component uses a "type_name" instead -->
 
 
-<%encounter.completion.each do |key, list| %>
+<%scene.completion.each do |key, list| %>
   <% if list.is_a?(Array)  %>
   <h3><%=key%></h3>
   <!--type string is pulled from a completion thus the syntax doesn not match the model exactly
@@ -14,13 +14,13 @@
     <%list.each do |component| %>
     <!--if there is a model render the specific component view? -->
     <%= key_type%>
-      <% unless encounter.model_names(key_type).include?(component["#{key_type}_name"])  %>
+      <% unless scene.model_names(key_type).include?(component["#{key_type}_name"])  %>
     
     <!--if there is a generated model that shares the 'name' with the completion['name'] we skip it
     because we have already rendered the full model for it
     -->
 
-      <!--gen more details -> needs  component, type, encounter.id-->
+      <!--gen more details -> needs  component, type, scene.id-->
       <form action="/components" method="post">
         <input name="authenticity_token"  type="hidden" value="<%= form_authenticity_token %>"/>
         <input type="text" name="component[name]" value='<%=component["name"]%>'>
@@ -31,7 +31,7 @@
         </textarea>
         <br>
         <input type="hidden" name="component[type]" value="<%=key_type%>">  
-        <input type="hidden" name="component[field_id]" value="<%=encounter.id%>">  
+        <input type="hidden" name="component[field_id]" value="<%=scene.id%>">  
         <label >this <%=key_type%> is...</label>
 
         <input type="hidden" name="component[alignment]" value="">

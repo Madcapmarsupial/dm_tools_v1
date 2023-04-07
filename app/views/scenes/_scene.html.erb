@@ -1,0 +1,17 @@
+
+<!--this is what is listed on a quest_view -->
+
+
+<div>
+  <%= scene.scene_name %>
+  <br>
+  <ul>
+  <li><%= scene.next_steps_for_players %></li>
+  <li><%= scene.scene_goal %></li>
+  <li><%= scene.main_scene_obstacle %></li>
+  <li><%= scene.sense_of_danger["the_primary_threat"] %></li>
+  <li><%= scene.sense_of_danger["the_consequences_of_failure"] %></li>
+</ul>
+  <%= link_to "View", scene_url(scene) %>
+</div>
+<br>

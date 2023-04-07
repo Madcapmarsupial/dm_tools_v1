@@ -1,6 +1,6 @@
 class Reward < Component
-  belongs_to :encounter,
-  class_name: 'Encounter',
+  belongs_to :scene,
+  class_name: 'Scene',
   foreign_key: :field_id,
   primary_key: :id,
   dependent: :destroy

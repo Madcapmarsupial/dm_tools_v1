@@ -88,12 +88,12 @@ class QuestsController < ApplicationController
     end
   end
 
-  def update_encounter_list
-     #update the completion with a new encounter name
+  def update_scene_list
+     #update the completion with a new scene name
     @quest = Quest.find_by(id: params[:quest][:id])
-    new_encounter_name = (params[:quest][:encounter_name])
+    new_scene_name = (params[:quest][:scene_name])
 
-    @quest.add_encounter(new_encounter_name)
+    @quest.add_scene(new_scene_name)
 
     if @quest.save
       redirect_to @quest
@@ -102,7 +102,7 @@ class QuestsController < ApplicationController
     end
   end
 
-  
+
 
   def generate
     @quest = Quest.find_by(id: params[:id])

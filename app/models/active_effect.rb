@@ -1,6 +1,6 @@
 class ActiveEffect < Component
-  belongs_to :encounter,
-  class_name: 'Encounter',
+  belongs_to :scene,
+  class_name: 'Scene',
   foreign_key: :field_id,
   primary_key: :id,
   dependent: :destroy
@@ -23,7 +23,7 @@ class ActiveEffect < Component
   #   end
 
   #   <<~EOT
-  #   In the context of the below rpg scenario and the specified encounter
+  #   In the context of the below rpg scenario and the specified scene
   #   #{parents_context}
   #   The "#{get_type}" named #{params[:name]} 
   #   Recreate this #{get_type} in more detail 

@@ -30,13 +30,13 @@
 
 
   <%else %>
-  <h3>Encounter list</h3>
-  <!-- <%# render @quest.encounters %> -->
+  <h3>Scene list</h3>
+  <!-- <%# render @quest.scenes %> -->
 
-  <h3>Encounter forms</h3>
+  <h3>Scene forms</h3>
   <ul> 
     <%@quest.sequence_of_events.each do |event| %>
-      <%= render "encounters/new", event: event, quest: @quest%>
+      <%= render "scenes/new", event: event, quest: @quest%>
     <br>
   </ul>
 

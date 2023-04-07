@@ -3,22 +3,31 @@ class FieldsController < ApplicationController
   def create
     quest_id = params[:field][:quest_id]#[:encounter][:quest_id]
     #quest_id id name type completion response_id  description
-    begin
+    
+    #begin
       if current_user.has_enough_bottlecaps? 
         subclass = Field.get_class(params[:field][:type])
-          #old   field_options = {"quest_id" => quest_id, "name"=> field_name, "descripition"=>params[:field][:description]}
-        prompt = subclass.prompt(params[:field])
-          #we use the class specific prompt -> Villain.prompt to get instance specific completions from gpt
-        
-
-
-        #check to se if response type 
-        response = create_response(prompt)  
-          #user charged --> calls Response.create
-          #possibility that the response is (new) and invalid
-
         type_name = "#{params[:field][:type]}_name"
-        values = {response_id: response.id, completion: response.text_to_hash, quest_id: quest_id, name: response.text_to_hash[type_name]} 
+
+        if params["field"]["completion"].values.all?("")
+           prompt = subclass.prompt(params[:field])
+          #we use the class specific prompt -> Villain.prompt to get instance specific completions from gpt 
+           response = create_response(prompt)  
+            #user charged --> calls Response.create
+          #possibility that the response is (new) and invalid
+        else
+        #params[field][completion]  -> user_values  manuel_completion
+          params["field"]["completion"][type_name] = field_params[:name]
+          user_completion = Response.blank(params["field"]["completion"])
+          response = Response.create(completion: user_completion, user_id: current_user.id, prompt: "user_#{field_params["type"]}" )
+        end
+
+           values = {response_id: response.id, completion: response.text_to_hash, quest_id: quest_id, name: response.text_to_hash[type_name]} 
+        
+        #or
+          #use field[completion] 
+          #values
+
         @field = subclass.new(values)
 
         if @field.save
@@ -35,9 +44,9 @@ class FieldsController < ApplicationController
           redirect_to quest_url(quest_id), notice: "insufficient coins"
           #redirect_to  add coins 
       end
-    rescue StandardError => e
-      redirect_to quest_url(quest_id), alert: e
-    end
+    #rescue StandardError => e
+    #  redirect_to quest_url(quest_id), alert: e
+    #end
   end
 
   def show
@@ -82,7 +91,7 @@ class FieldsController < ApplicationController
  
 
   def field_params
-    params.require(:field).permit(:type, :description, :name, :options) #setting_id, objective_id 
+    params.require(:field).permit(:type, :description, :name, :options, :completion) #setting_id, objective_id 
   end
 
 end

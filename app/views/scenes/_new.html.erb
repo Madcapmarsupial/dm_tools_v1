@@ -1,0 +1,80 @@
+<form action="/fields" method="post"> <!--points a to field.create action generates new scene completion with passed in type-->
+<% type = "scene" %>
+<!--this is a view in the scenes folder   takes in an event: and quest:-->
+
+ 
+ 
+  <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+  <input type="hidden" name="field[type]" value="<%=type%>">
+  <input type="hidden" name="field[quest_id]" value="<%=quest.id%>">
+
+  <!--not generalized -->
+
+
+<li><%=event["order_number"]%>:
+<input type="text" name="field[name]" value="<%=event["title"]%>">
+<!-- <input type="submit" value="auto generate this event"> generate more details-->  
+
+</li> 
+<br>
+<label for="description"></label>
+<textarea name="field[description]" id="description" cols="30" rows="5">
+<%=event["description"]%>
+</textarea>  
+<br>
+
+
+
+
+
+
+<label for="<%=type%>_goal">goal</label>
+<input type="text" name="field[completion][<%=type%>_goal]">
+<label for="main_<%=type%>_obstacle">obstacle</label>
+<input type="text" name="field[completion][main_<%=type%>_obstacle]">
+<label for="sense_of_danger">danger</label>
+<input type="text" name="field[completion][sense_of_danger]">
+
+
+<input type="hidden" name="field[completion][area_description]">
+<input type="hidden" name="field[completion][next_steps_for_players]">
+<input type="hidden" name="field[completion][reward_list]">
+<input type="hidden" name="field[completion][creature_list]">
+<input type="hidden" name="field[completion][special_mechanic_list]">
+<input type="hidden" name="field[completion][active_effect_list]">
+<input type="hidden" name="field[completion][area_layout]">
+<input type="hidden" name="field[completion][summary]">
+<input type="hidden" name="field[completion][the_impressive_spectacle]">
+
+<!--(field.param_list - required_fields)= comppletion_list  -->
+
+<input type="submit" value="save <%=type%>">
+
+
+</form> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<form action="/fields" method="post">
+<input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+<input type="hidden" name="field[quest_id]" value="<%=quest.id%>">
+<input type="hidden" name="field[name]" value="<%=event["title"]%>">
+<input type="hidden" name="field[type]" value="<%=type%>">
+<input type="hidden" name="field[description]" value= "<%=event["description"]%>">
+<!-- <input type="hidden" name="field[options]" value="<%#options%>"> --> <!--scene, plotwist,  objective, villain, setting, timer, roll_table etc   feild.option_params --> 
+<!--type, other fields -->
+
+
+
+</form>

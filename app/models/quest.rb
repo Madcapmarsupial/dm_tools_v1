@@ -1,13 +1,13 @@
 class Quest < ApplicationRecord
-  #validate :encounter_name_cannot_be_blank
+  #validate :scene_name_cannot_be_blank
 
   store_accessor :completion,  [:quest_name, :sequence_of_events, :summary, :outcomes, :key_emontional_moments, :overarching_themes, :plot_twist]
   #[:scenario_name, :description, :setting, :villain,
   #add spectacle here??
-   # :timer, :objective, :success_consequence, :fail_consequence, :plot_twist, :encounter_list]
+   # :timer, :objective, :success_consequence, :fail_consequence, :plot_twist, :scene_list]
     #prefix?
 
-  #encounters/events can have individual outcomes?  outcomes can be seperate generations? 
+  #scenes/events can have individual outcomes?  outcomes can be seperate generations? 
   #add an implementation of a quest.id_list for response version control.
   #stashed saved response for unsaved quests
   
@@ -17,8 +17,8 @@ class Quest < ApplicationRecord
    foreign_key: :response_id,
    primary_key: :id
 
-  has_many :encounters,
-    class_name: 'Encounter',
+  has_many :scenes,
+    class_name: 'Scene',
     dependent: :destroy
 
   has_many :villains,
@@ -61,13 +61,13 @@ class Quest < ApplicationRecord
   
   def self.prompt(quest_id)
     #options = {quest_name, linked_quest, imports}
-    # def self.prompt(param_hash) #(system='dnd', encounters=4, theme='fantasy', context='') #context = QuestResponse.find_by()
+    # def self.prompt(param_hash) #(system='dnd', scenes=4, theme='fantasy', context='') #context = QuestResponse.find_by()
    #  prompt = <<~EOT
    #  Create an rpg scenario with a #{param_hash[:villain]} as the villain, the setting is a #{param_hash[:setting]} and the objective is a #{param_hash[:objective]}
-   #  Your response should be in JSON format with 10 parameters "scenario_name", "description", "villain", "setting", "objective", "timer" "success_consequence", "fail_consequence", "plot_twist", and "encounter_list"
+   #  Your response should be in JSON format with 10 parameters "scenario_name", "description", "villain", "setting", "objective", "timer" "success_consequence", "fail_consequence", "plot_twist", and "scene_list"
    #  The "villain" parameter should hold 1 parameter "name"
-   #  The "encounter_list" parameter should be an array of encounter names like [name_one, name_two]...
-   #  Limit the scenario to 4 encounters.
+   #  The "scene_list" parameter should be an array of scene names like [name_one, name_two]...
+   #  Limit the scenario to 4 scenes.
    #  Don't use any symbols as keys in your response.
    #  Your response should contain no integers.
    #  EOT
@@ -107,19 +107,19 @@ class Quest < ApplicationRecord
     param_list.slice(0...-1).join(", ") + " and #{param_list.last}"
   end
 
-  def encounter_list
+  def scene_list
     #list = []
     #self.sequence_of_events.each {|event| list << event['title']}
     sequence_of_events
   end
 
-   def get_encounter(name)
-     #{'encounter_name' => name}
-     index = self.encounter_list.find_index(name)
-     self.encounter_list[index]
+   def get_scene(name)
+     #{'scene_name' => name}
+     index = self.scene_list.find_index(name)
+     self.scene_list[index]
    end
 
-  # def add_encounter(event) #{name, order, desc}
+  # def add_scene(event) #{name, order, desc}
    #   titleize, capitalize
    #   self.sequence_of_events << event # name.titleize
    # sort by order_number
@@ -129,12 +129,12 @@ class Quest < ApplicationRecord
   #  key_history
   #   k_list = Quest.all.map { |q| q.completion.keys }.uniq
     #   [
-    #    ["timer", "setting", "villain", "objective", "plot_twist", "description", "scenario_name", "encounter_list", "fail_consequence", "success_consequence"],
+    #    ["timer", "setting", "villain", "objective", "plot_twist", "description", "scenario_name", "scene_list", "fail_consequence", "success_consequence"],
     #    ["summary", "outcomes", "scenario_name", "plot_structure", "overarching_theme", "sequence_of_events", "key_emotional_moments"],
     #    ["summary", "outcomes", "scenario_name", "overarching_themes", "sequence_of_events", "key_emotional_moments"],
     #    ["summary", "outcomes", "plot_twist", "scenario_name", "overarching_themes", "sequence_of_events", "key_emotional_moments"],
     #    #["setting", "villain", "objective"],  should avoid these
-    #    {"description" => "summary", "scenario_name" => "quest_name", "encounter_list" => "sequence_events" }
+    #    {"description" => "summary", "scenario_name" => "quest_name", "scene_list" => "sequence_events" }
     #    ["summary", "outcomes", "plot_twist", "quest_name", "overarching_themes", "sequence_of_events", "key_emotional_moments"]
     #   ]
   # 
@@ -159,18 +159,18 @@ class Quest < ApplicationRecord
 
 
 
-   def encounter_name_id_pairs
+   def scene_name_id_pairs
      e_hash = {}
-    #   #be careful of creating multiple encounters
+    #   #be careful of creating multiple scenes
     #   #multiple genrations with the same name will overwrite each other
 
-    self.encounters.each { |encounter| e_hash[encounter.encounter_name] = encounter.id }
+    self.scenes.each { |scene| e_hash[scene.scene_name] = scene.id }
     e_hash
   end
 
-  # def encounter_name_cannot_be_blank
-   #   if self.encounter_list.include?("")
-   #     errors.add :encounter_list, :empty_encounter_name, message: ": your new encounter (name) was blank."
+  # def scene_name_cannot_be_blank
+   #   if self.scene_list.include?("")
+   #     errors.add :scene_list, :empty_scene_name, message: ": your new scene (name) was blank."
    #   end
   # end
 
