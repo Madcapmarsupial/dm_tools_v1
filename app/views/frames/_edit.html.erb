@@ -1,0 +1,67 @@
+<!-- optionally takes in frame: takes in a scene:-->
+
+<!--self.parent   self.child -->
+
+
+<%= scene.scene_name%>
+<% if frame != nil %>
+<!--these links might need to be post routes -->
+<%= link_to 'prev-frame', frame_url(frame.parent) %> 
+<%=frame.name %>
+<%= link_to 'next-fram', frame_url(frame.child) %>
+<%end %>
+
+<form action="frame-route">
+  <input name="authenticity_token"  type="hidden" value="<%= form_authenticity_token %>"/>
+<!--  <input type="hidden" name="frame[child_id]"> -->
+<!--  <input type="hidden" name="frame[scene_id]"> -->
+
+  <label for="">goal</label>
+  <input type="text" name="frame[goal]" value="<%=scene.goal%>">
+  <label for="">obstacle</label>
+
+  <input type="text" name="frame[obstacle]" value="<%=scene.obstacle%>">
+  <label for="">obstacle</label>
+  <input type="text" name="frame[danger]" value="<%=scene.danger%>">
+  <label for="">description</label>
+  <textarea name="frame[descriptino]" cols="30" rows="10" placeholder="the grand hall of the manor is an expansive room, with a large starcase and doors on the sides and a majestic chandelier">
+  </textarea>
+  <label for="">quest items and plot points</label>
+  <textarea name="frame[quest_itmes]" cols="30" rows="10" placeholder="the celler key rests in the dying grip of the butler's corpse">
+  </textarea>
+  <!--tables could be imported from scene -->
+  <label for="">Creatures</label>
+  1:<input type="text" name="frame[creature_table][1]">
+  2:<input type="text" name="frame[creature_table][2]">
+  3:<input type="text" name="frame[creature_table][3]">
+  4:<input type="text" name="frame[creature_table][4]">
+
+<!--creature_table = {1: {name: goblin, desc: "a small green creature"}} -->
+<!-- Creature.find_by(name)-->
+
+  <label for="">Items</label>
+  1:<input type="text" name="frame[items_table][1]">
+  2:<input type="text" name="frame[items_table][2]">
+  3:<input type="text" name="frame[items_table][3]">
+  4:<input type="text" name="frame[items_table][4]">
+
+  <label for="">effects</label>
+  1:<input type="text" name="frame[effects_table][1]">
+  2:<input type="text" name="frame[effects_table][2]">
+  3:<input type="text" name="frame[effects_table][3]">
+  4:<input type="text" name="frame[effects_table][4]">
+
+
+
+  <!-- blocks -->
+  <!--stats descriptions, view links, nitty grity -->
+  <!-- add/look up component button-->
+
+  <!-- -->
+</form>
+
+
+
+
+
+

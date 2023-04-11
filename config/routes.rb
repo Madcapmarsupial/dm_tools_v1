@@ -36,6 +36,9 @@ Rails.application.routes.draw do
 
   resources :fields, only: [:show, :destroy, :create, :update] do 
     resources :components, only: [:new, :index]
+    member do 
+      patch 'generate'
+    end
   end
 
    resources :scenes, only: [:show, :destroy, :create, :update] do 

@@ -13,10 +13,15 @@ class Field < ApplicationRecord
 
   class_name: "Response",
   foreign_key: :response_id,
-  primary_key: :id
+  primary_key: :id,
+  optional: :true
 
   def child_type
     "component"
+  end
+
+  def self.get_type
+    itself.to_s.downcase
   end
 
 

@@ -1,6 +1,28 @@
 class Scene < Field
-   store_accessor :completion, [:reward_list, :creature_list, :active_effect_list, :special_mechanic_list, :the_impressive_spectacle,
-    :scene_name, :sense_of_danger, :area_description, :area_layout, :summary, :scene_goal, :main_scene_obstacle, :next_steps_for_players]
+   store_accessor :completion, [
+
+    #tables and mechanics
+      :reward_list, :creature_list, 
+      :active_effect_list, :special_mechanic_list, 
+    #
+
+    #key fields
+      :scene_goal, :sense_of_danger, :scene_obstacle,
+    #effect_description  #frequency #potential_solutions    #quest_items
+    # "the_primary_threat", "the_consequences_of_failure", "the_victims", and "added_complications_of_failure"
+
+    #description
+      :scene_name,:area_description, :area_layout, 
+      :summary, :the_impressive_spectacle, :next_steps_for_players
+    #
+  ]
+
+  has_many :frames,
+  class_name: "Frame",
+  foreign_key: :field_id,
+  primary_key: :id,
+  dependent: :destroy
+
     #sense_of_danger, :primary_scene_threat, primary_threat
 
 
@@ -93,13 +115,14 @@ class Scene < Field
     #{quest.q_context}
     Generate the scene with the name #{field["name"]} and the description #{field["description"]}.
     Your response should be in JSON format and each scene should have #{param_list.length} parameters #{param_string}
-    Each "creature", "reward", "active_effect", and  "special_mechanic"within their respictive list should have 2 parameters "name", and "description"
+    Each "creature", "reward", "active_effect", and  "special_mechanic" within their respictive list should have 2 parameters "name", and "description"
     The "area_description" parameter should should have 4 parameters "surroundings", "sights", "sounds", and "smells"
     The "sense_of_danger" parameter should have 4 parameters "the_primary_threat", "the_consequences_of_failure", "the_victims", and "added_complications_of_failure"
     make the scene time sensitive somehow using the "active_effects" and or "special_mechanics" and "sense_of_danger" parameters
     EOT
   end
 
+  # The parameter "scene_obstacle" should have 3 paramaters "name", "description" and  "possible_solution_list"
 
     def context_for_component
       quest_context = self.quest.completion

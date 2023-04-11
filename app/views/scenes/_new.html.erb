@@ -21,11 +21,10 @@
 <textarea name="field[description]" id="description" cols="30" rows="5">
 <%=event["description"]%>
 </textarea>  
+<textarea name="field[description]" id="description" cols="30" rows="5">
+<%=event["narrative_connection_to_next_event"]%>
+</textarea>  
 <br>
-
-
-
-
 
 
 <label for="<%=type%>_goal">goal</label>
@@ -48,7 +47,10 @@
 
 <!--(field.param_list - required_fields)= comppletion_list  -->
 
-<input type="submit" value="save <%=type%>">
+<!-- <input type="submit" value="save <%=type%>"> 
+
+we should create and save frames from this point
+--> 
 
 
 </form> 

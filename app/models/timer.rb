@@ -1,4 +1,7 @@
 class Timer < Field
+  #timer_name
+
+
   # attr_accessor :fail_condition, :pass_condition
 
   #  def set_pointer

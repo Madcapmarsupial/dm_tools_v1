@@ -11,66 +11,22 @@ class QuestsController < ApplicationController
       render :new
   end
 
-  def update
-    @quest = Quest.find_by(id: params[:id])
-
-    if @quest.update(quest_params)
-      redirect_to @quest
-    else
-      redirect_to root_path, alert: @quest.errors.full_messages
-    end
-  end
-
   def create
+    @quest = Quest.new(user_id: current_user.id)
     begin
-      if current_user.has_enough_bottlecaps?  #check user balance ->  5 ish generations
+      if @quest.save
+        Setting.create(name: quest_params["setting"], quest_id: @quest.id)
+        Objective.create(name: quest_params["objective"], quest_id: @quest.id)
+        Villain.create(name: quest_params["villain"], quest_id: @quest.id)
+            # stting objective villain could be full hashes representing required fields
 
-        # l_prompt = Location.blank_prompt(location_params)
-        # response = create_response(l_prompt)  #user charged --> calls Response.create
-        # l_values = {response_id: response.id, completion: response.text_to_hash}
-        # location = Location.create(l_values)
-
-
-        # o_prompt = Objective.blank_prompt(objective_params(location.completion, params))
-        # response = create_response(o_prompt)
-        # o_values = {response_id: response.id, completion: response.text_to_hash}
-        # objective = Objective.create(o_values)
-
-        # v_prompt = Villain.blank_prompt(villain_params(objective.completion, location.completion, params[:quest][:villain]))
-        # response = create_response(v_prompt)
-        # v_values = {response_id: response.id, completion: response.text_to_hash}
-        # villain = Villain.create(v_values)
-        
-      user_values =  {"setting"=> quest_params["setting"], "objective"=>quest_params["objective"], "villain"=> quest_params["villain"]}
-      @quest = Quest.new(user_id: current_user.id, completion: user_values)
-        #create setting
-        #create objective
-          #create villain
-            #create completion
-
-        #options = {"setting_completion"=> location.completion, "villain_completion" => villain.completion, "objective_completion"=> objective.completion}
-        # prompt = Quest.prompt(options)  #import other prompts
-        # response = create_response(prompt)  #user charged --> calls Response.create
-        # values = {response_id: response.id, completion: response.text_to_hash, user_id: current_user.id}
-        # @quest = Quest.new(values)
-        # @quest.name = @quest.quest_name
-        if @quest.save
-        
-
-          redirect_to @quest   #--> quest show
-        else
-          #refund -> and render :new #redirect_to user_home  #render response.errors.full_messaged too?
-          @quest.errors.add :response, invalid_response: "#{response.errors.full_messages}"
-          #render json: @quest.errors.full_messages, status: :unprocessable_entity
-          redirect_to root_path, alert: @quest.errors.full_messages
-            #quest not saved   #refund_user?/salvage last response
-        end
+        redirect_to @quest 
       else
-          redirect_to root_path, notice: "insufficient bottle caps"
-          #"insufficient funds"
+        @quest.errors.add :response, invalid_response: "#{response.errors.full_messages}"
+        redirect_to root_path, alert: @quest.errors.full_messages
       end
     rescue StandardError => e
-      redirect_to new_quest_path, alert: e
+      redirect_to root_path, alert: e
     end
   end
 
@@ -88,6 +44,15 @@ class QuestsController < ApplicationController
     end
   end
 
+  def update
+    @quest = Quest.find_by(id: params[:id])
+    if @quest.update(quest_params)
+      redirect_to @quest
+    else
+      redirect_to root_path, alert: @quest.errors.full_messages
+    end
+  end
+
   def update_scene_list
      #update the completion with a new scene name
     @quest = Quest.find_by(id: params[:quest][:id])
@@ -102,42 +67,40 @@ class QuestsController < ApplicationController
     end
   end
 
-
-
   def generate
     @quest = Quest.find_by(id: params[:id])
-    begin
-      if current_user.has_enough_bottlecaps? 
-        response = create_response(Quest.prompt(@quest.id))
-
-        values = {response_id: response.id, completion: response.text_to_hash, name: response.text_to_hash["quest_name"]}
-        if @quest.update(values)
-          redirect_to @quest   #--> quest show
-        else
-          #refund -> and render :new #redirect_to user_home  #render response.errors.full_messaged too?
-          @quest.errors.add :response, invalid_response: "#{response.errors.full_messages}"
-          #render json: @quest.errors.full_messages, status: :unprocessable_entity
-          redirect_to @quest, alert: @quest.errors.full_messages
-            #quest not saved   #refund_user?/salvage last response
-        end
+    prompt_str = Quest.prompt(params)
+    values = create_completion("quest", prompt_str)
+      if @quest.update(values)    #values contains  -> (response_id, completion: name:)
+        #QuestResponse.create(quest_id: @quest.id, response_id: values[:response_id])
+          #if saved add entry into join table
+        create_completion_scene_fields(@quest)
+        redirect_to @quest   #--> quest show
       else
-          redirect_to root_path, notice: "insufficient coins"
-          #"insufficient funds"
+        @quest.errors.add :response, invalid_response: "#{@quest.errors.full_messages}"
+        redirect_to @quest, alert: @quest.errors.full_messages
       end
-   rescue StandardError => e
-      redirect_to root_path, alert: e
-    end
   end
 
 
-
-
   private
+
+  include Generatable
+    # create_response. create_completion
+
   # def create_response(prompt)
   #   #filters  the output of the Response create to load into a new quest
   #   response = Response.build_response(prompt, current_user.id)  #$$$ inside Response      
   # end
-  include Generatable
+
+  def create_completion_scene_fields(quest)
+    quest.scene_list.count.times.each do |i|
+      scene_name = scene_list[i]["title"]
+      Scene.create(quest_id: quest.id, name: scene_name)
+    end
+  end
+
+
 
   def quest_params  #only really prompt params right now
      params.require(:quest).permit(:villain, :setting, :objective, :completion, :new_completion, :response_id, :user_id, :name)

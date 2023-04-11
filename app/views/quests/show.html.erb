@@ -1,16 +1,17 @@
   <%= link_to "Quest List", quests_url%>
+  <%= render @quest.fields %>
+
+  <%= render "/fields/generate", field: @quest.settings.last, desc: "a setting"%>
   
+
 <%if @quest.response_id == nil %>
 <!-- add conditional logic -->
  <%if @quest.settings.empty? %>
   <p> generate setting</p>
-  <%= render "/fields/new", quest: @quest, type: "setting", options: @quest.completion, name: @quest.completion["setting"], description: ""%>
   <% elsif @quest.objectives.empty?%>
   <p> generate objective</p>
-  <%= render "/fields/new", quest: @quest, type: "objective", options: @quest.completion, name: @quest.completion["objective"], description: ""%>
   <% elsif @quest.villains.empty? %>
   <p> generate villian</p>
-  <%= render "/fields/new", quest: @quest, type: "villain", options: @quest.completion, name: @quest.completion["villain"], description: ""%>
   <% else %>
      <form action="<%=generate_quest_url(@quest)%>" method="post">
       <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
@@ -19,26 +20,20 @@
       <input type="submit" value="generate this quest">
     </form>
 
-  <br>
-    <%= render @quest.villains.last %>
-    <%= render @quest.settings.last %>
-    <%= render @quest.objectives.last %>
-
-
  <% end %>
 
 
 
   <%else %>
-  <h3>Scene list</h3>
-  <!-- <%# render @quest.scenes %> -->
+    <h3>Scene list</h3>
+    <!-- <%# render @quest.scenes %> -->
 
-  <h3>Scene forms</h3>
-  <ul> 
-    <%@quest.sequence_of_events.each do |event| %>
-      <%= render "scenes/new", event: event, quest: @quest%>
-    <br>
-  </ul>
+    <h3>Scene forms</h3>
+    <ul> 
+      <%@quest.sequence_of_events.each do |event| %>
+        <%= render "scenes/new", event: event, quest: @quest%>
+      <br>
+    </ul>
 
   <%end %>    
 

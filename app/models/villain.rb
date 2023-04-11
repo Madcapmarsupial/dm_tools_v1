@@ -12,19 +12,19 @@ class Villain < Field
         :special_abilities, :weaknesses, :lair, :henchman
     ]
    
-     def self.get_type
-       "villain" 
-     end
+     
 
      def self.blank_context(field)
-      # setting and objective should be completions in this case. field a hash from params
+      #setting and objective should be completions in this case. field a hash from params
       setting = Setting.find_by(quest_id: field[:quest_id])
       objective = Objective.find_by(quest_id: field[:quest_id])
+      villain = Villain.find_by(quest_id: field[:quest_id])
+
 
       str = <<~EOT
       In an rpg scenario that has this data for the setting #{setting.s_context}
       And this data for the objective #{objective.o_context} 
-      And a #{field["options"]["villian"]} as the villain" 
+      And a #{villain.v_context} as the villain" 
       EOT
       str
     end
@@ -40,13 +40,18 @@ class Villain < Field
     end
 
     def v_context
-      {
+      if self.completion != nil
+        {
         "villain_name" => self.villain_name,
-      "planned_use_for_the_objective" => self.planned_use_for_the_objective,
-      "end_goal" => self.end_goal,
-      "tragic_backstory" => self.tragic_backstory,
-      "the_story_of_the_most_recent_victim" => self.the_story_of_the_most_recent_victim,
-      "misguided_ideals" => self.misguided_ideals}
+        "planned_use_for_the_objective" => self.planned_use_for_the_objective,
+        "end_goal" => self.end_goal,
+        # "tragic_backstory" => self.tragic_backstory,
+        # "the_story_of_the_most_recent_victim" => self.the_story_of_the_most_recent_victim,
+        # "misguided_ideals" => self.misguided_ideals
+        }
+      else
+        self.name
+      end 
     end
 
   

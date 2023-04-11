@@ -11,10 +11,6 @@ class Reward < Component
 
   #listable
 
-  def self.get_type
-    "reward"
-  end
-
   # def self.prompt(params)
   #   encounter = Encounter.find_by(id: params[:field_id])
   #   parents_context = encounter.context_for_component

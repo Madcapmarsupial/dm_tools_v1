@@ -3,17 +3,15 @@ class Setting < Field
 
     store_accessor :completion, [:setting_name, :summary, :description, :layout, :dwellers,
     :secrets, :lore, :history, :hazards, :narrative_connections]
-  
-
-     def self.get_type
-       "location" 
-     end
 
     def self.blank_context(field)
-      user_values = Quest.find_by(id: field[:quest_id]).completion
       #completion is set to to the users input until it is overwritten by a generated response
+      setting = Setting.find_by(quest_id: field[:quest_id])
+      objective = Objective.find_by(quest_id: field[:quest_id])
+      villain = Villain.find_by(quest_id: field[:quest_id])
+
       str = <<~EOT
-      In an rpg scenario with a #{user_values["setting"]} as the setting, a #{user_values["objective"]} as the objective, and a #{user_values["villain"]} as the villain" 
+      In an rpg scenario with a #{setting.s_context} as the setting, a #{objective.o_context} as the objective, and a #{villain.v_context} as the villain" 
       EOT
       str
     end
@@ -31,7 +29,18 @@ class Setting < Field
     end
 
     def s_context
-      self.completion
+      if completion != nil
+        {
+          "setting_name"=> self.setting_name,
+          "summary"=> self.summary,
+          "narrative_connections"=> self.narrative_connections,
+          "lore"=> self.lore
+          #"layout"=>self.layout,
+        }
+      else
+        self.name
+      end 
+      #self.completion
     end
 
      def self.specifics

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_30_233234) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_09_015831) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -36,8 +36,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_30_233234) do
     t.index ["response_id"], name: "index_components_on_response_id"
   end
 
+  create_table "connected_frames", force: :cascade do |t|
+    t.bigint "parent_id"
+    t.bigint "child_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["child_id"], name: "index_connected_frames_on_child_id"
+    t.index ["parent_id"], name: "index_connected_frames_on_parent_id"
+  end
+
   create_table "fields", force: :cascade do |t|
-    t.bigint "quest_id", null: false
+    t.bigint "quest_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "name", default: "untitled"
@@ -46,6 +55,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_30_233234) do
     t.string "type", null: false
     t.index ["quest_id"], name: "index_fields_on_quest_id"
     t.index ["response_id"], name: "index_fields_on_response_id"
+  end
+
+  create_table "frames", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "goal"
+    t.string "obstacle"
+    t.string "danger"
+    t.bigint "field_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["field_id"], name: "index_frames_on_field_id"
   end
 
   create_table "quests", force: :cascade do |t|
@@ -97,8 +118,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_30_233234) do
   add_foreign_key "accounts", "users", column: "owner_id"
   add_foreign_key "components", "fields"
   add_foreign_key "components", "responses"
+  add_foreign_key "connected_frames", "frames", column: "child_id"
+  add_foreign_key "connected_frames", "frames", column: "parent_id"
   add_foreign_key "fields", "quests"
   add_foreign_key "fields", "responses"
+  add_foreign_key "frames", "fields"
   add_foreign_key "quests", "responses"
   add_foreign_key "quests", "users"
   add_foreign_key "responses", "users"

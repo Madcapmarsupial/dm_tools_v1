@@ -3,6 +3,10 @@ class Component < ApplicationRecord
   #belongs to field
   #has many details
 
+  def self.get_type
+    itself.to_s.downcase
+  end
+
   def child_type
     "detail"
   end

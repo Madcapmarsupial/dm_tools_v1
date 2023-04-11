@@ -1,0 +1,29 @@
+  
+  <form action="<%=generate_field_url(field)%>" method="POST">
+  <input type="hidden" name="_method" value="patch">
+  <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+  <input type="hidden" name="field[quest_id]" value="<%=field.quest_id%>">
+  <input type="hidden" name="field[type]" value="<%=field.class.get_type%>">
+  <input type="hidden" name="field[name]" value="<%=field.name%>">
+  <input type="hidden" name="field[discription]" value="<%=desc%>"> 
+  <input type="submit" value="generate <%=field.type%>">
+  </form>
+
+  <!-- examples -->
+  <!--  setting  <%# render "/fields/generate", field: @quest.settings.last, desc: "a setting example"%> -->
+    <!--might need a quest method for getting a specific setting instead of "last" -->
+  <!--   <%# render "/fields/generate", field: target_scene, desc: target_scene["description" ]%> -->
+
+  <!-- contexts are set up by...
+  
+      setting = Setting.find_by(quest_id: field[:quest_id])
+      objective = Objective.find_by(quest_id: field[:quest_id])
+      villain = Villain.find_by(quest_id: field[:quest_id])
+  
+      setting.s_context etc
+  
+    in the future we might need to store id's for version control
+
+
+    scene, plotwist,  objective, villain, setting, timer, roll_table etc   feild.option_params
+   -->
