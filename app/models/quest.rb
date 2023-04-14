@@ -18,6 +18,8 @@ class Quest < ApplicationRecord
   has_many :scenes,
     class_name: 'Scene',
     dependent: :destroy
+  
+  has_many :frames, through: :scenes
 
   has_many :villains,
    class_name: 'Villain',

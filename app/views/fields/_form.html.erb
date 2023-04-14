@@ -11,7 +11,14 @@ with (field) -->
 <%end %>
 
 <br>
-<%= params[:action]%>
+<%=params[:action]%>
+<br>
+
+<!--quest.context -->
+<a href="#" >generate <%=field.type%></a> :
+gen button doesnt work  --> send request to 'generate/action'  (saves/creates object with current_params then generates.)
+
+
 <form action="<%=action_url%>" method="post">
   <% if params[:action] == "edit" %>
 	  <input type="hidden" name="_method" value="PATCH">
@@ -31,13 +38,11 @@ with (field) -->
         <!--creates the empty completion for the user -->
   <%end %>
 
-
   <%field.class.completion_hidden_list.each do |k, v| %>
     <input type="hidden" name="field[completion][<%=k%>]">
         <!--adds in the missing fields for the ai -->
   <%end %>
-  <input type="submit" value="save">
-</form>
 
-<!--quest.context -->
-  <a href="#" >generate <%=field.type%></a> :
+  <br>
+  <input type="submit" value="SAVE">
+</form>

@@ -1,50 +1,84 @@
-frame form: "<%=params[:action] %>"
+"<%=params[:action] %>"<h2><%= frame.name %></h2>
+:<%= link_to "back", :back %>
 <br>
 <br>
-<%if params[:action] == "edit" %>
-  <% action_url = frame_url()%>
-<%else%>
-  <%action_url = frames_url() %>
-<%end%>
+  switch scene source(link) -> scene.siblings
+<br>
+<br>
+children: <%= render frame.children %>
+<br>
+parents: <%= render frame.parents %>
+<br>
+<% params[:action] == "edit" ? action_url = frame_url() : action_url = frames_url()%>
 
-
+<h3>Scene Context</h3>
 <%=scene.summary %>
 <br>
 <br>
 <%=scene.next_steps_for_players%>
 <br>
-
-
-
+<br>
 <form action="<%=action_url%>" method="POST">
   <%if params[:action] == "edit" %> 
     <input type="hidden" name="_method" value="PATCH">
   <%end %>
   <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
   <input type="hidden" name="frame[field_id]" id="" value="<%=frame.field_id%>">
+
   <label for="name">Frame Name</label>
-  <input type="text" name="frame[name]" id="">
-  <br>
-  <label for="goal">Goal</label>
-  <br>
-  <textarea name="frame[goal]" id="" cols="30" rows="2"></textarea>
-  <br>
-  <label for="obstacle">Obstacle</label>
+  <input type="text" name="frame[name]" id="" value="<%=frame.name%>">
   <br>
 
-  <textarea name="frame[obstacle]" id="" cols="30" rows="2"></textarea>
-  <br>
-  <label for="danger">Danger</label>
-  <br>
-  <textarea name="frame[danger]" id="" cols="30" rows="2"></textarea>
-  <br>
+<!-- these are frame attributes that im not sure I need 
 
+    even if you save they will be auto filled by the scene again
+-->
+
+<label for="goal">Goal</label>
+<br>
+<textarea name="frame[goal]" id="" cols="30" rows="2">
+<%=scene.scene_goal%>
+</textarea>
+<br>
+
+<label for="obstacle">Obstacle</label>
+<br>
+<textarea name="frame[obstacle]" id="" cols="30" rows="2">
+<%=scene.scene_obstacle%>
+</textarea>
+<br>
+<label for="danger">Danger</label>
+<br>
+<textarea name="frame[danger]" id="" cols="30" rows="2">
+<%=scene.sense_of_danger%>
+</textarea>
+<br>
+
+<label for="desc">Description</label>
+<br>
+  <textarea name="frame[description]" id="desc" cols="30" rows="15">
+<%=frame.basic_template%>
+  </textarea>
+<br>
+
+<br>
   <input type="submit" value="Save Frame">
 </form>
 
-  <%if params[:action] == "edit" %> 
+<%if params[:action] == "edit" %> 
 
-    <a href=#>link frame</a>
+  <label>link this frame to another existing frame</label>
+    <%frame.siblings.each do |scene_frame| %>  
+      <%= form_with model: frame, url: connect_frame_url, method: "post" do |form| %>
+      <%=form.hidden_field :child_id, value: scene_frame.id %>
+        <%= form.submit value: scene_frame.name%> 
+      <%end %>
+    <%end%>
+    <br>
+    <br>
+ 
+
     <a href=#>link componet</a>
     <a href=#>link another quest field</a>
-  <%end %>
+<%end %>
+

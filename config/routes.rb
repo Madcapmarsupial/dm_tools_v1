@@ -41,7 +41,16 @@ Rails.application.routes.draw do
     resources :components, only: [:new, :index]
   end
 
-  resources :frames, only: [:show, :destroy, :create, :update, :edit]
+  resources :frames, only: [:show, :destroy, :create, :update, :edit] do
+    #resources :connected_frames, only: [:new, :index] 
+    member do 
+      post 'connect'
+      post 'connect_new'
+
+    end
+  end
+
+  #resources :connected_frames, only: [:destroy, :create] #maybe update
 
   
 
