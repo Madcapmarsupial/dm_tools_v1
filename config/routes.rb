@@ -18,8 +18,6 @@ Rails.application.routes.draw do
   #what is accessed through a user
   resources :users, only: [] 
 
-
-
   #what is accesed through a quest
   resources :quests, only: [:create, :show, :new, :index, :update] do 
     member do
@@ -27,24 +25,23 @@ Rails.application.routes.draw do
       patch 'generate'
 
     end
-    #resources :fields, only: [:new, :index]
     #resources :scenes, only: [:new, :index]
     resources :fields, only: [:new, :index]
-
-   
   end
 
   resources :fields, only: [:show, :destroy, :create, :update, :edit] do 
     resources :components, only: [:new, :index]
+    resources :frames, only: [:new, :index]
     member do 
       patch 'generate'
     end
   end
 
-   resources :scenes, only: [:show, :destroy, :create, :update] do 
-     resources :components, only: [:new, :index]
-   end
+  resources :scenes, only: [:show, :destroy, :create, :update] do 
+    resources :components, only: [:new, :index]
+  end
 
+  resources :frames, only: [:show, :destroy, :create, :update, :edit]
 
   
 

@@ -1,0 +1,50 @@
+frame form: "<%=params[:action] %>"
+<br>
+<br>
+<%if params[:action] == "edit" %>
+  <% action_url = frame_url()%>
+<%else%>
+  <%action_url = frames_url() %>
+<%end%>
+
+
+<%=scene.summary %>
+<br>
+<br>
+<%=scene.next_steps_for_players%>
+<br>
+
+
+
+<form action="<%=action_url%>" method="POST">
+  <%if params[:action] == "edit" %> 
+    <input type="hidden" name="_method" value="PATCH">
+  <%end %>
+  <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+  <input type="hidden" name="frame[field_id]" id="" value="<%=frame.field_id%>">
+  <label for="name">Frame Name</label>
+  <input type="text" name="frame[name]" id="">
+  <br>
+  <label for="goal">Goal</label>
+  <br>
+  <textarea name="frame[goal]" id="" cols="30" rows="2"></textarea>
+  <br>
+  <label for="obstacle">Obstacle</label>
+  <br>
+
+  <textarea name="frame[obstacle]" id="" cols="30" rows="2"></textarea>
+  <br>
+  <label for="danger">Danger</label>
+  <br>
+  <textarea name="frame[danger]" id="" cols="30" rows="2"></textarea>
+  <br>
+
+  <input type="submit" value="Save Frame">
+</form>
+
+  <%if params[:action] == "edit" %> 
+
+    <a href=#>link frame</a>
+    <a href=#>link componet</a>
+    <a href=#>link another quest field</a>
+  <%end %>

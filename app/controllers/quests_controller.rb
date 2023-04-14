@@ -7,12 +7,15 @@ class QuestsController < ApplicationController
   end
 
   def new
-      @quest = Quest.new(user_id: current_user.id)
+      @quest = Quest.new(user_id: current_user.id, name: current_user.quests.count + 1)
       render :new
   end
 
   def create
     q_name = params[:quest][:completion][:quest_name].titleize
+    if q_name == ""
+       q_name = "Untitled Quest (#{current_user.quests.count + 1})"
+    end
     @quest = Quest.new(user_id: current_user.id, completion: params[:quest][:completion], name: q_name) #Quest.blank_completion
     #@quest.blank_completion
 
@@ -51,6 +54,17 @@ class QuestsController < ApplicationController
     end
   end
 
+
+
+
+
+
+
+
+
+
+
+  
   def update_scene_list
      #update the completion with a new scene name
     @quest = Quest.find_by(id: params[:quest][:id])
@@ -71,8 +85,6 @@ class QuestsController < ApplicationController
     prompt_str = Quest.prompt(params)
       # prompt grabs the contexts from the rereq_fields 
         #we need to filter out any nil or "" values
-
-
     values = create_completion("quest", prompt_str)
       if @quest.update(values)    #values contains  -> (response_id, completion: name:)
         #QuestResponse.create(quest_id: @quest.id, response_id: values[:response_id])

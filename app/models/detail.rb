@@ -21,5 +21,7 @@ class Detail < ApplicationRecord
     has_many :quests,  #might be better j
     through: :quest_details
 
-
+   def connect_detail(detail_id)
+    ConnectedDetail.create(parent_detail_id: self.id, child_detail_id: detail_id)
+   end
 end

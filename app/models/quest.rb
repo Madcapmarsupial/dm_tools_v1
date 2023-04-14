@@ -52,7 +52,6 @@ class Quest < ApplicationRecord
     (!villains.empty? && !objectives.empty? && !settings.empty?)
   end
   
-
   def scene_list
       scenes
   end
@@ -77,6 +76,7 @@ class Quest < ApplicationRecord
     villains.last || Villain.new
   end 
 
+  
 
 
 #PROMPT METHODS
