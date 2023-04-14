@@ -24,8 +24,12 @@ class Field < ApplicationRecord
     itself.to_s.downcase
   end
 
+  def get_type
+    self.class.get_type
+  end
+  
 
-   
+
   def self.get_class(type)
     fields = {
       "scene" => Scene,

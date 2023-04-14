@@ -2,6 +2,9 @@ class Component < ApplicationRecord
   belongs_to :field
   #belongs to field
   #has many details
+  include Generatable
+
+  
 
   def self.get_type
     itself.to_s.downcase

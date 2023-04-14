@@ -11,7 +11,11 @@ class ActiveEffect < Component
 
     #:special_abilities, :key_chracteristic, :personality, :motivation, :alignment, :tactics]
  
-  #listable
+
+
+    
+    
+
   
   # if params[:alignment] != ""
   #     alignment_string = <<~EOT
@@ -36,6 +40,11 @@ class ActiveEffect < Component
 
   def self.get_type
     "active_effect"
+  end
+
+  private 
+  def self.ai_values
+      []
   end
 
 end

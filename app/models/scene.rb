@@ -1,63 +1,61 @@
 class Scene < Field
-   store_accessor :completion, [
-
-    #tables and mechanics
-      :reward_list, :creature_list, 
-      :active_effect_list, :special_mechanic_list, 
+  store_accessor :completion, [  
+    #description
+      :scene_name, :summary, :area_description, :area_layout, :the_impressive_spectacle, 
     #
 
     #key fields
-      :scene_goal, :sense_of_danger, :scene_obstacle,
-    #effect_description  #frequency #potential_solutions    #quest_items
-    # "the_primary_threat", "the_consequences_of_failure", "the_victims", and "added_complications_of_failure"
-
-    #description
-      :scene_name,:area_description, :area_layout, 
-      :summary, :the_impressive_spectacle, :next_steps_for_players
+       :scene_goal, :sense_of_danger, :scene_obstacle, :next_steps_for_players,
+       #effect_description  #frequency #potential_solutions    #quest_items
+        #"the_primary_threat", "the_consequences_of_failure", "the_victims", and "added_complications_of_failure"
     #
-  ]
 
-  has_many :frames,
-  class_name: "Frame",
-  foreign_key: :field_id,
-  primary_key: :id,
-  dependent: :destroy
+    #tables and mechanics
+      :reward_list, :creature_list, :active_effect_list, :special_mechanic_list
+    #       
+    ]
 
-    #sense_of_danger, :primary_scene_threat, primary_threat
+   #scenes can have individual outcomes?  outcomes can be seperate generations? 
+    #add an implementation of a quest.id_list for response version control.
+    #stashed saved response for unsaved quests
 
+  #assoctiations
+    belongs_to :quest
 
-    #fields should be single 
-    #or be lists have generic name and description keys
+    has_many :frames,
+      class_name: "Frame",
+      foreign_key: :field_id,
+      primary_key: :id,
+      dependent: :destroy
 
-    #update scene name
-    #deal with scene versions
-    #scene prompt 
-    #scene layout
-    #how do we group and display?
-    #by threat/obstacles 
-
-    #npcs
+    #field subclasses
     has_many :creature_models,
-    class_name: 'Creature',
-    primary_key: :id,
-    foreign_key: :field_id
-
+     class_name: 'Creature',
+     primary_key: :id,
+     foreign_key: :field_id
+ 
     has_many :reward_models,
-    class_name: 'Reward',
-    primary_key: :id,
-    foreign_key: :field_id
+      class_name: 'Reward',
+      primary_key: :id,
+      foreign_key: :field_id  
 
     has_many :mechanic_models,
-    class_name: 'SpecialMechanic',
-    primary_key: :id,
-    foreign_key: :field_id
+      class_name: 'SpecialMechanic',
+      primary_key: :id,
+      foreign_key: :field_id
 
     has_many :effect_models,
-    class_name: 'ActiveEffect',
-    primary_key: :id,
-    foreign_key: :field_id
+      class_name: 'ActiveEffect',
+      primary_key: :id,
+      foreign_key: :field_id
+  #assoctiations-end
 
-    belongs_to :quest
+  
+    def order_number
+      (quest.scenes.count).to_s
+    end
+
+
 
     def add_component(parameters)
       #make sure name is present is valid 
@@ -68,6 +66,7 @@ class Scene < Field
     end
 
     def component_list_types
+      #freeze
       ["creature", "reward", "special_mechanic", "active_effect"]
     end
 
@@ -78,6 +77,7 @@ class Scene < Field
     end
 
      def list_of(type_str)
+      #refactor and freeze
          model_lists = {
         "creature" => self.creature_models,
         "reward" => self.reward_models,
@@ -89,17 +89,18 @@ class Scene < Field
     end
 
     def component_lists
-     component_lists = {
-      "creature_list" => self.creature_list,
-      "reward_list" => self.reward_list,
-      "special_mechanic_list" => self.special_mechanic_list,
-      "active_effect_list" => self.active_effect_list
-    }
-  end
+      #refactor and freeze
+      component_lists = {
+        "creature_list" => self.creature_list,
+        "reward_list" => self.reward_list,
+        "special_mechanic_list" => self.special_mechanic_list,
+        "active_effect_list" => self.active_effect_list
+      }
+    end
 
-  def get_component_by_name(type, name)
-    list_of(type).find_by(name: name)
-  end 
+    def get_component_by_name(type, name)
+      list_of(type).find_by(name: name)
+    end 
 
 
   def self.prompt(field)
@@ -135,29 +136,36 @@ class Scene < Field
        #its just the completion for now
     end
 
-
-
-    def create_user_response(user_id, field_hash)
-      user_completion =  {
-        "usage"=>{"total_tokens"=>0, "prompt_tokens"=>0, "completion_tokens"=>0},
-        "choices"=>
-        [
-          {
-            "index"=>0,
-            "message"=> {
-            "role"=>"assistant",
-            # sanitize user input
-            "content"=> field_hash.to_json
-          },
+    # def create_user_response(user_id, field_hash)
+    #   user_completion =  {
+    #     "usage"=>{"total_tokens"=>0, "prompt_tokens"=>0, "completion_tokens"=>0},
+    #     "choices"=>
+    #     [
+    #       {
+    #         "index"=>0,
+    #         "message"=> {
+    #         "role"=>"assistant",
+    #         # sanitize user input
+    #         "content"=> field_hash.to_json
+    #       },
         
-        "finish_reason"=>"stop"}
-        ],
-        "created"=>1680407028
-      }      
-      values = {user_id: user_id, completion: user_completion, prompt: "blank_#{self.type.downcase}"}
-    end
+    #     "finish_reason"=>"stop"}
+    #     ],
+    #     "created"=>1680407028
+    #   }      
+    #   values = {user_id: user_id, completion: user_completion, prompt: "blank_#{self.type.downcase}"}
+    # end
 
 private
+
+    #the user will not interact with these fields
+    def self.ai_values
+      ["area_layout", "reward_list", "creature_list", "active_effect_list", "special_mechanic_list"].freeze
+      #[:scene_name, :summary, :area_description, :area_layout, 
+      #:the_impressive_spectacle, :next_steps_for_players, :scene_goal, 
+      #:sense_of_danger, :scene_obstacle, :reward_list, :creature_list, 
+      #:active_effect_list, :special_mechanic_list]
+    end
   
 end#class
 

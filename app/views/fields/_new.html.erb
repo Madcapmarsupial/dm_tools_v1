@@ -1,7 +1,7 @@
 <!--points to fields#create  sends type along with option chain -->
 <!--shows only a submit button will create then point to field.show-->
 
-
+<!--takes in quest, name, description, options,  -->
 <form action="/fields" method="post">
 <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
 <input type="hidden" name="field[quest_id]" value="<%=quest.id%>">
@@ -9,7 +9,11 @@
 <input type="hidden" name="field[description]" value= "<%=description%>">
 <input type="hidden" name="field[options]" value="<%=options%>">  <!--scene, plotwist,  objective, villain, setting, timer, roll_table etc   feild.option_params -->
 <!--type, other fields -->
+
+<input type="text" name="field[completion][<%="#{type}_name"%>]" value="<%=name%>">
 <input type="text" name="field[name]" value="<%=name%>">
+
+
 <input type="submit" value="create <%=type%>">
 
 

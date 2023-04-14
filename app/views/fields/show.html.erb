@@ -1,17 +1,7 @@
 <!-- depending on type we render a different partial-->
 <p>blank show from field</p>
-<%=@field.name%>
-<br>
-<%= link_to 'Back to Quest', quest_url(@field.quest) %>
-<% if @field.response_id == nil  %>
 
 
-<%else %>
-  <%@field.completion.each do |k, v| %>
-  <br>
-  <%="#{k} --> #{v}"%>
-  <br>
-  <br>
-  <% end %>
-  <br>
-<%end%>
+<% type = @field.get_type %>
+<%= render "#{type.pluralize}/full_view", field: @field%>
+

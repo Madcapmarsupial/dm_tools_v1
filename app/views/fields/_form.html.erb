@@ -1,0 +1,43 @@
+
+<!--fields/_form , field: ,  
+with (field) -->
+
+<% if params[:action] == "edit" %>
+  <% action_url = field_url(field.id)%> 
+  <!-- edit -> to update -->
+<% else%>
+  <!--new -> to create-->
+  <% action_url = fields_url(field.quest_id) %>
+<%end %>
+
+<br>
+<%= params[:action]%>
+<form action="<%=action_url%>" method="post">
+  <% if params[:action] == "edit" %>
+	  <input type="hidden" name="_method" value="PATCH">
+  <% end %>
+  
+  <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+  <input type="hidden" name="field[type]" value="<%=field.type%>">
+  <input type="hidden" name="field[quest_id]" value="<%=field.quest_id%>">
+ 
+  
+  <%field.class.completion_user_list.each do |k, v| %>
+      <label for="<%=k%>"><%=field.class.titlize_key(k)%></label>
+      <textarea name="field[completion][<%=k%>]" id="<%=k%>" cols="30" rows="1">
+<%=field.completion[k]%>
+      </textarea>
+      <br>
+        <!--creates the empty completion for the user -->
+  <%end %>
+
+
+  <%field.class.completion_hidden_list.each do |k, v| %>
+    <input type="hidden" name="field[completion][<%=k%>]">
+        <!--adds in the missing fields for the ai -->
+  <%end %>
+  <input type="submit" value="save">
+</form>
+
+<!--quest.context -->
+  <a href="#" >generate <%=field.type%></a> :

@@ -2,6 +2,8 @@
   <%= link_to "Home", root_url%><br><br>
 
   <%@quests.each do |quest| %>
-    <%display_name = quest.quest_name || quest.name %>
-    <%= link_to display_name, quest_url(quest) %><br>
+    <%= link_to quest.name, quest_url(quest) %>
+
+    
+    <br>
   <%end %>

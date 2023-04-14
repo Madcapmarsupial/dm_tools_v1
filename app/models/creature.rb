@@ -16,8 +16,6 @@ class Creature < Component
     #lore
     #secrets
 
-
-  #listable
   
     def self.get_type
       "creature"
@@ -69,6 +67,13 @@ class Creature < Component
   #bonuses
   #hp
   #secrets
+    private
+    
+    def self.ai_values
+      []
+    end
+
+  
 
  
 end

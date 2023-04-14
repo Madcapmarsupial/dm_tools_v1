@@ -1,0 +1,60 @@
+ edit
+ <%= link_to "Quest List", quests_url%>
+
+<form action="edit">
+
+</form>
+
+  <%= render @quest.fields %>
+
+  <%= render "/fields/generate", field: @quest.settings.last, desc: "a setting"%>
+  
+
+<%if @quest.response_id == nil %>
+<!-- add conditional logic -->
+ <%if @quest.settings.empty? %>
+  <p> generate setting</p>
+  <% elsif @quest.objectives.empty?%>
+  <p> generate objective</p>
+  <% elsif @quest.villains.empty? %>
+  <p> generate villian</p>
+  <% else %>
+     <form action="<%=generate_quest_url(@quest)%>" method="post">
+      <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+      <input type="hidden" name="_method" value="patch">
+      <br>
+      <input type="submit" value="generate this quest">
+    </form>
+
+ <% end %>
+
+
+
+  <%else %>
+    <h3>Scene list</h3>
+    <!-- <%# render @quest.scenes %> -->
+
+    <h3>Scene forms</h3>
+    <ul> 
+      <%@quest.sequence_of_events.each do |event| %>
+        <%= render "scenes/new", event: event, quest: @quest%>
+      <br>
+    </ul>
+
+  <%end %>    
+
+
+<h3>data<h3>
+  <%@quest.completion.each do |key, value| %>
+  <h3><%="#{key}"%></h3>
+  <%= render "completions/completion_object", parent: @quest, value: value %>
+  <br>
+  <%end %>
+  <br>
+<%end %>
+
+
+
+
+
+

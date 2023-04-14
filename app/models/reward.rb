@@ -9,6 +9,9 @@ class Reward < Component
   store_accessor :completion, [:reward_name, :description, :appearance, :quantity, :lore,
   :special_abilities, :active_effects, :secrets, :alignment]
 
+
+
+
   #listable
 
   # def self.prompt(params)
@@ -43,4 +46,9 @@ class Reward < Component
   #   last_key = p_list.last
   #   p_list.slice(0...-1).join(", ") + " and #{last_key}"
   # end
+  private
+    def self.ai_values
+      []
+    end
+
 end 

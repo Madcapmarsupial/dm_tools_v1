@@ -1,6 +1,9 @@
 module Generatable
   extend ActiveSupport::Concern
-
+  #this module difenis the methods used for ai compeltion except for model specfific prompts
+  #and model specfific key-value filtering -> (not all values that the ai fills can be filled by a user)
+    #excluded Class.prompt
+    #class.ai_values
 
 
   included do
@@ -29,10 +32,34 @@ module Generatable
       end
     end
 
+  
+    
   end
 
   class_methods do
     # define class methods here
-   
+      def blank_completion
+        new_completion = Hash.new()
+
+       self.param_list.each { |key| new_completion[key.to_s] = "" }
+        new_completion
+      end
+
+      def completion_user_list
+        self.blank_completion.reject {|k, v| ai_values.include?(k)}
+      end
+
+      def completion_hidden_list
+        self.blank_completion.filter {|k, v| ai_values.include?(k)}
+      end
+
+      def titlize_key(key)
+          #key.gsub("_list", "").pluralize
+          new_key = key.gsub("_", " ")
+          plural_key = new_key.gsub(" list", "")
+          final_key = (plural_key == new_key ? new_key : plural_key.pluralize)
+          final_key.titleize
+      end
+  
   end
 end

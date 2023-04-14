@@ -1,7 +1,19 @@
-<div>
-  <%= villain.name %>
-  <br>
-  <%= link_to "View", field_url(villain.id) %>
-</div>
 
 <!--villain value->  comes from villains/_villain -->
+
+
+<div>
+  
+  <% if villain.valid?%>
+    <%= villain.name %>:
+    
+    <%= link_to "edit", edit_field_url(villain) %>
+  <%else %>
+
+    <form action="<%=new_quest_field_url(quest.id)%>" method="get">
+      <input type="hidden" name="field[type]" value="villain">
+      <input type="submit" value="New Villain">
+    </form>
+    
+  <%end %>
+</div>

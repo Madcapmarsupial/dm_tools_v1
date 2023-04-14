@@ -1,15 +1,12 @@
 class Quest < ApplicationRecord
   #validate :encounter_name_cannot_be_blank
+  include Generatable
 
   store_accessor :completion,  [:quest_name, :sequence_of_events, :summary, :outcome_list, :ongoing_threat]
   #[:scenario_name, :description, :setting, :villain,
     #add spectacle here??
     # :timer, :objective, :success_consequence, :fail_consequence, :plot_twist, :encounter_list]
     #prefix?
-
-    #encounters/events can have individual outcomes?  outcomes can be seperate generations? 
-    #add an implementation of a quest.id_list for response version control.
-    #stashed saved response for unsaved quests
 
 #asccotiations  
   belongs_to :response,
@@ -18,8 +15,8 @@ class Quest < ApplicationRecord
    foreign_key: :response_id,
    primary_key: :id
 
-  has_many :encounters,
-    class_name: 'Encounter',
+  has_many :scenes,
+    class_name: 'Scene',
     dependent: :destroy
 
   has_many :villains,
@@ -37,23 +34,57 @@ class Quest < ApplicationRecord
   has_many :fields,
     class_name: 'Field',
     dependent: :destroy
-#associations
+
+  has_many :quest_details,
+    foreign_key: :quest_id,
+    dependent: :destroy
+
+  has_many :details,
+    through: :quest_details,
+    dependent: :destroy
+#asso-end
+
+  
+#after the intial creation in the case of generation (Quest needs to keeps its sequence of events value up to date )
+#via its Scenes children
+  
+  def prereqs_met?
+    (!villains.empty? && !objectives.empty? && !settings.empty?)
+  end
   
 
   def scene_list
-     completion != nil ? self.sequence_events : []    
+      scenes
   end
 
   def encounter_list
-    scene_list
+    scenes
   end
 
+  def non_scene_fields
+    fields.where.not(type: "Scene")
+  end
+
+  def current_setting
+    settings.last || Setting.new 
+  end 
+
+  def current_objective
+    objectives.last || Objective.new
+  end 
+  
+  def current_villain
+    villains.last || Villain.new
+  end 
+
+
+
+#PROMPT METHODS
   def q_context
     text = <<~EOT
     #{q_context}
     EOT
     #{self.completion}
-
   end
 
   def self.get_type
@@ -75,18 +106,6 @@ class Quest < ApplicationRecord
   end
 
 
-
-  #def current_setting#(i)
-    # to maintain a version history we would have to track an index for every child field.
-      #or we pass a decrementer or an incrementor along params
-      #instead of settings.last we do settings.all[index]  defualt being -1
-      #this would only work until you start generating subresponses
-      # <%= link_to '<', quest_url(@quest, :incrementor =>"-1", :current_id => @quest.current_setting(params).id) %>
-      #we'd need a version history to store the working index
-        #settings[-1 + i.to_i]
-   #settings.last || []
-  #end
-  
   def self.prompt(quest_params)
     #options = {quest_name, linked_quest, imports}
     # def self.prompt(param_hash) #(system='dnd', encounters=4, theme='fantasy', context='') #context = QuestResponse.find_by()
@@ -145,14 +164,26 @@ class Quest < ApplicationRecord
   def self.param_string
     param_list.slice(0...-1).join(", ") + " and #{param_list.last}"
   end
+#
 
+  def get_encounter(name)
+    #{'encounter_name' => name}
+    index = self.encounter_list.find_index(name)
+    self.encounter_list[index]
+  end
+
+    #def current_setting#(i)
+    # to maintain a version history we would have to track an index for every child field.
+      #or we pass a decrementer or an incrementor along params
+      #instead of settings.last we do settings.all[index]  defualt being -1
+      #this would only work until you start generating subresponses
+      # <%= link_to '<', quest_url(@quest, :incrementor =>"-1", :current_id => @quest.current_setting(params).id) %>
+      #we'd need a version history to store the working index
+        #settings[-1 + i.to_i]
+   #settings.last || []
+  #end
   
 
-   def get_encounter(name)
-     #{'encounter_name' => name}
-     index = self.encounter_list.find_index(name)
-     self.encounter_list[index]
-   end
 
   # def add_encounter(event) #{name, order, desc}
    #   titleize, capitalize
@@ -208,5 +239,12 @@ class Quest < ApplicationRecord
    #     errors.add :encounter_list, :empty_encounter_name, message: ": your new encounter (name) was blank."
    #   end
   # end
+
+  private
+    def self.ai_values
+      []
+    end
+
+
 
 end #class

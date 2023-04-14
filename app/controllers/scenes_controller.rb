@@ -39,7 +39,7 @@ class ScenesController < ApplicationController
   # end
 
   def show
-    @scene = scene.find_by(id: params[:id])
+    @scene = Scene.find_by(id: params[:id])
     render :show
   end
 

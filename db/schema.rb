@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_09_015831) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_12_183325) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -36,6 +36,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_09_015831) do
     t.index ["response_id"], name: "index_components_on_response_id"
   end
 
+  create_table "connected_details", force: :cascade do |t|
+    t.bigint "parent_detail_id"
+    t.bigint "child_detail_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["child_detail_id"], name: "index_connected_details_on_child_detail_id"
+    t.index ["parent_detail_id"], name: "index_connected_details_on_parent_detail_id"
+  end
+
   create_table "connected_frames", force: :cascade do |t|
     t.bigint "parent_id"
     t.bigint "child_id"
@@ -43,6 +52,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_09_015831) do
     t.datetime "updated_at", null: false
     t.index ["child_id"], name: "index_connected_frames_on_child_id"
     t.index ["parent_id"], name: "index_connected_frames_on_parent_id"
+  end
+
+  create_table "details", force: :cascade do |t|
+    t.string "label"
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "fields", force: :cascade do |t|
@@ -69,6 +85,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_09_015831) do
     t.index ["field_id"], name: "index_frames_on_field_id"
   end
 
+  create_table "quest_details", id: false, force: :cascade do |t|
+    t.bigint "detail_id", null: false
+    t.bigint "quest_id", null: false
+    t.index ["detail_id", "quest_id"], name: "index_quest_details_on_detail_id_and_quest_id"
+    t.index ["quest_id", "detail_id"], name: "index_quest_details_on_quest_id_and_detail_id"
+  end
+
   create_table "quests", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -76,6 +99,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_09_015831) do
     t.jsonb "completion"
     t.text "name", default: "untitled quest", null: false
     t.bigint "response_id"
+    t.string "tone"
+    t.string "rules"
+    t.string "recap_intros"
+    t.string "opening"
     t.index ["response_id"], name: "index_quests_on_response_id"
     t.index ["user_id"], name: "index_quests_on_user_id"
   end
@@ -118,6 +145,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_09_015831) do
   add_foreign_key "accounts", "users", column: "owner_id"
   add_foreign_key "components", "fields"
   add_foreign_key "components", "responses"
+  add_foreign_key "connected_details", "details", column: "child_detail_id"
+  add_foreign_key "connected_details", "details", column: "parent_detail_id"
   add_foreign_key "connected_frames", "frames", column: "child_id"
   add_foreign_key "connected_frames", "frames", column: "parent_id"
   add_foreign_key "fields", "quests"

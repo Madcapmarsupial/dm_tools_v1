@@ -3,7 +3,10 @@ class Objective < Field
 
     store_accessor :completion, [:objective_name, :summary, :description, :current_owner, :current_location, 
       :effects_and_abilities, :use_cases, :interested_parties, :secrets, :conflicts_of_interest]
-  
+
+
+
+
     def self.blank_context(field)
       #setting = Setting.find_by(quest_id: field[:quest_id])
       # setting should be a completion in this case
@@ -68,4 +71,11 @@ class Objective < Field
       EOT
      end
       #The lay
+
+
+    private
+    def self.ai_values
+      []
+    end
+
 end

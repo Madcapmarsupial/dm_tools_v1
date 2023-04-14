@@ -12,14 +12,12 @@ class QuestsController < ApplicationController
   end
 
   def create
-    @quest = Quest.new(user_id: current_user.id)
+    q_name = params[:quest][:completion][:quest_name].titleize
+    @quest = Quest.new(user_id: current_user.id, completion: params[:quest][:completion], name: q_name) #Quest.blank_completion
+    #@quest.blank_completion
+
     begin
       if @quest.save
-        Setting.create(name: quest_params["setting"], quest_id: @quest.id)
-        Objective.create(name: quest_params["objective"], quest_id: @quest.id)
-        Villain.create(name: quest_params["villain"], quest_id: @quest.id)
-            # stting objective villain could be full hashes representing required fields
-
         redirect_to @quest 
       else
         @quest.errors.add :response, invalid_response: "#{response.errors.full_messages}"
@@ -69,12 +67,17 @@ class QuestsController < ApplicationController
 
   def generate
     @quest = Quest.find_by(id: params[:id])
+
     prompt_str = Quest.prompt(params)
+      # prompt grabs the contexts from the rereq_fields 
+        #we need to filter out any nil or "" values
+
+
     values = create_completion("quest", prompt_str)
       if @quest.update(values)    #values contains  -> (response_id, completion: name:)
         #QuestResponse.create(quest_id: @quest.id, response_id: values[:response_id])
           #if saved add entry into join table
-        create_completion_scene_fields(@quest)
+        create_completion_scenes(@quest)
         redirect_to @quest   #--> quest show
       else
         @quest.errors.add :response, invalid_response: "#{@quest.errors.full_messages}"
@@ -82,41 +85,30 @@ class QuestsController < ApplicationController
       end
   end
 
+   
+
 
   private
 
   include Generatable
-    # create_response. create_completion
 
-  # def create_response(prompt)
-  #   #filters  the output of the Response create to load into a new quest
-  #   response = Response.build_response(prompt, current_user.id)  #$$$ inside Response      
-  # end
+   def create_completion_scenes(quest)
+    quest.sequence_of_events.each do |event|
 
-  def create_completion_scene_fields(quest)
-    quest.scene_list.count.times.each do |i|
-      scene_name = scene_list[i]["title"]
-      Scene.create(quest_id: quest.id, name: scene_name)
+      scene_name = event["title"]
+      summary = event["description"]
+      steps =  event["narrative_connection_to_next_event"]
+      mini_completion = {"scene_name" => scene_name, "summary" => summary, "next_steps_for_players" => steps }
+      
+      #scene_name = quest.sequence_of_events[i]["title"]
+      #summary = (quest.sequence_of_events[i]["description"] + quest.sequence_of_events[i]["narrative_connection_to_next_event"])
+      Scene.create(quest_id: quest.id, name: scene_name, completion: mini_completion)
     end
   end
 
 
-
   def quest_params  #only really prompt params right now
      params.require(:quest).permit(:villain, :setting, :objective, :completion, :new_completion, :response_id, :user_id, :name)
-  end
-
-  def location_params
-     params.require(:quest).permit(:villain, :setting, :objective)
-  end
-
-  def objective_params(l_completion, params)
-     q = params[:quest]
-     {"villain" => q[:villain], "objective" => q[:objective], "setting_completion" => l_completion}
-  end
-
-  def villain_params(o_completion, l_completion, villain)
-     {"villain" => villain, "objective_completion" => o_completion, "setting_completion" => l_completion}
   end
 end
 

@@ -1,19 +1,19 @@
 
 <!--this is what is listed on a quest_view -->
-
-
 <div>
-  <%= scene.scene_name %>
   <br>
+  Scene <%=scene.order_number%>: <%=scene.name%>: <%= link_to "Edit", edit_field_url(scene) %>:
+  
+  <%= link_to 'View', field_url(scene)%>:
+
   <% if scene.response_id != nil %>
-  <ul>
-    <li><%= scene.next_steps_for_players %></li>
-    <li><%= scene.scene_goal %></li>
-    <li><%= scene.scene_obstacle %></li>
-    <li><%= scene.sense_of_danger["the_primary_threat"] %></li>
-    <li><%= scene.sense_of_danger["the_consequences_of_failure"] %></li>
-  </ul>
+    <ul>
+      <li><%= scene.next_steps_for_players %></li>
+      <li><%= scene.scene_goal %></li>
+      <li><%= scene.scene_obstacle %></li>
+      <li><%= scene.sense_of_danger["the_primary_threat"] %></li>
+      <li><%= scene.sense_of_danger["the_consequences_of_failure"] %></li>
+    </ul>
   <%end %>
-  <%= link_to "View", scene_url(scene) %>
 </div>
 <br>

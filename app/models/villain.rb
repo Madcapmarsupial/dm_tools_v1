@@ -12,7 +12,7 @@ class Villain < Field
         :special_abilities, :weaknesses, :lair, :henchman
     ]
    
-     
+  
 
      def self.blank_context(field)
       #setting and objective should be completions in this case. field a hash from params
@@ -60,6 +60,12 @@ class Villain < Field
       
     #   EOT
     #  end
+
+    private
+    def self.ai_values
+      []
+    end
+
 
 
 

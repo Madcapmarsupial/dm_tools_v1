@@ -1,59 +1,19 @@
-<h3><%=@scene.scene_name %></h1>
+<h3><%=@scene.name %></h1>
 
 <p>"blank show from scene"</p>
+EDITING
+
 <h3>full scene</h3>
 <%= link_to 'Back to Quest', quest_url(@scene.quest) %>
 
-
 <ul>
   <h3>primary threat</h3>
-  <%= @scene.sense_of_danger %>
   <h3>obstacle</h3>
-  <%= @scene.main_scene_obstacle %>
   <h3>goal</h3>
-  <%= @scene.scene_goal %>
-</ul>
-
   <h3>timer</h3>
-
-<h3>key_checks for the scene</h3>
-  <label>check one</label>
-      <select>
-        <option value="creature">Str</option>
-        <option value="reward">Dex</option>
-        <option value="active_effect">Con</option>
-        <option value="special_mechanic">Wis</option>
-        <option value="special_mechanic">Int</option>
-        <option value="special_mechanic">Cha</option>
-        <!-- <option value="special_mechanic">Custom</option> -->
-      </select>
-  <label>check two</label>
-      <select>
-        <option value="creature">Str</option>
-        <option value="reward">Dex</option>
-        <option value="active_effect">Con</option>
-        <option value="special_mechanic">Wis</option>
-        <option value="special_mechanic">Int</option>
-        <option value="special_mechanic">Cha</option>
-        <!-- <option value="special_mechanic">Custom</option> -->
-      </select>
-  <label>check three</label>
-      <select>
-        <option value="creature">Str</option>
-        <option value="reward">Dex</option>
-        <option value="active_effect">Con</option>
-        <option value="special_mechanic">Wis</option>
-        <option value="special_mechanic">Int</option>
-        <option value="special_mechanic">Cha</option>
-        <!-- <option value="special_mechanic">Custom</option> -->
-      </select>
-<ul>
-  <h3>Target</h3>
-  add a target
-<!--select menue -->
-  <li>str  -> target</li>
 </ul>
 
+<%if @scene.response_id != nil %>
 <h3>spectacle</h3>
 <p>
   <%= @scene.the_impressive_spectacle%>
@@ -83,7 +43,7 @@
 <p>
 
 <h3>Components</h3>
-    <% @scene.reward_list.each do |reward| %>
+  <% @scene.reward_list.each do |reward| %>
     <%= reward["name"]%> |
   <%end %>
   <br>
@@ -93,18 +53,13 @@
   <%end %>
   <br>
 
-     <% @scene.active_effect_list.each do |effect| %>
+  <% @scene.active_effect_list.each do |effect| %>
     <%= effect["name"]%> |
   <%end %>
   <br>
 
   <br><br>
-
-  
-
-
-</p>
-
+ </p>
 
 <%= render "components/custom_list_items", scene: @scene%>
 
@@ -117,3 +72,4 @@
 <h3><%="#{key}"%></h3>
   <%= render "completions/completion_object",value: value, parent: @scene%>
 <% end%>
+<%end %>
