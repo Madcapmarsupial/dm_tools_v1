@@ -2,7 +2,13 @@ class Quest < ApplicationRecord
   #validate :encounter_name_cannot_be_blank
   include Generatable
 
-  store_accessor :completion,  [:quest_name, :sequence_of_events, :summary, :outcome_list, :ongoing_threat]
+  store_accessor :completion,  [
+    :quest_name, :summary,
+     :villain_name, :setting_name, :objective_name,
+     :sequence_of_events, :outcome_list, :ongoing_threat]
+
+     #other_ideas_and_suggestions
+     
   #[:scenario_name, :description, :setting, :villain,
     #add spectacle here??
     # :timer, :objective, :success_consequence, :fail_consequence, :plot_twist, :encounter_list]
@@ -50,12 +56,14 @@ class Quest < ApplicationRecord
 #after the intial creation in the case of generation (Quest needs to keeps its sequence of events value up to date )
 #via its Scenes children
   
+
+
   def prereqs_met?
     (!villains.empty? && !objectives.empty? && !settings.empty?)
   end
   
   def scene_list
-      scenes
+    scenes
   end
 
   def encounter_list
@@ -84,7 +92,8 @@ class Quest < ApplicationRecord
 #PROMPT METHODS
   def q_context
     text = <<~EOT
-    #{q_context}
+    In a table-top rpg with the following summary "#{self.summary}"
+    And this scene-list #{self.sequence_of_events}
     EOT
     #{self.completion}
   end
@@ -101,9 +110,9 @@ class Quest < ApplicationRecord
   def s_o_v_context
     #add user_values to else of field contexts
     {
-      "setting" => settings.last.s_context,
-      "objective" => objectives.last.o_context,
-      "villain" => villains.last.v_context
+      "setting" => settings.last.setting_context,
+      "objective" => objectives.last.objective_context,
+      "villain" => villains.last.villain_context
     }
   end
 
@@ -122,18 +131,18 @@ class Quest < ApplicationRecord
    #  EOT
     # end
 
-    setting_context = Setting.find_by(quest_id: quest_params[:id]).s_context
-    objective_context = Objective.find_by(quest_id: quest_params[:id]).o_context
-    villain_context = Villain.find_by(quest_id: quest_params[:id]).v_context
+    s_context = Setting.find_by(quest_id: quest_params[:id]).setting_context
+    o_context = Objective.find_by(quest_id: quest_params[:id]).objective_context
+    v_context = Villain.find_by(quest_id: quest_params[:id]).villain_context
 
 
 
 
    # gonna need a import_context method 
    prompt = <<~EOT
-    Create an rpg scenario with this data for the scenario setting #{setting_context} 
-    This data for the scenario objective #{objective_context}
-    And this data for the scenario villian #{villain_context}
+    Create an rpg scenario with this data for the scenario setting #{s_context} 
+    This data for the scenario objective #{o_context}
+    And this data for the scenario villian #{v_context}
     Your response should be in JSON format with #{param_list.length} parameters #{param_string}
     #{specifics}
     EOT
@@ -142,6 +151,8 @@ class Quest < ApplicationRecord
   def self.param_list
     stored_attributes[:completion]
   end
+
+  
 
   def self.specifics
     str = <<~EOT
@@ -242,10 +253,12 @@ class Quest < ApplicationRecord
    #   end
   # end
 
+  def hidden_keys
+    ["sequence_of_events"]
+  end
+  
+
   private
-    def self.ai_values
-      []
-    end
 
 
 

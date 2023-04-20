@@ -4,12 +4,14 @@
     <%= objective.name %>:
     
     <%= link_to "edit", edit_field_url(objective) %>
-  <%else %>
-
-    <form action="<%=new_quest_field_url(quest.id)%>" method="get">
-      <input type="hidden" name="field[type]" value="objective">
-      <input type="submit" value="New Objective">
-    </form>
-    
   <%end %>
+ 
+
+      <!-- full seperate form - 
+    <form action="<%#new_quest_field_url(quest.id)%>" method="get">
+      <input type="hidden" name="field[type]" value="objective">
+      <input type="submit" value="objective details">
+    </form>
+    -->
+    
 </div>

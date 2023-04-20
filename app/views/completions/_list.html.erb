@@ -1,8 +1,31 @@
 
+<!--object, base , key 
+
+  <input name="person[addresses][][line1]" type="text"/>
+<input name="person[addresses][][line2]" type="text"/>
+<input name="person[addresses][][city]" type="text"/>
+
+results in
+ person[adresses]  = [line1, line2]
 
 
-<% object.each do |list_object| %>
-  <li><%= render "completions/completion_object", value: list_object, parent: parent%></li>
+-->
+
+<ul class="array">
+<br>
+<button>add new </button>
+  
+
+<%= base %><%= key %>
+<br>
+<% object.each_with_index do |list_object, i| %>
   <br>
+
+  <li><%= render "completions/completion_object", object: list_object, base: "#{base}[#{key}][]", key: "array" %></li>
+  <br>
+  <button>create component</button>
 <%end %>
+<br>
+
+</ul>
 

@@ -1,5 +1,7 @@
 class Component < ApplicationRecord
-  belongs_to :field
+  belongs_to :field,
+    optional: :true
+
   #belongs to field
   #has many details
   include Generatable
@@ -13,6 +15,31 @@ class Component < ApplicationRecord
   def child_type
     "detail"
   end
+
+  def get_type
+    self.class.get_type
+  end
+  
+
+
+  def self.get_class(type)
+    #more genralized?
+      #creature #item #effect #information
+
+    fields = {
+      "creature" => Creature,
+      "reward" => Reward,  #item
+      "special_mechanic" => SpecialMechanic,
+      "active_effect" => ActiveEffect
+       #datum => Datum
+    }
+    fields[type.downcase]
+  end
+
+
+
+
+
 
    def self.prompt(params)
     scene = Scene.find_by(id: params[:field_id])

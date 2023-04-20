@@ -1,13 +1,22 @@
 
 <!--this is what is listed on a quest_view -->
+<li>
 <div>
-  <br>
+  <!-- Scene<%#scene.order_number%>
+  <%# link_to scene.name, field_url(scene)%>: 
+  -->
+   <%= link_to scene.name, edit_field_url(scene) %>
   
-  Scene <%=scene.order_number%>: <%= link_to scene.name, field_url(scene)%>: <%= link_to "Edit", edit_field_url(scene) %>:
-  Frames: <%= render scene.frames %> 
-  <%= link_to 'New Frame', new_field_frame_url(scene) %> 
-
+  <!--
+    Frames: <%# render scene.frames %> 
+    <%# link_to 'New Frame', new_field_frame_url(scene) %> 
+  -->
   <br>
-  
+  <ul>
+  <li><%=scene.summary %></li>
+  <br>
+  <li><%= scene.next_steps_for_players %></li>
+  </ul>
 </div>
+</li>
 <br>

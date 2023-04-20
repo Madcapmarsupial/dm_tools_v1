@@ -1,69 +1,62 @@
 class ScenesController < ApplicationController
-  #models have :name completions have "type_name"
-  # def create
-  #   quest_id = params[:scene][:quest_id]
-  #   #params[:field][:type]
-  #   #quest_id = params[:field][:quest_id]
-
-
-  #   begin
-  #     if current_user.has_enough_bottlecaps?  #check user balance
-  #       scene_name = params[:scene][:name]
-  #       e_prompt = scene.prompt(quest_id, scene_name)
-  #       #name passed via params in view
-
-  #       response = create_response(e_prompt)  #user charged --> calls Response.create
-  #       #possibility that the response is (new) and invalid
-
-  #       values = {response_id: response.id, completion: response.text_to_hash, quest_id: quest_id, name: scene_name} #
-  #       @scene = scene.new(values)
-
-
-  #       if @scene.save
-  #         #if we reach this point the validations have all passed
-  #         redirect_to @scene   #--> quest show
-  #       else
-  #         #refund -> and render :new #redirect_to user_home  #render response.errors.full_messaged too?
-  #         @scene.errors.add :response, invalid_response: "#{response.errors.full_messages}"
-  #         #render json: @quest.errors.full_messages, status: :unprocessable_entity
-  #         redirect_to quest_url(quest_id), alert: @scene.errors.full_messages
-  #           #quest not saved   #refund_user?/salvage last response
-  #       end
-  #     else
-  #         redirect_to quest_url(quest_id), notice: "insufficient bottle caps"
-  #         #"insufficient funds"
-  #     end
-  #   rescue StandardError => e
-  #     redirect_to quest_url(quest_id), alert: e
-  #   end
-  # end
-
-  def show
-    @scene = Scene.find_by(id: params[:id])
-    render :show
+  def new
+    @quest = Quest.find_by(id: params[:quest_id])
+    @scene = Scene.new(quest_id: @quest.id, completion: {})
+    render :new
+      # render "#{type.pluaralize}/new"
   end
 
-  def update
-    @scene = Scene.find_by(id: params[:id])
-    #what type of update?
-    #update completion
-      #control flow to decide what type of update params to call
-     new_completion = @scene.add_component(component_params)
-        #component = {name = val, description = val}
-    #save might be better
-    #add validations
-    if @scene.update(completion: new_completion)
-      redirect_to @scene
+  def create
+    quest_id = params[:scene][:quest_id] #quest_id = params[:field][:quest_id] 
+    scene_name = params[:field][:completion]["scene_name"].titleize
+    @scene = Scene.new(quest_id: quest_id, name: scene_name, completion: params[:scene][:completion])
+    fail
+
+    if @scene.save
+      redirect_to scene_url(@scene.id)
     else
-      redirect_to @scene, alert: @scene.errors.full_messages
+      redirect_to quest_url(quest_id), alert: @scene.errors.full_messages
     end
   end
 
+  def show
+    @scene = Scene.find_by(id: params[:id])
+    #rework this to redirect to the type/show?
+    # render fields/ show and pass in the type on view to detrmine which "type partial to render?"
+    render "show", scene: @scene
+    #render "#{@field.type.downcase}_show", field: @field
+  end
 
+  def edit
+    @scene = Scene.find_by(id: params[:id])
+    render :edit
+  end
 
+  def update 
+    #quest_id = params[:field][:quest_id] #[:encounter][:quest_id]
+    @scene = Scene.find_by(id: params[:id])
+    fail
 
+    if @scene.update(name: params[:scene][:completion]["scene_name"].titleize, completion: params[:scene][:completion])
+      redirect_to scene_url(@scene.id)
+    else
+      redirect_to quest_url(quest_id), alert: @scene.errors.full_messages
+    end
+  end
 
+  def generate
+    @scene = Scene.find_by(id: params[:id])   
+    prompt_str = Scene.prompt(params[:scene])
+    values = create_completion("scene", prompt_str)
+    if @scene.update(values)
+      redirect_to scene_url(@scene.id)
+    else
+      @scene.errors.add :response, invalid_response: "#{values.errors.full_messages}"
+      redirect_to quest_url(@scene.quest_id), alert: @scene.errors.full_messages
+    end
+  end
 
+  include Generatable
 
   private
   def scene_params

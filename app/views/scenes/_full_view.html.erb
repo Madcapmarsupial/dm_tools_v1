@@ -4,22 +4,26 @@
 <br>
 <h4><%=field.name%></h4>
 <br>
-  <%= render field.frames %>  
+<form action="<%=generate_field_url(field)%>" method="post">
+    <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+    <input type="hidden" name="_method" value="patch">
+    <input type="hidden" name="field[quest_id]" value="<%=field.quest_id%>">
+    <input type="hidden" name="field[name]" value="<%=field.name%>">
+    <input type="hidden" name="field[description]" value="<%=field.summary%>">
+    <input type="submit" value="generate scene">
 <br>
-  <%= link_to 'New Frame', new_field_frame_url(field) %> 
-<br>
-scene components?
-<br>
-add components
+</form>
 
-
-<!-- 
-  could genralize it into
-
-  typee - specifics
-  type add ins
-  type context
-  type outsiders and links
-
+<%= render "fields/form", field: field %>
+<!-- FRAMES
+  <%# render field.frames %>  
+  <br>
+    <%#link_to 'New Frame', new_field_frame_url(field) %> 
+  <br>
 -->
+
+<%= render field.components %>
+<br>
+<!-- add components -->
+
 

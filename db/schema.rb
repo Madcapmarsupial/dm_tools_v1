@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_12_183325) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_17_033827) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,7 +26,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_12_183325) do
     t.bigint "field_id"
     t.string "type"
     t.string "alignment"
-    t.jsonb "completion"
+    t.jsonb "completion", default: {}
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -66,7 +66,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_12_183325) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "name", default: "untitled"
-    t.jsonb "completion"
+    t.jsonb "completion", default: {}
     t.bigint "response_id"
     t.string "type", null: false
     t.index ["quest_id"], name: "index_fields_on_quest_id"
@@ -96,10 +96,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_12_183325) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
-    t.jsonb "completion"
+    t.jsonb "completion", default: {}
     t.text "name", default: "untitled quest", null: false
     t.bigint "response_id"
-    t.string "tone"
+    t.text "notes"
     t.string "rules"
     t.string "recap_intros"
     t.string "opening"

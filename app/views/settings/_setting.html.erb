@@ -1,15 +1,19 @@
 <div>
-  
+
   <% if setting.valid? %>
     <%= setting.name %>:
     
     <%= link_to "edit", edit_field_url(setting) %>
-  <%else %>
-
-    <form action="<%=new_quest_field_url(quest.id)%>" method="get">
-      <input type="hidden" name="field[type]" value="setting">
-      <input type="submit" value="New Setting">
-    </form>
-    
   <%end %>
+
+
+    <!-- full seperate form
+    <form action="<%#new_quest_field_url(quest.id)%>" method="get">
+      <input type="hidden" name="field[type]" value="setting">
+      <input type="submit" value="setting details">
+    </form>
+     -->
+
+  
 </div>
+ 

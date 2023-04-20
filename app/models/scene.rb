@@ -22,6 +22,9 @@ class Scene < Field
   #assoctiations
     belongs_to :quest
 
+    belongs_to :response,
+    optional: true
+
     has_many :frames,
       class_name: "Frame",
       foreign_key: :field_id,
@@ -29,25 +32,38 @@ class Scene < Field
       dependent: :destroy
 
     #field subclasses
-    has_many :creature_models,
+    has_many :creatures,
      class_name: 'Creature',
      primary_key: :id,
-     foreign_key: :field_id
+     foreign_key: :field_id,
+     dependent: :destroy
  
     has_many :reward_models,
       class_name: 'Reward',
       primary_key: :id,
-      foreign_key: :field_id  
+      foreign_key: :field_id,
+     dependent: :destroy
+
 
     has_many :mechanic_models,
       class_name: 'SpecialMechanic',
       primary_key: :id,
-      foreign_key: :field_id
+      foreign_key: :field_id,
+     dependent: :destroy
+
 
     has_many :effect_models,
       class_name: 'ActiveEffect',
       primary_key: :id,
-      foreign_key: :field_id
+      foreign_key: :field_id,
+      dependent: :destroy
+
+
+    has_many :components,
+      primary_key: :id,
+      foreign_key: :field_id,
+     dependent: :destroy
+
   #assoctiations-end
 
   
@@ -55,7 +71,7 @@ class Scene < Field
       (quest.scenes.count).to_s
     end
 
-
+   
 
     def add_component(parameters)
       #make sure name is present is valid 
@@ -114,7 +130,7 @@ class Scene < Field
     quest = Quest.find_by(id: field["quest_id"])
     <<~EOT
     #{quest.q_context}
-    Generate the scene with the name #{field["name"]} and the description #{field["description"]}.
+    Generate the scene with the name "#{field["name"]}" and the description "#{field["description"]}".
     Your response should be in JSON format and each scene should have #{param_list.length} parameters #{param_string}
     Each "creature", "reward", "active_effect", and  "special_mechanic" within their respictive list should have 2 parameters "name", and "description"
     The "area_description" parameter should should have 4 parameters "surroundings", "sights", "sounds", and "smells"
@@ -156,16 +172,20 @@ class Scene < Field
     #   values = {user_id: user_id, completion: user_completion, prompt: "blank_#{self.type.downcase}"}
     # end
 
-private
-
-    #the user will not interact with these fields
-    def self.ai_values
-      ["area_layout", "reward_list", "creature_list", "active_effect_list", "special_mechanic_list"].freeze
+    def hidden_keys
+      ["creature_list", "reward_list",  "active_effect_list", "special_mechanic_list"]
+     # ["area_layout", "reward_list", "creature_list", "active_effect_list", "special_mechanic_list"].freeze
       #[:scene_name, :summary, :area_description, :area_layout, 
       #:the_impressive_spectacle, :next_steps_for_players, :scene_goal, 
       #:sense_of_danger, :scene_obstacle, :reward_list, :creature_list, 
       #:active_effect_list, :special_mechanic_list]
     end
+
+  
+private
+
+    #the user will not interact with these fields
+  
   
 end#class
 

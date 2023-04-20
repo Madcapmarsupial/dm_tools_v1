@@ -1,12 +1,14 @@
 
 <!--list of existing scenes -->
-<%= render quest.scenes %>   <!--scenes/_scenes  is rendered for each scene-->
+<ul>
+ <%= render quest.scenes %>   <!--scenes/_scenes  is rendered for each scene-->
 
+<li>
 <form action=" <%=new_quest_field_url(@quest.id)%>" method="get">
   <input type="hidden" name="field[type]" value="scene">
   <input type="submit" value="Add New Scene">
   <!--link to fields/new action (with type scene) -->
 </form>
- 
-
+ </li>
+</ul>
 <br>

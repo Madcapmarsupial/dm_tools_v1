@@ -1,0 +1,327 @@
+
+
+
+BAD REquest
+#<Response:0x000000010921c9b0
+ id: 1,
+ user_id: 1,
+ completion:
+  {"id"=>"cmpl-6oaQl8SqORT6H4A8s1u8isvqtj4t6",
+   "model"=>"text-davinci-003",
+   "usage"=>{"total_tokens"=>"[FILTERED]", "prompt_tokens"=>"[FILTERED]", "completion_tokens"=>"[FILTERED]"},
+   "object"=>"text_completion",
+   "choices"=>
+    [{"text"=>
+       "\n{\n    scenario_name: \"The Goblin's Lair\", \n    description: \"A group of adventurers set out to the forest to retrieve an ancient magical wand held by a powerful necromancer.\", \n    villain: { name: \"Suilen the Necromancer\" },\n    setting: \"A forest\", \n    objective: \"Retrieve an ancient magical wand held by a powerful necromancer\", \n    timer: \"24 hours\", \n    success_consequence: \"Retrieve the wand and restore peace and balance in the forest\", \n    fail_consequence: \"The wand will fall into the hands of the necromancer and chaos will be spread across the land\", \n    plot_twist: \"The necromancer is not alone. The wand is guarded by a band of goblins and other creatures protecting it.\", \n    encounter_list: [ \n        \"The Goblin King and His Guards\",\n        \"An Ancient Wyrm\",\n        \"The Forbidden Ruins\",\n        \"Suilen's Tower\"\n    ]\n}",
+      "index"=>0,
+      "logprobs"=>nil,
+      "finish_reason"=>"stop"}],
+   "created"=>1677514459},
+ prompt:
+  "Create a dnd scenario with a necromancer as the villain, the setting is a forest and the objective is a wand and limit the scenario to 4 encounters. \nYour response should be in JSON format with 10 paramaters \"scenario_name\", \"description\", \"villain\", \"setting\", \"objective\", \"timer\" \"success_consequence\", \"fail_consequence\", \"plot_twist\", and \"encounter_list\".\nThe \"villain\" parameter should hold 1 parameter: \"name\". \nThe \"encounter_list\" parameter should be an array encounter names like [name_one, name_two]...\n",
+ created_at: Mon, 27 Feb 2023 16:14:28.661339000 UTC +00:00,
+ updated_at: Mon, 27 Feb 2023 16:14:28.661339000 UTC +00:00>
+
+
+
+
+
+
+
+
+        db/migrate/20230412034048_create_details.rb
+        db/migrate/20230412034326_create_detail_join_table.rb
+        db/migrate/20230412050724_create_detailed_quest_join_table.rb
+        db/migrate/20230412050921_rename_details_quests.rb
+        db/migrate/20230412183325_add_columns_to_quests.rb
+        app/controllers/frames_controller.rb
+        app/models/connected_detail.rb
+        app/models/detail.rb
+        app/models/quest_detail.rb
+        app/models/text.rb
+        app/views/fields/_form.html.erb
+        app/views/fields/edit.html.erb
+        app/views/fields/new.html.erb
+        app/views/objectives/_full_view.html.erb
+        app/views/quests/_current_objective.html.erb
+        app/views/quests/_current_setting.html.erb
+        app/views/quests/_current_villain.html.erb
+        app/views/quests/_run.html.erb
+        app/views/quests/_scene_list.html.erb
+        app/views/quests/edit.html.erb
+        app/views/scenes/_full_view.html.erb
+        app/views/settings/_full_view.html.erb
+        app/views/villains/_full_view.html.erb
+        
+
+
+
+
+
+# def create_response(prompt="this is a test", token_count=1) #temperature #p_top???, #stop_limit
+  #   params = { parameters: { model: "text-davinci-003", prompt: prompt, max_tokens: token_count}}
+  #   myBot = OpenAI::Client.new
+  #   response = myBot.completions(params)
+  #   qr = QuestResponse.create(response_text: response['choices'][0]['text'], prompt: prompt, quest_id: self.id)
+  #   p 'quest response generated'
+  #   self.staged_response = qr.return_text
+  #   #actually returns a HTTParty::Response
+  #   #still need context
+  # end
+
+  #not sure if this applies or not
+  #wrap hash in '' make sure any ' are doubled
+  #ai_response = JSON.parse(raw_response)
+
+
+Quest holds everything
+  quests have encounters
+  quests have fields 
+    fields have traits
+      -> fields influence the encounter?
+  
+  Encounters
+    have elements
+    elements 
+      have trait/attributes
+
+
+encounter view creates fields
+  fields fill out the prompts
+
+
+Are Encounters Fields of the quest
+
+
+quest
+  location  has (quest_id)
+    t_Where has (field_id)
+
+    pointer needs  (villain_id) or the field_id
+  villain ()
+    who
+    edge
+    
+  timer
+    what
+  goal
+    what
+
+
+
+  quest_view
+
+    place 
+      name
+
+  quest_view
+
+    villain
+      name
+      henchman
+      edge
+      endgoal
+
+  quest_view
+
+    goal
+      what
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#work backwards
+#place
+  #get value    or if obj
+ 
+  #if place or thing 
+#villain
+  #get value  
+
+#if thing
+  #get place/ get villain
+
+  #goal 
+  #get value
+  #if vill or thing
+
+# you need a goal   -> resolution 
+  #Timer
+#Need a place   
+  #timer
+#You need an obstacle   -> #middle  -> plotwist -> consequence
+  #timer
+
+
+  #what does the timer partain to?
+    #place
+    #goal
+    #villain
+
+  #how does the villain relate to the place
+  #how does the villain relate to the fail consequence?
+
+  #what comes first place or goal
+
+#start middle end
+
+
+
+
+
+
+
+
+less flavor
+  more archeytypes
+
+  objs -> rescue the hostage(person/place/or thing),slay the villain,find/obtain an item,escape the location/villain,
+          investigate the murder/theft/mising person,escort the item or person,
+          protect an item/person,destroy an item,
+
+
+villain attributes as a partial
+          
+
+what pulls the heroes in.
+  weeks ago X happened...
+    last night Y happened...
+      and moments ago Z happend...
+
+
+
+so we create a quest
+we edit and then
+we offer a choice to save or desttoy it on close
+
+secret sauces 
+(betrayal)
+(what is lore?)
+
+
+questions
+(why are the pc all together)
+(what will push them onward)
+(what is this rooms function)
+(why are the monsters here)
+
+
+VIEWS
+  (quests)
+    edit
+    show
+      drag and drop objs around 
+      radio selection of modifiers 
+
+
+
+
+
+obj modifiers
+  - before (timer)
+  - kill,steal,defend,escape,hide,persuade,deliver,find,build,destroy,escourt (obj)
+
+Of modifiers
+  {thing/place} + 'of' "#{modifier}"
+  'shadows,burning,widows,tears,binding,'
+
+LOCATION
+  - in/on (location) castle,fort,fortress,village,town,dessert,hideout,camp,court,forest,jungle,wastes,
+  peak,mountains,lodge,bunker,celler,sewers,bazaar,gravyard,tower,road,court,sea,island,field,asylum,
+  prison,temple,church,mansion,mine,lab,study,carnivel,circus,blackmarket,bog,kitchen,jail,trail,canyon,
+  wagon train,ship,palace,convoy,morgue,hamlet,caves,caverns,keep,market,square,convent,factory,ruins,cove,
+
+  -(before)secret,hidden,mysterious,murderous,haunted,drowned,slave,trespassers,pilgrims,icy,submergerd,
+    interdiminsial,bloodsaoked,cloud,swamp,crumbling,ancient, (henchman-hideout) (monster-lair)
+    overgrown,abandoned,accursed,otherworldy,barren,sleepywatchful,frigid,crimson,merchant,sky,ruins,infernal,burning
+  -(after) of dreams, of(monsters/henchmen), of bones,
+
+  #pair with lair
+    alcemists #{location}, witch's, liche, 
+
+    
+
+
+
+
+root has/with dependents
+  timer 
+    - 
+  villain(optional=theme)
+    #Villan::henchman(optional=theme)
+    - henchman  
+    - lair  ->get_location
+    - motive power,wealth,fame,immortality,love,lust,hunger,revenge,the good of mankind,divine purpose
+    - edge  connections,wealth,super powers,fame,secret knowledge,relentless
+
+
+  locations
+    -ocupants natives,invaders,wild beasts,pilgrims,bandits,villagers,royals,
+    -hazards natives,invaders,wild beasts,plant life,traps,active battle ground,envroinmental,bandits
+
+
+  objective
+     things => 'crown,sword,gauntlet,goblet,chalace'   
+    people =>
+     'queen,prince,princess,baron,duke,lord,captian of the gaurd,king,royal family,
+      bailef,headsman,necromancer,wizard,alchimist,hunter,rogue,thief,bard,minstral,'
+      #{bandit} cheiftan,captain,king,lord,captian,
+    places => 'palace,court,sanctum'
+
+    -modifiers
+    things => 'steal,sanctify,desecrate,destroy,seal away,defend'   
+    people => 'assassinate,kill,protect,persuade,abduct,seduce,ingraciate,demnify'
+    places => 'infiltrate,burn,desecrate,santify,defend,seige'
+
+
+Quest Model
+#validations
+  #has one villan,plot,location,
+  #has_many dungeouns 
+  #has_many monsters through dungeoun
+  #belongs to  --> user
+  # --> user has many quests
+     # add variable quest fields?
+
+User Model
+# id 
+#has many quests
+
+
+
+
+
+
+Session
+#create Session  
+  -validates id is unique
+  save Session
+  create
+  get by unique id
+  visit count? 
+
+  prune old and unvisited Sessions??
+  most visited sessions
+
+
+  its tool that is meant for a start not a recuring theme but perhaps you could use it for reference
+
+  
+    

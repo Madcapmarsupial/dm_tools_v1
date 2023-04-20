@@ -1,48 +1,100 @@
   show quest action
-  <br>
-   <%= link_to "Home", root_url%>:
-
- <%= link_to "Quest List", quests_url%>:
-
- <br>
-<h3><%=@quest.name%></h3>
-
-<% if @quest.prereqs_met? %>
-      <form action="<%=generate_quest_url(@quest)%>" method="post">
-        <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
-        <input type="hidden" name="_method" value="patch">
-        <input type="hidden" name="quest[]">
-        <input type="submit" value="generate this quest">
-      </form>
- 
-<!-- <%#@quest.completion %> -->
-
-<%else %>
-
-
-  Setting:
-  <%= render "quests/current_setting", quest: @quest %>
-Objective:
-<%= render "quests/current_objective", quest: @quest %>
-Villain:
-<%= render "quests/current_villain", quest: @quest %>
-
-
-<h3>Scene list</h3>
-<%= render "quests/scene_list", quest: @quest %>
-
-
-
-<%end %>
+<br>
+<%= link_to "Home", root_url%>: 
+<%= link_to "Quest List", quests_url%>:
+<h3><%=@quest.name%></h3> 
 
 <br>
-   render tables
-  <a href="#" >(+ add new)</a>:
+<%=render "quests/current_setting", quest: @quest %>
+<br>
+<%=render "quests/current_villain", quest: @quest %>
+<br>
+<%=render "quests/current_objective", quest: @quest %>
+<br>
 
 
-  <br>
-  render components 
-  <a href="#" >(+ add new)</a>:
+<form action="<%=quest_url(@quest)%>" method="post">
+      <br>
+  <input type="hidden" name="_method" value="patch">
+  <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+   <label for="notes">Notes</label> 
+    <br>
+
+    <textarea name="quest[notes]" id="notes" cols="30" rows="1"><%=@quest.notes%></textarea>
+    <br>
+   <input type="submit" value="save notes">
+</form> 
+
+
+<%if @quest.response != nil %>
+  <%= render "completions/full_completion", object: @quest, base: "quest", key_list: @quest.user_key_list%>
+  <!--this view can be manipulated by changing the completion_list we feed it 
+        ie:  key_list: @quest.completion_keys - ["sequence_of_events"]
+    -->
+<%else %>
+
+  <form action="<%=generate_quest_url(@quest)%>" method="post">
+    <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+     <input type="hidden" name="_method" value="patch">
+    <br>
+
+    <% if @quest.settings.empty? %>
+      <label for="">setting name:</label>
+      <input type="text" name="quest[setting]" id="">
+      <%= link_to "setting_details", new_quest_field_url(@quest.id, "field" => {"type" => "setting"})%>
+      <br>
+    <% end %>
+
+    <% if @quest.villains.empty? %>
+      <label for="">villain name:</label>
+      <input type="text" name="quest[villain]" id="">
+      <%= link_to "villain details", new_quest_field_url(@quest.id, "field" => {"type" => "villain"})%>
+      <br>
+    <% end %>
+
+    <% if @quest.objectives.empty? %>
+      <label for="">objective name:</label>
+      <input type="text" name="quest[objective]" id="">
+      <%= link_to "objective_details", new_quest_field_url(@quest.id, "field" => {"type" => "objective"})%>
+      <br>
+    <% end %>
+    
+    <input type="submit" value="generate this quest">
+  </form>
+  
+<%end %>
+
+  <h3>Scene list</h3>
+  <%= render "quests/scene_list", quest: @quest %>
+ 
+
+<% @quest.scenes.each do  |scene| %>
+  <% if  scene.creature_list != nil%>
+      <% if !scene.creature_list.empty? %>
+  <% scene.creature_list.each do |unsaved_creature| %>
+  <%= render "creatures/creature", creature: unsaved_creature  %>
+      <%end %>
+  <% end %>
+<% end %>
+<% end %>
+
+<%= field =  @quest.scenes.last%>
+
+
+  <%= form_with model: field do |form| %>
+   <%= form.hidden_field :field_id, value: "foo" %>
+   <%= form.text_field :name, value: field.name %>  <!-- model_type[title] -->
+   <%= form.text_area :description, size: "60x10" %>
+  <%= form.submit %>
+<% end %>
+
+
+<br>
+ render tables
+<a href="#" >(+ add new)</a>:
+<br>
+render components 
+<a href="#" >(+ add new)</a>:
 
 
 

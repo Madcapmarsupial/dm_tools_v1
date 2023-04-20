@@ -1,27 +1,17 @@
-
-
-
-<!--
-field form for editing and creating generatable obejcts 
-
-save or edit
-
-fields/_form , field: with (field) -->
-
 <% if params[:action] == "edit" %>
-  <% action_url = field_url(field.id)%> 
+  <% action_url = component_url(component.id)%> 
   <!-- edit -> to update -->
 <% else%>
   <!--new -> to create-->
-  <% action_url = fields_url(field.quest_id) %>
+  <% action_url = components_url(component.field_id) %>
 <%end %>
 
 <br>
 <%=params[:action]%>
 <br>
 
-<!--quest.context -->
-<a href="#" >generate <%=field.type%></a> :
+<!--field.context -->
+<a href="#" >generate <%=component.type%></a> :
 gen button doesnt work  --> send request to 'generate/action'  (saves/creates object with current_params then generates.)
 
 <form action="<%=action_url%>" method="post">
@@ -29,9 +19,9 @@ gen button doesnt work  --> send request to 'generate/action'  (saves/creates ob
 	  <input type="hidden" name="_method" value="PATCH">
   <% end %>
   <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
-  <input type="hidden" name="field[quest_id]" value="<%=field.quest_id%>">
-  <input type="hidden" name="field[type]" value="<%=field.get_type%>">
-    <%= render "completions/full_completion", object: field, base: "field", key_list: field.user_key_list%>
+  <input type="hidden" name="component[field_id]" value="<%=component.field_id%>">
+  <input type="hidden" name="component[type]" value="<%=component.get_type%>">
+    <%= render "completions/full_completion", object: component, base: "component", key_list: component.user_key_list%>
   <br>
   <input type="submit" value="<%=params[:action]%>">
 </form>

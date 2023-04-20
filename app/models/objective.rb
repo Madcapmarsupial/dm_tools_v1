@@ -18,9 +18,9 @@ class Objective < Field
 
 
       str = <<~EOT
-      In an rpg scenario that has this data for the setting #{setting.s_context}
-      And a #{objective.o_context} as the objective
-      And a #{villain.v_context} as the villain" 
+      In an rpg scenario that has this data for the setting #{setting.setting_context}
+      And a #{objective.objective_context} as the objective
+      And a #{villain.villain_context} as the villain" 
       EOT
       str
     end
@@ -46,8 +46,8 @@ class Objective < Field
         }
     end
 
-    def o_context
-      if self.completion != nil
+    def objective_context
+      if self.completion != {}
         {
           "summary" => self.summary,
           "objective_name" => self.objective_name,

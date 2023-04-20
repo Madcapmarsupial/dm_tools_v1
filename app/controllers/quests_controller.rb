@@ -35,7 +35,6 @@ class QuestsController < ApplicationController
     if user_signed_in?
       @quest =  current_user.quests.find_by(id: params[:id])
       if @quest
-        @response = @quest.completion
         render :show
       else
         redirect_back(fallback_location: root_path)
@@ -53,16 +52,6 @@ class QuestsController < ApplicationController
       redirect_to root_path, alert: @quest.errors.full_messages
     end
   end
-
-
-
-
-
-
-
-
-
-
 
   
   def update_scene_list
@@ -82,13 +71,20 @@ class QuestsController < ApplicationController
   def generate
     @quest = Quest.find_by(id: params[:id])
 
+    create_s_o_v_fields(params, @quest)
+    #sov_fileds are used for prompt
+     #quest[setting], quest[villain] quest[objective]
     prompt_str = Quest.prompt(params)
       # prompt grabs the contexts from the rereq_fields 
         #we need to filter out any nil or "" values
+
+    #if s-o-v-field does not exist create it
+
     values = create_completion("quest", prompt_str)
       if @quest.update(values)    #values contains  -> (response_id, completion: name:)
         #QuestResponse.create(quest_id: @quest.id, response_id: values[:response_id])
           #if saved add entry into join table
+        update_s_o_v(@quest)
         create_completion_scenes(@quest)
         redirect_to @quest   #--> quest show
       else
@@ -104,12 +100,12 @@ class QuestsController < ApplicationController
 
   include Generatable
 
-   def create_completion_scenes(quest)
+  def create_completion_scenes(quest)
     quest.sequence_of_events.each do |event|
 
       scene_name = event["title"]
       summary = event["description"]
-      steps =  event["narrative_connection_to_next_event"]
+      steps = event["narrative_connection_to_next_event"]
       mini_completion = {"scene_name" => scene_name, "summary" => summary, "next_steps_for_players" => steps }
       
       #scene_name = quest.sequence_of_events[i]["title"]
@@ -118,9 +114,27 @@ class QuestsController < ApplicationController
     end
   end
 
+  def create_s_o_v_fields(params, quest)
+    #quest[field_name]
+    if quest.settings.empty?
+      Setting.create(quest_id: params[:id], name: params[:quest][:setting])
+    end
+    if quest.objectives.empty?
+      Objective.create(quest_id: params[:id], name: params[:quest][:objective])
+    end
+    if quest.villains.empty?      
+      Villain.create(quest_id: params[:id], name: params[:quest][:villain])
+    end
+  end
+
+  def update_s_o_v(quest)
+    quest.settings.last.update(name: quest.setting_name)
+    quest.villains.last.update(name: quest.villain_name)
+    quest.objectives.last.update(name: quest.objective_name)
+  end
 
   def quest_params  #only really prompt params right now
-     params.require(:quest).permit(:villain, :setting, :objective, :completion, :new_completion, :response_id, :user_id, :name)
+     params.require(:quest).permit(:notes, :completion, :response_id, :user_id, :name)
   end
 end
 

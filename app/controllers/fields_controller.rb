@@ -14,6 +14,9 @@ class FieldsController < ApplicationController
     field_name = params[:field][:completion]["#{subclass.get_type}_name"].titleize
     @field = subclass.new(quest_id: quest_id, name: field_name, completion: params[:field][:completion])
 
+
+    fail
+
     if @field.save
       redirect_to field_url(@field.id)
     else
@@ -39,6 +42,7 @@ class FieldsController < ApplicationController
     #quest_id = params[:field][:quest_id] #[:encounter][:quest_id]
     @field = Field.find_by(id: params[:id])
     type_str = @field.class.get_type
+    fail
 
     if @field.update(name: params[:field][:completion]["#{type_str}_name"].titleize, completion: params[:field][:completion])
       redirect_to field_url(@field.id)
@@ -51,7 +55,6 @@ class FieldsController < ApplicationController
     @field = Field.find_by(id: params[:id])   
     prompt_str = @field.class.prompt(params[:field])
     field_type = @field.class.get_type
-
     values = create_completion(field_type, prompt_str)
     if @field.update(values)
       redirect_to field_url(@field.id)

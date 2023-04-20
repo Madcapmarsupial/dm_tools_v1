@@ -1,0 +1,29 @@
+
+
+
+<!--if  "key" is in genrate list       add form
+  <input type="hidden" name="" id="">
+  <input type="hidden" name="" id="">
+
+<%#else %>
+-->
+  <% if key == "array" %>
+    <!--if this object was in an array we make special allowances for the params -->
+    <% object.each do |k, v|%>
+    <%= k %>: <br>
+    <%=render "completions/completion_object", object: v, base: "#{base}", key: k %>
+    <br>
+    <%end %>
+
+  <%else %>
+
+  <% object.each do |k, v|%>
+    <%= k %>: <br>
+    <%=render "completions/completion_object", object: v, base: "#{base}[#{key}]", key: k %>
+    <br>
+  <%end %>
+<!--if on generate_list  make this class specific  parent.pass_list -->
+<%end %>
+  
+
+

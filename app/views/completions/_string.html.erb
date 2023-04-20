@@ -1,1 +1,21 @@
-<%= object %>
+<!--object, base , key -->
+
+
+  <% if key == "array" %>
+    <!--if this object was in an array we make special allowances for the params -->
+    <% if object.length < 30 %>
+      <input type="text" name="<%="#{base}"%>" value="<%=object%>" id="">
+      <br>
+    <%else%>
+      <textarea name="<%="#{base}[#{key}]"%>" id="" cols="50" rows="3"><%=object%></textarea>
+    <%end  %>
+
+  <%else %>
+    <% if object.length < 30 %>
+      <input type="text" name="<%="#{base}[#{key}]"%>" value="<%=object%>" id="">
+      <br>
+    <%else%>
+      <textarea name="<%="#{base}[#{key}]"%>" id="" cols="50" rows="3"><%=object%></textarea>
+    <%end  %>
+  <% end %>
+

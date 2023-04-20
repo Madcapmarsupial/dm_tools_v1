@@ -11,7 +11,7 @@ class Setting < Field
       villain = Villain.find_by(quest_id: field[:quest_id])
 
       str = <<~EOT
-      In an rpg scenario with a #{setting.s_context} as the setting, a #{objective.o_context} as the objective, and a #{villain.v_context} as the villain" 
+      In an rpg scenario with a #{setting.setting_context} as the setting, a #{objective.objective_context} as the objective, and a #{villain.villain_context} as the villain" 
       EOT
       str
     end
@@ -28,8 +28,8 @@ class Setting < Field
       str
     end
 
-    def s_context
-      if completion != nil
+    def setting_context
+      if completion != {}
         {
           "setting_name"=> self.setting_name,
           "summary"=> self.summary,
@@ -56,7 +56,7 @@ class Setting < Field
 
       private
     def self.ai_values
-      [
+      [ 
         #"setting_name", "summary", "description", "layout", "dwellers",
       #"secrets", "lore", "history", "hazards", "narrative_connections"
     ]

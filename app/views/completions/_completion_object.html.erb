@@ -1,11 +1,14 @@
 
 
-<!--takes in value: value and later type -->
-<% if value.is_a?(Hash) %>
-<%= render "completions/object", object: value, parent: parent%>
-<%elsif  value.is_a?(Array) %>
-<%= render "completions/list", object: value, parent: parent%>
-<%elsif  value.is_a?(String) %>
-<%= render "completions/string", object: value, parent: parent%>
-<%end %>
 
+<!--takes in object and a base, and key -->
+
+  <% if object.is_a?(Hash) %>  
+  <%= render "completions/hash", object: object, base: base, key: key%>
+  <%elsif  object.is_a?(Array) %>
+    <!--field[completion][rewards_list] = base key = [] -->
+
+  <%= render "completions/list", object: object, base: base, key: key%>
+  <%elsif  object.is_a?(String) %>
+  <%= render "completions/string", object: object, base: base, key: key %>
+  <%end %>
