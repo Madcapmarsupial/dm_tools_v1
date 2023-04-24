@@ -9,7 +9,7 @@ class Villain < Field
         :personality, :end_goal, :tragic_backstory, :redeeming_qualities,
         :misguided_ideals, :planned_use_for_the_objective, :the_story_of_the_most_recent_victim,
       #mechanics
-        :special_abilities, :weaknesses, :lair, :henchman
+        :special_abilities, :weaknesses, :lair
     ]
    
   

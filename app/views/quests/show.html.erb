@@ -1,16 +1,10 @@
-  show quest action
-<br>
+<h3><%=@quest.name%></h3> 
 <%= link_to "Home", root_url%>: 
 <%= link_to "Quest List", quests_url%>:
-<h3><%=@quest.name%></h3> 
 
-<br>
-<%=render "quests/current_setting", quest: @quest %>
-<br>
-<%=render "quests/current_villain", quest: @quest %>
-<br>
-<%=render "quests/current_objective", quest: @quest %>
-<br>
+<h4><%=render "quests/current_setting", quest: @quest %></h4>
+<h4><%=render "quests/current_villain", quest: @quest %></h4>
+<h4><%=render "quests/current_objective", quest: @quest %></h4>
 
 
 <form action="<%=quest_url(@quest)%>" method="post">
@@ -41,21 +35,21 @@
     <% if @quest.settings.empty? %>
       <label for="">setting name:</label>
       <input type="text" name="quest[setting]" id="">
-      <%= link_to "setting_details", new_quest_field_url(@quest.id, "field" => {"type" => "setting"})%>
+      <%= link_to "setting_details", new_quest_setting_url(@quest.id, "setting" => {"type" => "setting"})%>
       <br>
     <% end %>
 
     <% if @quest.villains.empty? %>
       <label for="">villain name:</label>
       <input type="text" name="quest[villain]" id="">
-      <%= link_to "villain details", new_quest_field_url(@quest.id, "field" => {"type" => "villain"})%>
+      <%= link_to "villain details", new_quest_villain_url(@quest.id, "villain" => {"type" => "villain"})%>
       <br>
     <% end %>
 
     <% if @quest.objectives.empty? %>
       <label for="">objective name:</label>
       <input type="text" name="quest[objective]" id="">
-      <%= link_to "objective_details", new_quest_field_url(@quest.id, "field" => {"type" => "objective"})%>
+      <%= link_to "objective_details", new_quest_objective_url(@quest.id, "objective" => {"type" => "objective"})%>
       <br>
     <% end %>
     
@@ -64,32 +58,17 @@
   
 <%end %>
 
-  <h3>Scene list</h3>
-  <%= render "quests/scene_list", quest: @quest %>
- 
+<h3>Scene list</h3>
 
-<% @quest.scenes.each do  |scene| %>
-  <% if  scene.creature_list != nil%>
-      <% if !scene.creature_list.empty? %>
-  <% scene.creature_list.each do |unsaved_creature| %>
-  <%= render "creatures/creature", creature: unsaved_creature  %>
-      <%end %>
-  <% end %>
-<% end %>
-<% end %>
-
-<%= field =  @quest.scenes.last%>
+<%= render "quests/scene_list", quest: @quest %>
 
 
-  <%= form_with model: field do |form| %>
-   <%= form.hidden_field :field_id, value: "foo" %>
-   <%= form.text_field :name, value: field.name %>  <!-- model_type[title] -->
-   <%= form.text_area :description, size: "60x10" %>
-  <%= form.submit %>
-<% end %>
 
 
+<!-- 
 <br>
+  creatures
+
  render tables
 <a href="#" >(+ add new)</a>:
 <br>
@@ -97,6 +76,6 @@ render components
 <a href="#" >(+ add new)</a>:
 
 
-
+-->
 
 

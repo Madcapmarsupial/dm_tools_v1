@@ -26,25 +26,58 @@ Rails.application.routes.draw do
       
     end
 
+    #resources :fields, only: [:new, :index]
     resources :scenes, only: [:new, :index]
-    resources :fields, only: [:new, :index]
+    resources :settings, only: [:new, :index]
+    resources :objectives, only: [:new, :index]
+    resources :villains, only: [:new, :index]
   end
   
-  resources :fields, only: [:show, :destroy, :create, :update, :edit] do 
-    resources :components, only: [:new, :index]
-    resources :frames, only: [:new, :index]
-    member do 
-      patch 'generate'
+  # resources :fields, only: [:show, :destroy, :create, :update, :edit] do 
+  #   #resources :components, only: [:new, :index]
+  #   resources :frames, only: [:new, :index]
+  #   member do 
+  #     patch 'generate'
+  #   end
+  # end
+
+    resources :scenes, only: [:show, :edit, :destroy, :new, :create, :update] do 
+     #resources :components, only: [:new, :index]
+      resources :creatures, only: [:new, :index]
+      resources :items, only: [:new, :index]
+      resources :effects, only: [:new, :index]
+      member do 
+        patch 'generate'
+      end
     end
-  end
-  
-   resources :scenes, only: [:show, :edit, :destroy, :create, :update] do 
-     resources :components, only: [:new, :index]
-     #resources :creatures, only: [:new, :index]
-     #resources :active_effects, only: [:new, :index]
-     #resources :special_mechanics, only: [:new, :index]
-     #resources :items, only: [:new, :index]
-   end
+
+    resources :villains, only: [:show, :edit, :destroy, :create, :update] do 
+     #resources :components, only: [:new, :index]
+      resources :creatures, only: [:new, :index]
+      resources :items, only: [:new, :index]
+      resources :effects, only: [:new, :index]
+      member do 
+        patch 'generate'
+      end
+    end
+
+    resources :settings, only: [:show, :edit, :destroy, :create, :update] do 
+      resources :creatures, only: [:new, :index]
+      resources :items, only: [:new, :index]
+      resources :effects, only: [:new, :index]
+      member do 
+        patch 'generate'
+      end
+    end
+
+     resources :objectives, only: [:show, :edit, :destroy, :create, :update] do 
+      resources :creatures, only: [:new, :index]
+      resources :items, only: [:new, :index]
+      resources :effects, only: [:new, :index]
+      member do 
+        patch 'generate'
+      end
+    end
 
   #   resources :villains, only: [:show, :edit, :destroy, :create, :update] do 
   #    resources :components, only: [:new, :index]
@@ -60,42 +93,38 @@ Rails.application.routes.draw do
   #  end
 
 
-  resources :components, only: [:show, :create, :destroy] do
-    member do
-      patch 'generate'
+  # resources :components, only: [:show, :create, :destroy] do
+  #    # member do
+  #     #  patch 'generate'
+  #     #end
+  #   #end  
+
+    resources :creatures, only: [:show, :edit, :destroy, :create, :update] do
+      member do
+        patch 'generate'
+      end
+    end  
+
+    resources :effects, only: [:show, :edit, :destroy, :create, :update] do
+      member do
+        patch 'generate'
+      end
+    end  
+
+     resources :items, only: [:show, :edit, :destroy, :create, :update] do
+       member do
+         patch 'generate'
+       end
+     end  
+
+    resources :frames, only: [:show, :destroy, :create, :update, :edit] do
+      #resources :connected_frames, only: [:new, :index] 
+      member do 
+        post 'connect'
+        post 'connect_new'
+
+      end
     end
-  end  
-
-
-
-  # resources :creatures, only: [:show, :create, :destroy] do
-  #   member do
-  #     patch 'generate'
-  #   end
-  # end  
-
-
-  # resources :active_effects, only: [:show, :create, :destroy] do
-  #   member do
-  #     patch 'generate'
-  #   end
-  # end  
-
-
-  # resources :items, only: [:show, :create, :destroy] do
-  #   member do
-  #     patch 'generate'
-  #   end
-  # end  
-
-  resources :frames, only: [:show, :destroy, :create, :update, :edit] do
-    #resources :connected_frames, only: [:new, :index] 
-    member do 
-      post 'connect'
-      post 'connect_new'
-
-    end
-  end
 
   #resources :connected_frames, only: [:destroy, :create] #maybe update
 

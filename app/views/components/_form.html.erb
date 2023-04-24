@@ -1,27 +1,27 @@
-<% if params[:action] == "edit" %>
-  <% action_url = component_url(component.id)%> 
-  <!-- edit -> to update -->
-<% else%>
-  <!--new -> to create-->
-  <% action_url = components_url(component.field_id) %>
-<%end %>
+<%= form_with model: component do |form| %>
+   <%= form.hidden_field :field_id, value: component.field_id %>
+   <%= form.hidden_field :type, value: component.type %> 
+   
+  <ul> <!-- map component attributes  to =>  completion[attributes]-->
+    <li><%=form.label :name, "#{component.get_type.titleize} Name" %></li>
+      <%=form.text_field "completion[#{component.get_type}_name]" , value: component.name %>
 
-<br>
-<%=params[:action]%>
-<br>
+    <li><%= form.label :quantity, "Quantity" %></li>
+      <%=form.number_field :quantity, value: component.quantity %> <!-- model_type[title] -->
 
-<!--field.context -->
-<a href="#" >generate <%=component.type%></a> :
-gen button doesnt work  --> send request to 'generate/action'  (saves/creates object with current_params then generates.)
+    <li><%=form.label :description, "Description" %></li>
+      <%= form.text_area "completion[description]", value: component.desc %>
 
-<form action="<%=action_url%>" method="post">
-  <% if params[:action] == "edit" %>
-	  <input type="hidden" name="_method" value="PATCH">
-  <% end %>
-  <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
-  <input type="hidden" name="component[field_id]" value="<%=component.field_id%>">
-  <input type="hidden" name="component[type]" value="<%=component.get_type%>">
-    <%= render "completions/full_completion", object: component, base: "component", key_list: component.user_key_list%>
-  <br>
-  <input type="submit" value="<%=params[:action]%>">
-</form>
+    <li><%=form.label :alignment, "Current Alignment: (#{component.component_alignment})" %></li>
+      <%=form.select "completion[alignment]", ["Harmful", "Helpful", "Neutral"], selected: component.component_alignment %>
+  </ul>
+  
+
+  <!-- mass ai values --->
+  <%= render "completions/full_completion", object: component, base: component.get_type, key_list: component.user_key_list%>
+
+
+  <%= button_tag "Save", {:class => "bttn-and-txt", :name => "submit", :value => "save"} %>
+  <%= button_tag "Generate", {:class => "bttn-and-txt", :name => "submit", :value => "generate"} %>
+<% end %> 
+

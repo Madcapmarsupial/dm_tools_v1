@@ -1,9 +1,3 @@
-
-
-<form action="generate_component">
-<%= creature["name"] %>:
-<input type="submit" value="generate creature">
-</form>
-<li><%= creature["description"] %>:</li>
-<br> 
+<%= link_to "#{creature.name}", creature_url(creature.id)%><form action="">
+<!-- <input type="number" name="" id="" min="0" max="99" ></form> -->
 

@@ -14,6 +14,16 @@ class Field < ApplicationRecord
   primary_key: :id,
   optional: :true
 
+    has_many :components,
+      primary_key: :id,
+      foreign_key: :field_id,
+      dependent: :destroy
+
+    accepts_nested_attributes_for :components  
+
+  
+  
+
   def child_type
     "component"
   end
@@ -71,6 +81,23 @@ class Field < ApplicationRecord
 
 def self.specifics
 end
+
+
+    def children_types_and_lists
+      {"creature" => creature_list, "reward" => reward_list, "active_effect" => active_effect_list, "special_mechanic" => special_mechanic_list}
+    end
+
+    def build_children
+      children_types_and_lists.each { |type, list|  build_child_type(type, list) }
+    end
+    
+    def build_child_type(type, list)
+      list.each do |child|
+        child_model = Component.get_class(type)
+        child_model.create(name: child["name"], alignment: "", quantity: "1", desc: child["description"], completion: {}, field_id: self.id)
+      end
+    end 
+
 
   private
     def self.param_list

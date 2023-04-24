@@ -1,4 +1,4 @@
-class ActiveEffect < Component
+class Effect < Component
   belongs_to :scene,
   class_name: 'Scene',
   foreign_key: :field_id,
@@ -6,15 +6,14 @@ class ActiveEffect < Component
   dependent: :destroy
   #has mnay details
 
-  store_accessor :completion, [:active_effect_name, :description, :alignment,
+  store_accessor :completion, [:effect_name, :description, :alignment,
   :duration_in_rounds, :effect, :cause, :prevention, :secrets, :lore, :appearance, :defense]
 
-    #:special_abilities, :key_chracteristic, :personality, :motivation, :alignment, :tactics]
+  #effected-field
  
 
 
-    
-    
+
 
   
   # if params[:alignment] != ""
@@ -39,7 +38,7 @@ class ActiveEffect < Component
   #   EOT
 
   def self.get_type
-    "active_effect"
+    "effect"
   end
 
   private 

@@ -24,7 +24,9 @@ class Quest < ApplicationRecord
   has_many :scenes,
     class_name: 'Scene',
     dependent: :destroy
-  
+    
+    accepts_nested_attributes_for :scenes
+
   has_many :frames, through: :scenes
 
   has_many :villains,
@@ -42,6 +44,7 @@ class Quest < ApplicationRecord
   has_many :fields,
     class_name: 'Field',
     dependent: :destroy
+
 
   has_many :quest_details,
     foreign_key: :quest_id,
@@ -92,7 +95,7 @@ class Quest < ApplicationRecord
 #PROMPT METHODS
   def q_context
     text = <<~EOT
-    In a table-top rpg with the following summary "#{self.summary}"
+    In a table-top-rpg with the following summary "#{self.summary}"
     And this scene-list #{self.sequence_of_events}
     EOT
     #{self.completion}

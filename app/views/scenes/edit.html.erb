@@ -1,0 +1,13 @@
+<h1>Edit Scene</h3>
+<%= link_to 'Quest', quest_url(@scene.quest_id) %><br>
+<%= render "completions/generate", object: @scene, object_url: generate_scene_url(@scene), desc: @scene.build_description %>
+<%= render "fields/form", field: @scene %>
+
+<!--creature set -->
+<br>
+<h4>Creatures</h4>
+<%= @scene.creature_list %>
+<%= render @scene.creatures %>
+<%= link_to "New Creature", new_scene_creature_url(@scene.id)%>
+
+

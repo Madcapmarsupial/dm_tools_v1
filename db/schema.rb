@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_17_033827) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_22_220521) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,13 +25,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_17_033827) do
   create_table "components", force: :cascade do |t|
     t.bigint "field_id"
     t.string "type"
-    t.string "alignment"
+    t.string "component_alignment"
     t.jsonb "completion", default: {}
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "response_id"
     t.integer "quantity"
+    t.string "desc", default: "", null: false
     t.index ["field_id"], name: "index_components_on_field_id"
     t.index ["response_id"], name: "index_components_on_response_id"
   end

@@ -1,4 +1,4 @@
-class Reward < Component
+class Item < Component
   belongs_to :scene,
   class_name: 'Scene',
   foreign_key: :field_id,
@@ -6,7 +6,7 @@ class Reward < Component
   dependent: :destroy
   #has mnay details
 
-  store_accessor :completion, [:reward_name, :description, :appearance, :quantity, :lore,
+  store_accessor :completion, [:item_name, :description, :appearance, :quantity, :lore,
   :special_abilities, :active_effects, :secrets, :alignment]
 
 

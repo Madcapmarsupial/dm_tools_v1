@@ -1,0 +1,20 @@
+
+
+<!--
+  needs  object: , object_url: , desc: 
+
+ -->
+
+
+<!--does not work for components -->
+<%= form_with model: object, url: object_url, method: "patch"  do |f| %>
+
+    <%object.attributes.keys.each do |k| %>
+      <%= f.hidden_field k, value: object.attributes[k] %>
+    <%end %>
+
+
+     <%= f.submit "Generate #{object.type}" %>
+  <% end %>
+
+

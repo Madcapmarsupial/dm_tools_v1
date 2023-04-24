@@ -19,54 +19,73 @@ class Component < ApplicationRecord
   def get_type
     self.class.get_type
   end
-  
-
 
   def self.get_class(type)
     #more genralized?
       #creature #item #effect #information
 
-    fields = {
+    types = {
       "creature" => Creature,
-      "reward" => Reward,  #item
-      "special_mechanic" => SpecialMechanic,
-      "active_effect" => ActiveEffect
+      "item" => Item,  #item
+      "reward" => Item,
+      "effect" => Effect,
+      "active_effect" => Effect,
+      "ability" => Effect,
+      "special_mechanic" => Effect
        #datum => Datum
     }
-    fields[type.downcase]
+    types[type.downcase]
   end
 
-
-
-
-
-
-   def self.prompt(params)
-    scene = Scene.find_by(id: params[:field_id])
-    parents_context = scene.context_for_component
+  def self.prompt(component)
+    parent = Field.find_by(id: component.field_id)
+    parents_context = parent.context_for_component
     #scene.creature_context    # component_context
     #
     #build context
-    if params[:alignment] != ""
+    if component.component_alignment != "" && component.component_alignment != nil
       alignment_string = <<~EOT
-      Make this #{get_type} #{params[:alignment]} to the player characters 
-      label it using the "alignment" parameter
+      Make this #{get_type} #{component.component_alignment} to the player characters 
+      Label it using the "alignment" parameter
       EOT
     else
       alignment_string = ""
     end
 
+    if component.desc != "" && component.desc != nil
+      desc_string = <<~EOT
+      based off this description "#{component.desc}"
+      EOT
+    else
+      desc_string = ""
+    end
+
     <<~EOT
-    In the context of the below rpg scenario and the specified scene
     #{parents_context}
-    The "#{get_type}" named #{params[:name]} 
-    Recreate this #{get_type} in more detail 
+    Create this #{get_type} with the name #{component.name} 
+    #{desc_string}
     The #{get_type} should have #{param_list.length} parameters #{param_string}
     #{alignment_string} 
     The "alignment" parameter should be one of these 3 values "harmful", "helpful", or "neutral"
     Your response should be in JSON format 
     EOT
   end
+
+
+  def hidden_keys
+    ["alignment", "description", "#{self.get_type}_name"]
+  end
+
+
+  
+
+  #context
+  #body
+  #specifics
+
+
+  #create this {component.type} for a table-top-rpg sceneario that is represented by the following hash. {context}
+  #{component.type.specifics}
 
   def self.param_list
     stored_attributes[:completion]

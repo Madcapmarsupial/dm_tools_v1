@@ -6,8 +6,9 @@ class Creature < Component
   dependent: :destroy
   #has mnay details
 
-  store_accessor :completion, [:creature_name, :equipment, :description, :quantity, :weaknesses, :bonuses,
+  store_accessor :completion, [:creature_name, :equipment, :description, :weaknesses, :bonuses,
     :special_abilities, :key_chracteristic, :personality, :motivation, :alignment, :tactics]
+
 
     #put these under detail?
     #backstory
@@ -17,9 +18,6 @@ class Creature < Component
     #secrets
 
   
-    def self.get_type
-      "creature"
-    end
 
   # def self.prompt(params)
   #   scene = Scene.find_by(id: params[:field_id])
@@ -67,13 +65,9 @@ class Creature < Component
   #bonuses
   #hp
   #secrets
-    private
-    
-    def self.ai_values
-      []
-    end
 
   
-
+  
+  private
  
 end

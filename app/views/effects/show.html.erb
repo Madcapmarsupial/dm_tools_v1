@@ -1,0 +1,4 @@
+<h3><%=@effect.name%></h3>
+<%= link_to "Scene", scene_url(@effect.field_id) %>
+
+<%=render "components/form", component: @effect%>

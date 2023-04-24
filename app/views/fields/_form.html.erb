@@ -1,37 +1,7 @@
+<%= form_with model: field do |form| %>
+   <%= form.hidden_field :quest_id, value: field.quest.id %>
+   <%= form.hidden_field :type, value: field.type %>  <!-- model_type[title] -->
+    <%= render "completions/full_completion", object: field, base: field.get_type, key_list: field.user_key_list%>
 
-
-
-<!--
-field form for editing and creating generatable obejcts 
-
-save or edit
-
-fields/_form , field: with (field) -->
-
-<% if params[:action] == "edit" %>
-  <% action_url = field_url(field.id)%> 
-  <!-- edit -> to update -->
-<% else%>
-  <!--new -> to create-->
-  <% action_url = fields_url(field.quest_id) %>
-<%end %>
-
-<br>
-<%=params[:action]%>
-<br>
-
-<!--quest.context -->
-<a href="#" >generate <%=field.type%></a> :
-gen button doesnt work  --> send request to 'generate/action'  (saves/creates object with current_params then generates.)
-
-<form action="<%=action_url%>" method="post">
-  <% if params[:action] == "edit" %>
-	  <input type="hidden" name="_method" value="PATCH">
-  <% end %>
-  <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
-  <input type="hidden" name="field[quest_id]" value="<%=field.quest_id%>">
-  <input type="hidden" name="field[type]" value="<%=field.get_type%>">
-    <%= render "completions/full_completion", object: field, base: "field", key_list: field.user_key_list%>
-  <br>
-  <input type="submit" value="<%=params[:action]%>">
-</form>
+  <%= form.submit %>
+<% end %>

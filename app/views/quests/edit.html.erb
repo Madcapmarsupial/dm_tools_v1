@@ -1,14 +1,12 @@
- edit
+ <h3>Edit Quest</h3>
  <%= link_to "Quest List", quests_url%>
 
 <form action="edit">
 
 </form>
 
-  <%= render @quest.fields %>
 
-  <%= render "/fields/generate", field: @quest.settings.last, desc: "a setting"%>
-  
+  <%= render "/completions/generate", object: @quest.settings.last, url: generate_setting(@quest.settings.last), desc: "a setting"%>
 
 <%if @quest.response_id == nil %>
 <!-- add conditional logic -->
@@ -42,12 +40,8 @@
     </ul>
 
   <%end %>    
-
-
 <h3>data<h3>
-  <%@quest.completion.each do |key, value| %>
-  <h3><%="#{key}"%></h3>
-  <%= render "completions/completion_object", parent: @quest, value: value %>
+  <%= render "completions/full_completion", object: @quest, base: "quest", key_list: @quest.user_key_list %>
   <br>
   <%end %>
   <br>

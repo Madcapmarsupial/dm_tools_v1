@@ -1,0 +1,6 @@
+<h1>Edit Villain</h3>
+<%= link_to 'Quest', quest_url(@villain.quest_id) %><br><br>
+<%= render "completions/generate", object: @villain, object_url: generate_villain_url(@villain), desc: "" %>
+<%=render "fields/form", field: @villain%>
+
+

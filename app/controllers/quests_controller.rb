@@ -46,6 +46,7 @@ class QuestsController < ApplicationController
 
   def update
     @quest = Quest.find_by(id: params[:id])
+    
     if @quest.update(quest_params)
       redirect_to @quest
     else
@@ -70,17 +71,16 @@ class QuestsController < ApplicationController
 
   def generate
     @quest = Quest.find_by(id: params[:id])
+    begin
+      create_s_o_v_fields(params, @quest)
+      #sov_fileds are used for prompt
+       #quest[setting], quest[villain] quest[objective]
+      prompt_str = Quest.prompt(params)
+        # prompt grabs the contexts from the rereq_fields 
+          #we need to filter out any nil or "" values
 
-    create_s_o_v_fields(params, @quest)
-    #sov_fileds are used for prompt
-     #quest[setting], quest[villain] quest[objective]
-    prompt_str = Quest.prompt(params)
-      # prompt grabs the contexts from the rereq_fields 
-        #we need to filter out any nil or "" values
-
-    #if s-o-v-field does not exist create it
-
-    values = create_completion("quest", prompt_str)
+      #if s-o-v-field does not exist create it
+      values = create_completion("quest", prompt_str)
       if @quest.update(values)    #values contains  -> (response_id, completion: name:)
         #QuestResponse.create(quest_id: @quest.id, response_id: values[:response_id])
           #if saved add entry into join table
@@ -91,9 +91,11 @@ class QuestsController < ApplicationController
         @quest.errors.add :response, invalid_response: "#{@quest.errors.full_messages}"
         redirect_to @quest, alert: @quest.errors.full_messages
       end
+    rescue StandardError => e
+        #refund -> and render :new #redirect_to user_home  #render response.errors.full_messaged too?
+        redirect_to root_path, alert: e
+    end
   end
-
-   
 
 
   private
@@ -134,7 +136,9 @@ class QuestsController < ApplicationController
   end
 
   def quest_params  #only really prompt params right now
-     params.require(:quest).permit(:notes, :completion, :response_id, :user_id, :name)
+     params.require(:quest).permit(:notes, :completion, :response_id, :user_id, :name, 
+      scenes_attributes: [:id, :type, :name, :completion] #quest_id #summery #next_steps_for_players, etc
+    )
   end
 end
 

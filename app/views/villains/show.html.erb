@@ -1,8 +1,3 @@
-<%= link_to 'Back to Quest', quest_url(@field.quest) %>
-<%@field.completion.each do |k, v| %>
-<br>
-<%="#{k} --> #{v}"%>
-<br>
-<br>
-<% end %>
-<br>
+<h1>Villain</h3>
+<%= link_to 'Quest', quest_url(@villain.quest_id) %><br>
+<%=render "fields/form", field: @villain%>

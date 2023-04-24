@@ -1,29 +1,50 @@
 <h3>Full view for Scenes</h3>
 
-<%= link_to 'Back to Quest', quest_url(field.quest) %>
+<%= link_to 'Back to Quest', quest_url(scene.quest) %>
 <br>
-<h4><%=field.name%></h4>
+<h4><%=scene.name%></h4>
 <br>
-<form action="<%=generate_field_url(field)%>" method="post">
+<form action="<%=generate_scene_url(field)%>" method="post">
     <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
     <input type="hidden" name="_method" value="patch">
-    <input type="hidden" name="field[quest_id]" value="<%=field.quest_id%>">
-    <input type="hidden" name="field[name]" value="<%=field.name%>">
-    <input type="hidden" name="field[description]" value="<%=field.summary%>">
+    <input type="hidden" name="scene[quest_id]" value="<%=scene.quest_id%>">
+    <input type="hidden" name="scene[name]" value="<%=scene.name%>">
+    <input type="hidden" name="scene[description]" value="<%=scene.summary%>">
     <input type="submit" value="generate scene">
 <br>
 </form>
 
-<%= render "fields/form", field: field %>
+
+
+<%= render "fields/form", field: scene,  %>
 <!-- FRAMES
-  <%# render field.frames %>  
+  <%# render scene.frames %>  
   <br>
-    <%#link_to 'New Frame', new_field_frame_url(field) %> 
+    <%#link_to 'New Frame', new_scene_frame_url(scene) %> 
   <br>
 -->
 
-<%= render field.components %>
+<%= render scene.components %>
 <br>
 <!-- add components -->
 
+ <%= form_for scene do |f| %>
+   <% f.object.completion.each do |k,v| %>
+   <!-- <%# f.object.completion["summary"] %> -->
+      <%= k %> :
+      <%if v.is_a?(Array) %> 
+        <% v.each_with_index do |list_item, i| %>
+          <input name="scene[completion][<%=k%>][][name]" type="text" value="<%=list_item["name"]%>"/><br>
+          <textarea name="scene[completion][<%=k%>][][description]" id="" cols="30" rows="6"><%=list_item["description"]%></textarea>
+          <br>
+        <%end %>
+      <%else %>
+           <%= text_field "scene[completion]", k, value: v%>
+           <br>
+      <%end %>
+   <% end %>
+   <%= f.submit %>
+ <% end %>
+ <br>
+ <%end  %>
 

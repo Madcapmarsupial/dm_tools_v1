@@ -1,75 +1,18 @@
-<h3><%=@scene.name %></h1>
+<h1>Show Scene</h3>
+<%= link_to 'Quest', quest_url(@scene.quest_id) %><br>
+<%= render "completions/generate", object: @scene, object_url: generate_scene_url(@scene), desc: @scene.build_description %>
+<%= render "fields/form", field: @scene %>
 
-<p>"blank show from scene"</p>
-EDITING
-
-<h3>full scene</h3>
-<%= link_to 'Back to Quest', quest_url(@scene.quest) %>
-
-<ul>
-  <h3>primary threat</h3>
-  <h3>obstacle</h3>
-  <h3>goal</h3>
-  <h3>timer</h3>
-</ul>
-
-<%if @scene.response_id != nil %>
-<h3>spectacle</h3>
-<p>
-  <%= @scene.the_impressive_spectacle%>
-  <br>
-
- <%= @scene.area_description['surroundings']%>
-  <br>
-
-  <%= @scene.area_description['smells']%>
-  <br>
-  <%= @scene.area_description['sights']%>
-  <br>
-  <%= @scene.area_description['sounds']%>
-  <br><br>
-
-  <%= @scene.summary %>
-  <br>
-</p>
-
-<h3>paths</h3>
-
-  <%= @scene.next_steps_for_players %>
-  <br><br>
-  <%= @scene.area_layout%>
-  <br><br>
-
-<p>
-
-<h3>Components</h3>
-  <% @scene.reward_list.each do |reward| %>
-    <%= reward["name"]%> |
-  <%end %>
-  <br>
-
-  <% @scene.special_mechanic_list.each do |mech| %>
-    <%= mech["name"]%> |
-  <%end %>
-  <br>
-
-  <% @scene.active_effect_list.each do |effect| %>
-    <%= effect["name"]%> |
-  <%end %>
-  <br>
-
-  <br><br>
- </p>
-
-<%= render "components/custom_list_items", scene: @scene%>
-
-<%= render "components/list_items_index", scene: @scene%>
-<!--list generated models-->
-<%= render "components/list_items_new", scene: @scene %>
-<!-- list scene fields with forms -->
+<!--creature set -->
 <br>
-<%@scene.completion.each do |key, value| %>
-<h3><%="#{key}"%></h3>
-  <%= render "completions/completion_object",value: value, parent: @scene%>
-<% end%>
-<%end %>
+<h4>Creatures</h4>
+<%= render @scene.creatures %>
+<%= link_to "New Creature", new_scene_creature_url(@scene.id)%>
+<br>
+<h4>Items</h4>
+<%= render @scene.items %>
+<%= link_to "New Item", new_scene_item_url(@scene.id)%>
+<br>
+<h4>Effects</h4>
+<%= render @scene.effects %>
+<%= link_to "New Effect", new_scene_effect_url(@scene.id)%>
