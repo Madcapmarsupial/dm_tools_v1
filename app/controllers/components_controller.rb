@@ -18,7 +18,7 @@ class ComponentsController < ApplicationController
   end
 
   def create
-    field_id = params[:component][:field_id])
+    field_id = params[:component][:field_id]
     class_type = params[:component][:type]
     subclass = Component.get_class(class_type)
 
