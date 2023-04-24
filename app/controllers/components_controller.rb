@@ -1,6 +1,6 @@
 class ComponentsController < ApplicationController
   def index 
-    field = Field.find_by(id: component_params[:field_id])
+    field = Field.find_by(id: component_params[:field_id] 
     type_str = component_params[:type]
     @components = field.components.where(type: type_str)
 
@@ -14,7 +14,6 @@ class ComponentsController < ApplicationController
     @component = subclass.new(field_id: @field.id, completion: {})
 
     render :new
-      # render "#{type.pluaralize}/new"
   end
 
   def create
