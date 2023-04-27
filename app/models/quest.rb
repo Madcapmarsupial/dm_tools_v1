@@ -139,7 +139,7 @@ class Quest < ApplicationRecord
     v_context = Villain.find_by(quest_id: quest_params[:id]).villain_context
 
 
-
+ 
 
    # gonna need a import_context method 
    prompt = <<~EOT

@@ -1,0 +1,46 @@
+<%= form_with model: roll_table do |form| %>   
+  <ul> <!-- map component attributes  to =>  completion[attributes]-->
+    <li><%=form.label :name, "#{roll_table.table_type.titleize} Roll-Table" %></li>
+
+    <li><%= form.label :row_count, "row count" %></li>
+      <%=form.number_field :row_count, value: roll_table.row_count %> <!-- model_type[title] -->
+      <% i = 0 %>
+      <li><% roll_table.column_list.split(",").each do |k, v| %>
+      <% i += 1 %>
+        <%=form.label :column, "Column #{i}" %>
+        <input type="text" name="roll_table[column_list][]" value="<%=k%>">
+
+        <button>X</button>
+      <%end%>
+      <button>Add column</button>
+    </li>
+  </ul>
+  
+
+  <%= button_tag "Save", {:class => "bttn-and-txt", :name => "submit", :value => "save"} %>
+  <%= button_tag "Generate", {:class => "bttn-and-txt", :name => "submit", :value => "generate"} %>
+<% end %> 
+
+
+<!--
+  link to new table with current data + an untitled column
+ -->
+
+
+    <form action="<%=new_roll_table_url()%>">
+      <input type="hidden" name="roll_table[table_type]" value="<%roll_table.table_type%>">
+      <input type="hidden" name="roll_table[row_count]" value="<%roll_table.row_count%>"> 
+      <input type="hidden" name="roll_table[column_list]" value="<%roll_table.column_list += " new column"%>"> 
+      <input type="hidden" name="roll_table[completion]" value="<%roll_table.completion%>"> 
+    <input type="submit">
+    </form>
+
+          <!--
+            row.times.each do |row_number|
+             <%# form.text_field "completion[num][entered_col]"%>
+            end
+
+          needs to submit a string to params
+              needs to take in and display a string (split)  add new (add to array and reload)
+              needd to display a list of text_fields
+          -->

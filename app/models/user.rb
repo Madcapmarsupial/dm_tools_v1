@@ -25,6 +25,12 @@ class User < ApplicationRecord
   foreign_key: :user_id,
   primary_key: :id
 
+  has_many :tables,
+  class_name: "RollTable",
+  foreign_key: :user_id,
+  primary_key: :id
+
+
   #--> login bottle_cap deposits
 
   #declare callback methods as protected or private. If left public,
