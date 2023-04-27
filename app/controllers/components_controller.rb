@@ -1,6 +1,6 @@
 class ComponentsController < ApplicationController
   def index 
-    field = Field.find_by(id: component_params[:field_id] 
+    field = Field.find_by(id: component_params[:field_id])
     type_str = component_params[:type]
     @components = field.components.where(type: type_str)
 
