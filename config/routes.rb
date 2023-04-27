@@ -31,6 +31,9 @@ Rails.application.routes.draw do
     resources :settings, only: [:new, :index]
     resources :objectives, only: [:new, :index]
     resources :villains, only: [:new, :index]
+      #resources :roll_tables, only: [:new, :index]
+
+
   end
   
   # resources :fields, only: [:show, :destroy, :create, :update, :edit] do 
@@ -125,6 +128,12 @@ Rails.application.routes.draw do
 
       end
     end
+
+    resources :roll_tables, only: [:new, :show, :edit, :destroy, :create, :update] do
+       member do
+         patch 'generate'
+       end
+    end  
 
   #resources :connected_frames, only: [:destroy, :create] #maybe update
 

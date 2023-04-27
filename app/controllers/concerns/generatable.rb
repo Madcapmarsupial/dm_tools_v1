@@ -49,6 +49,14 @@ module Generatable
       []
     end
     
+     def self.param_list
+      stored_attributes[:completion]
+    end
+
+    def self.param_string   
+      param_list.slice(0...-1).join(", ") + " and #{param_list.last}"
+    end
+
 
   end
 
