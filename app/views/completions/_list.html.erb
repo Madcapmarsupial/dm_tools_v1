@@ -12,18 +12,10 @@ results in
 -->
 
 <ul class="array">
-<br>
-<button>add new </button>
-  
 
-<%= base %><%= key %>
-<br>
 <% object.each_with_index do |list_object, i| %>
-  <br>
 
   <li><%= render "completions/completion_object", object: list_object, base: "#{base}[#{key}][]", key: "array" %></li>
-  <br>
-  <button>create component</button>
 <%end %>
 <br>
 

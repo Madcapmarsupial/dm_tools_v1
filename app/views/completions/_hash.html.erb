@@ -10,17 +10,18 @@
   <% if key == "array" %>
     <!--if this object was in an array we make special allowances for the params -->
     <% object.each do |k, v|%>
-    <%= k %>: <br>
-    <%=render "completions/completion_object", object: v, base: "#{base}", key: k %>
+    <label><%= k %>:</label>
     <br>
+    <%=render "completions/completion_object", object: v, base: "#{base}", key: k %>
+   
     <%end %>
 
   <%else %>
 
   <% object.each do |k, v|%>
-    <%= k %>: <br>
-    <%=render "completions/completion_object", object: v, base: "#{base}[#{key}]", key: k %>
+    <label><%= k %>:</label>
     <br>
+    <%=render "completions/completion_object", object: v, base: "#{base}[#{key}]", key: k %>
   <%end %>
 <!--if on generate_list  make this class specific  parent.pass_list -->
 <%end %>

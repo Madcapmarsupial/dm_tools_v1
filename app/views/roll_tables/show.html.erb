@@ -1,2 +1,33 @@
 <h3><%=@roll_table.table_type%></h3>
 
+
+
+
+<!-- EDIT-->
+<%= form_with model: @roll_table do |form| %>  
+    <li><%=form.label :table_type, "Table Type" %>
+      <%=form.text_field :table_type, value: @roll_table.table_type.titleize  %>
+    </li>
+
+    <% @roll_table.completion.each do |roll_num, row_hash| %>
+      <%= form.label :entry_num, roll_num %>:
+
+      <% if row_hash.is_a?(Hash) %>
+        <% row_hash.each do |sub_key, sub_value| %>
+          <%= form.label :col_name, sub_key %>:
+          <%= form.text_field "completion[#{roll_num}][#{sub_key}]", value: sub_value, size: "30x20"%>
+        <%end %>
+      <%else %>
+      <!--should be a string, could be an array -->
+          <%= form.text_field "completion[#{roll_num}]", value: row_hash, size: "30x20"%>
+      <%end%>
+
+        <br>
+    <%end %>
+
+  <%= button_tag "Save", {:class => "bttn-and-txt", :name => "submit", :value => "save"} %>
+  <%= button_tag "Generate", {:class => "bttn-and-txt", :name => "submit", :value => "generate"} %>
+<%end%>
+
+
+    <!-- <%# render "completions/full_completion", object: @roll_table, base: "roll_table", key_list: @roll_table.completion.keys %> -->

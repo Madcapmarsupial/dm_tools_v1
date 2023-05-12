@@ -53,6 +53,15 @@ class Quest < ApplicationRecord
   has_many :details,
     through: :quest_details,
     dependent: :destroy
+
+
+  has_many :quest_tables,
+    primary_key: :id,
+    class_name: "QuestsRollTable",
+      foreign_key: :quest_id,
+      dependent: :destroy
+
+  has_many :roll_tables, through: :quest_tables
 #asso-end
 
   

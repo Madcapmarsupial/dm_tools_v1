@@ -1,40 +1,66 @@
-<h3>New table</h3>
+<h3>New <%=@roll_table.link_type%> table</h3>
+
+<h3><%=@roll_table.table_type%></h3>
+
+<!-- new-->
+<%= form_with model: @roll_table do |form| %>  
+
+  <%= form.hidden_field :row_count, value: @roll_table.row_count %>
+  <%= form.hidden_field :column_count, value: @roll_table.column_count %>
+  <%= form.hidden_field :context, value: @roll_table.context %>
+  <%= form.hidden_field :link_id, value: @roll_table.link_id %>
+  <%= form.hidden_field :link_type, value: @roll_table.link_type %>
 
 
-
-<%= render "roll_tables/form", roll_table: @roll_table %>
-
-
-
-<%= form_with model: @roll_table do |form| %>   
-  <ul> <!-- map component attributes  to =>  completion[attributes]-->
-    <li><%=form.label :name, "#{@roll_table.table_type.titleize} Roll-Table" %></li>
-
-    <li><%= form.label :row_count, "row count" %></li>
-      <%=form.number_field :row_count, value: @roll_table.row_count %> <!-- model_type[title] -->
-      <% i = 0 %>
-      <li><% @roll_table.column_list.split(",").each do |k, v| %>
-      <% i += 1 %>
-        <%=form.label :column, "Column #{i}" %>
-        <input type="text" name="roll_table[column_list]" value="<%=k%>">
-
-        <button>X</button>
-      <%end%>
-      <button>Add column</button>
-    </li>
-  </ul>
   
+    <li><%=form.label :table_type, "Table Type" %>
+       <%= form.text_field :table_type, value: @roll_table.table_type.titleize  %>
+    </li>
+
+  <%@roll_table.row_count.times do |row_num| %>
+    <li><%=form.label :entry_name, "#{row_num+1}" %>
+    <%= form.text_field "completion[#{row_num+1}][name]", placeholder: "Goblin"%>
+    </li>
+  <% end %>
+
 
   <%= button_tag "Save", {:class => "bttn-and-txt", :name => "submit", :value => "save"} %>
   <%= button_tag "Generate", {:class => "bttn-and-txt", :name => "submit", :value => "generate"} %>
-<% end %> 
+<%end%>
+
+<br>
+<br>
 
 
 
-    <form action="<%=new_roll_table_url()%>">
-      <input type="hidden" name="roll_table[table_type]" value="<%@roll_table.table_type%>">
-      <input type="hidden" name="roll_table[row_count]" value="<%@roll_table.row_count%>"> 
-      <input type="hidden" name="roll_table[column_list]" value="<%@roll_table.column_list += ", new column"%>"> 
-      <input type="hidden" name="roll_table[completion]" value="<%@roll_table.completion%>"> 
-    <input type="submit">
-    </form>
+<!-- 
+
+OLD
+
+<%# form_with model: @roll_table do |form| %>  
+    <li><%#form.label :table_type, "Table Type" %>
+    <%# form.text_field :table_type, value: @roll_table.table_type.titleize  %>
+    </li>
+  <%# form.hidden_field :row_count, value: @roll_table.row_count %>
+  <%# form.hidden_field :column_count, value: @roll_table.column_count %>
+
+
+  <%# form.label :labels, "Row Columns" %>
+    <%# @roll_table.column_count.times do |column| %>
+    <%# form.label :column_label,  "#{column+1}" %>
+    <input type="text" name="roll_table[labels][]">
+  <%#end %>
+
+
+
+    
+
+  <%# button_tag "Save", {:class => "bttn-and-txt", :name => "submit", :value => "save"} %>
+  <%# button_tag "Generate", {:class => "bttn-and-txt", :name => "submit", :value => "generate"} %>
+<%#end%>
+
+-->
+
+
+
+

@@ -20,7 +20,7 @@ class ComponentsController < ApplicationController
     field_id = params[:component][:field_id]
     class_type = params[:component][:type]
     subclass = Component.get_class(class_type)
-
+    
     @component = subclass.new(component_params)
 
     if @component.save

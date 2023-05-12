@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_24_033333) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_12_181536) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -74,6 +74,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_24_033333) do
     t.index ["response_id"], name: "index_fields_on_response_id"
   end
 
+  create_table "fields_roll_tables", id: false, force: :cascade do |t|
+    t.bigint "roll_table_id", null: false
+    t.bigint "field_id", null: false
+    t.index ["field_id"], name: "index_fields_roll_tables_on_field_id"
+    t.index ["roll_table_id"], name: "index_fields_roll_tables_on_roll_table_id"
+  end
+
   create_table "frames", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -108,6 +115,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_24_033333) do
     t.index ["user_id"], name: "index_quests_on_user_id"
   end
 
+  create_table "quests_roll_tables", id: false, force: :cascade do |t|
+    t.bigint "roll_table_id", null: false
+    t.bigint "quest_id", null: false
+    t.index ["quest_id"], name: "index_quests_roll_tables_on_quest_id"
+    t.index ["roll_table_id"], name: "index_quests_roll_tables_on_roll_table_id"
+  end
+
   create_table "responses", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.jsonb "completion", null: false
@@ -120,12 +134,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_24_033333) do
   create_table "roll_tables", force: :cascade do |t|
     t.string "table_type", default: "NPC", null: false
     t.integer "row_count", default: 2, null: false
-    t.string "column_list", default: "name, occupation", null: false
-    t.jsonb "completion", default: {"1"=>{"name"=>"Gerald", "occupation"=>"Blacksmith"}, "2"=>{"name"=>"Eleanor", "occupation"=>"Innkeeper"}}, null: false
+    t.jsonb "completion", default: {}, null: false
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "response_id"
+    t.integer "column_count", default: 1
+    t.text "context", default: "", null: false
+    t.string "link_type"
+    t.integer "link_id"
+    t.index ["link_id"], name: "index_roll_tables_on_link_id"
     t.index ["response_id"], name: "index_roll_tables_on_response_id"
     t.index ["user_id"], name: "index_roll_tables_on_user_id"
   end

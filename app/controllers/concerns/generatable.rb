@@ -38,6 +38,8 @@ module Generatable
         if current_user.has_enough_bottlecaps? 
           response = create_response(prompt_str)  #(Quest, @quest.id, prompt_str)
           #validations  built into create_response    
+          
+
           values = { response_id: response.id, completion: response.text_to_hash, name: response.text_to_hash["#{type}_name"]}
           values
         else

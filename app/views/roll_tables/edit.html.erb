@@ -1,4 +1,27 @@
 <h3>Edit Roll-Table</h3>
 
 
+<!-- EDIT-->
+<%= form_with model: @roll_table do |form| %>  
+    <li><%=form.label :table_type, "Table Type" %>
+    <%= form.text_field :table_type, value: @roll_table.table_type.titleize  %>
+    </li>
+  <%= form.hidden_field :row_count, value: @roll_table.row_count %>
+  <%= form.hidden_field :column_count, value: @roll_table.column_count %>
+   
+   <%= form.fields_for :rows do |rows_form| %>
+      <%= rows_form.label :labels, "column labels for each row" %><br>
+      <%@roll_table.column_count.times do |i| %>
+        <%= i + 1%> <%= rows_form.text_field "col_#{i}" %> 
+      <%end %>
+    <%end %>
 
+  <%= button_tag "Save", {:class => "bttn-and-txt", :name => "submit", :value => "save"} %>
+  <%= button_tag "Generate", {:class => "bttn-and-txt", :name => "submit", :value => "generate"} %>
+<%end%>
+
+<br>
+<br>
+
+
+<!--

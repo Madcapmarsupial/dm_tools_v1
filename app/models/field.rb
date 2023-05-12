@@ -22,7 +22,11 @@ class Field < ApplicationRecord
     accepts_nested_attributes_for :components  
 
   
-  
+    has_many :field_tables,
+      class_name: "FieldsRollTable",
+      primary_key: :id,
+      foreign_key: :field_id,
+      dependent: :destroy
 
   def child_type
     "component"

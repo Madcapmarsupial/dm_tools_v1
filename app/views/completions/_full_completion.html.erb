@@ -8,14 +8,14 @@
 <%(key_list - object.hidden_keys).each do |key| %>
 <li>
   <%value = object.completion[key] %>
-  <label for=""><%=object.titleize_key(key)%></label><br>  
+  <label for=""><%=object.titleize_key(key)%></label>
+  <br>  
     <%if object.completion[key] == nil%>
       <textarea name="<%="#{base}[completion][#{key}]"%>" id="" cols="45" rows="1"></textarea>
     <%else %>
       <%= render "completions/completion_object", object: value, base: "#{base}[completion]", key: key%>
     <%end %>
 </li>
-  <br>
 <%end%> 
 </ul>
 
