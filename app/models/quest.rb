@@ -266,7 +266,7 @@ class Quest < ApplicationRecord
   # end
 
   def hidden_keys
-    ["sequence_of_events"]
+    ["sequence_of_events", "villain_name", "objective_name", "setting_name", "quest_name"]
   end
   
 

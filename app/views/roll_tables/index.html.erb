@@ -1,0 +1,7 @@
+Roll Table List
+<%= render @parent.roll_tables %>
+<br>
+<%= link_to 'New Roll Table', new_roll_table_url("#{@parent.get_type}_id" => @parent.id, parent: @parent.get_type) %>:
+
+<%= @parent.name %>
+<%= link_to 'back', @parent %>

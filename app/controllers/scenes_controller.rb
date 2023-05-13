@@ -1,10 +1,20 @@
 class ScenesController < ApplicationController
+  
+  def index
+    @quest = Quest.find_by(id: params[:quest_id])
+    @scenes = @quest.scenes
+    #2.times { @scene.creatures.build }
+    render :index
+  end
+  
   def new
     @quest = Quest.find_by(id: params[:quest_id])
     @scene = Scene.new(quest_id: @quest.id, completion: {})
     #2.times { @scene.creatures.build }
     render :new
   end
+
+
 
   def create
     quest_id = scene_params[:quest_id] 

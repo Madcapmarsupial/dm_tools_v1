@@ -72,6 +72,9 @@ class Objective < Field
      end
       #The lay
 
+      #  def hidden_keys
+      #   [ "objective_name"]
+      # end
 
     private
     def self.ai_values

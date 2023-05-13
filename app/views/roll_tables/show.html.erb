@@ -1,9 +1,8 @@
 <h3><%=@roll_table.table_type%></h3>
 
-
-
-
 <!-- EDIT-->
+<%if @roll_table.response_id != nil %>
+
 <%= form_with model: @roll_table do |form| %>  
     <li><%=form.label :table_type, "Table Type" %>
       <%=form.text_field :table_type, value: @roll_table.table_type.titleize  %>
@@ -25,9 +24,27 @@
         <br>
     <%end %>
 
-  <%= button_tag "Save", {:class => "bttn-and-txt", :name => "submit", :value => "save"} %>
-  <%= button_tag "Generate", {:class => "bttn-and-txt", :name => "submit", :value => "generate"} %>
-<%end%>
+    <%= button_tag "Save", {:class => "bttn-and-txt", :name => "submit", :value => "save"} %>
+    <%= button_tag "Generate", {:class => "bttn-and-txt", :name => "submit", :value => "generate"} %>
+  <%end%>
+<%else %>
 
+  <%= form_with model: @roll_table do |form| %>  
+    <li><%=form.label :table_type, "Table Type" %>
+      <%=form.text_field :table_type, value: @roll_table.table_type.titleize  %>
+    </li>
 
+    <% @roll_table.row_count.times  do |i| %>
+      <%= form.label :entry_num, i + 1 %>:
+          <%= form.text_field "completion[#{i}]", value: (@roll_table.completion[i.to_s] || ""), size: "30x20"%>
+          <br>
+    <%end %>
+
+    <%= button_tag "Save", {:class => "bttn-and-txt", :name => "submit", :value => "save"} %>
+    <%= button_tag "Generate", {:class => "bttn-and-txt", :name => "submit", :value => "generate"} %>
+  <%end %>
+
+<%end %>
+
+<%= link_to "back", :back %>
     <!-- <%# render "completions/full_completion", object: @roll_table, base: "roll_table", key_list: @roll_table.completion.keys %> -->

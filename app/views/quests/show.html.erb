@@ -1,51 +1,16 @@
-<h3><%=@quest.name%></h3> 
 <%= link_to "Home", root_url%>: 
-<%= link_to "Quest List", quests_url%>:
+<h3>Quest Overview</h3>
+<h3><%=@quest.name%></h3> 
+<li>
+  <%= link_to "Quest Info" %>
+  <%= link_to "Scene List",  quest_scenes_url(@quest)%>
+  <%= link_to 'Roll Tables', quest_roll_tables_url(quest_id: @quest.id, parent: "quest") %>
+</li>
 
-<h4><%=render "quests/current_setting", quest: @quest %></h4>
-<h4><%=render "quests/current_villain", quest: @quest %></h4>
-<h4><%=render "quests/current_objective", quest: @quest %></h4>
-
-
-<form action="<%=new_roll_table_url%>" method="get">
-  <input type="hidden" name="roll_table[link_id]" value="<%=@quest.id%>">
-  <input type="hidden" name="roll_table[link_type]" value="quest">
-
-  <label for="table_type">Table Type</label>
-  <input type="text" name="roll_table[table_type]" id="">
-  <label for="row_count">Table length</label>
-  <input type="number" name="roll_table[row_count]" min="2" max="100" id="">
-
-  <input type="hidden" name="roll_table[column_count]" max="4" min="1" id="" value=1>
-  <input type="hidden" name="roll_table[context]" value="<%=@quest.summary%>">
-
-  <input type="submit" value="new">
-</form>
-
-
-<%= render @quest.roll_tables %>
-<!-- render quest.roll_tables
-
-make a join_table
-quest_tables
-scene_tables
-
-
-
--->
-
-<form action="<%=quest_url(@quest)%>" method="post">
-      <br>
-  <input type="hidden" name="_method" value="patch">
-  <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
-   <label for="notes">Notes</label> 
-    <br>
-
-    <textarea name="quest[notes]" id="notes" cols="30" rows="1"><%=@quest.notes%></textarea>
-    <br>
-   <input type="submit" value="save notes">
-</form> 
-
+<h4>Quest Information:</h4>
+<%=render "quests/current_setting", quest: @quest %>
+<%=render "quests/current_villain", quest: @quest %>
+<%=render "quests/current_objective", quest: @quest %>
 
 <%if @quest.response != nil %>
   <%= render "completions/full_completion", object: @quest, base: "quest", key_list: @quest.user_key_list%>
@@ -85,12 +50,39 @@ scene_tables
   
 <%end %>
 
-<h3>Scene list</h3>
 
-<%= render "quests/scene_list", quest: @quest %>
+<form action="<%=quest_url(@quest)%>" method="post">
+      <br>
+  <input type="hidden" name="_method" value="patch">
+  <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+   <label for="notes">Notes</label> 
+    <br>
+
+    <textarea name="quest[notes]" id="notes" cols="30" rows="1"><%=@quest.notes%></textarea>
+    <br>
+   <input type="submit" value="save notes">
+</form> 
+
+<form action="<%=new_roll_table_url%>" method="get">
+  Create a table (enemies, npcs, loot, encounters, etc) <br>
+  <input type="hidden" name="roll_table[link_id]" value="<%=@quest.id%>">
+  <input type="hidden" name="roll_table[link_type]" value="quest">
+
+  <label for="table_type">Table Type:</label>
+  <input type="text" name="roll_table[table_type]" id="" placeholder="plot threads">
+  <label for="row_count">Table length</label>
+  <input type="number" name="roll_table[row_count]" min="2" max="100" value=6 id="">
+
+  <input type="hidden" name="roll_table[column_count]" max="4" min="1" id="" value=1>
+  <input type="hidden" name="roll_table[context]" value="<%=@quest.summary%>">
+
+  <input type="submit" value="new">
+</form>
 
 
-
+<label for="table_list">Table List:</label>
+<ul><%= render @quest.roll_tables %>
+</ul>
 
 
 <!-- 

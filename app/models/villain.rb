@@ -61,6 +61,10 @@ class Villain < Field
     #   EOT
     #  end
 
+    #  def hidden_keys
+    #     [ "villain_name"]
+    #   end
+
     private
     def self.ai_values
       []

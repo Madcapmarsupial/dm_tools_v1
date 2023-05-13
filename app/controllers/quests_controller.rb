@@ -119,13 +119,17 @@ class QuestsController < ApplicationController
   def create_s_o_v_fields(params, quest)
     #quest[field_name]
     if quest.settings.empty?
-      Setting.create(quest_id: params[:id], name: params[:quest][:setting])
+      s_name = params[:quest][:setting]
+      Setting.create(quest_id: params[:id], name: s_name, completion: {"setting_name" => s_name})
+
     end
     if quest.objectives.empty?
-      Objective.create(quest_id: params[:id], name: params[:quest][:objective])
+      o_name = params[:quest][:objective]
+      Objective.create(quest_id: params[:id], name: o_name, completion: {"objective_name" => o_name})
     end
     if quest.villains.empty?      
-      Villain.create(quest_id: params[:id], name: params[:quest][:villain])
+       v_name = params[:quest][:villain]
+      Villain.create(quest_id: params[:id], name: v_name, completion: {"villain_name" => v_name})
     end
   end
 

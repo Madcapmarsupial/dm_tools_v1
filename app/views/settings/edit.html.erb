@@ -1,3 +1,4 @@
-<h1>Edit Setting</h3>
+<h1><%= @setting.setting_name%></h3>
+
 <%= link_to 'Quest', quest_url(@setting.quest_id) %><br>
 <%=render "fields/form", field: @setting%>

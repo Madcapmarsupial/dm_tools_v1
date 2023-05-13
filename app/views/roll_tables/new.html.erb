@@ -1,8 +1,5 @@
-<h3>New <%=@roll_table.link_type%> table</h3>
+<h3>New <%=@roll_table.link_type%> Table</h3>
 
-<h3><%=@roll_table.table_type%></h3>
-
-<!-- new-->
 <%= form_with model: @roll_table do |form| %>  
 
   <%= form.hidden_field :row_count, value: @roll_table.row_count %>
@@ -10,26 +7,26 @@
   <%= form.hidden_field :context, value: @roll_table.context %>
   <%= form.hidden_field :link_id, value: @roll_table.link_id %>
   <%= form.hidden_field :link_type, value: @roll_table.link_type %>
-
-
   
     <li><%=form.label :table_type, "Table Type" %>
        <%= form.text_field :table_type, value: @roll_table.table_type.titleize  %>
+       <p>loot, side-quests, plot threads, encounters, etc</p>
     </li>
-
-  <%@roll_table.row_count.times do |row_num| %>
-    <li><%=form.label :entry_name, "#{row_num+1}" %>
-    <%= form.text_field "completion[#{row_num+1}][name]", placeholder: "Goblin"%>
+     <li><%=form.label :row_count, "Table Length" %>
+       <%= form.number_field :row_count, value: 6 %>
     </li>
-  <% end %>
-
 
   <%= button_tag "Save", {:class => "bttn-and-txt", :name => "submit", :value => "save"} %>
   <%= button_tag "Generate", {:class => "bttn-and-txt", :name => "submit", :value => "generate"} %>
 <%end%>
 
-<br>
-<br>
+<%= link_to 'back', :back %>
+
+
+
+
+
+
 
 
 

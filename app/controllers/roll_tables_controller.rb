@@ -1,16 +1,37 @@
 class RollTablesController < ApplicationController
   include Generatable
 
+  def index
+
+    parent_class = PARENTS[params[:parent]]
+    @parent = parent_class.find_by(id: params["#{parent_class.get_type}_id"])
+    @roll_tables = @parent.roll_tables
+    render :index
+  end
+
+
   def new
     #check params to see of the table should be linked to a join table
-    @roll_table = RollTable.new(roll_table_params)
-    @roll_table.user_id = current_user.id
+      if params[:parent] != nil
+        parent_class = PARENTS[params[:parent]]
+        parent = parent_class.find_by(id: params["#{parent_class.get_type}_id"])
+        parent_values = {context: parent.summary, link_type: parent.get_type, link_id: parent.id}
+      else
+        parent_values = {}
+      end
+      @roll_table = RollTable.new(parent_values)
+      @roll_table.user_id = current_user.id
+      #@roll_table.link_id = params[:link_id]
+      #@roll_table.link_type = params[:link_type]
+      #@roll_table.context = params[:context]
+
     render :new
   end
 
   def create
     @roll_table = RollTable.new(roll_table_params)
     @roll_table.user_id = current_user.id
+
 
     if @roll_table.save
       create_join_table!(@roll_table)
@@ -80,6 +101,10 @@ class RollTablesController < ApplicationController
     params.require(:roll_table).permit(:context, :row_count, :table_type, :column_count, :link_type, :link_id, completion: {} )
   end
 
+  def link_params
+    params.permit(:context, :row_count, :table_type, :link_id, :link_type)
+  end
+
   def row_data
     roll_table_params[:rows_attributes]["0"]
   end
@@ -87,7 +112,9 @@ class RollTablesController < ApplicationController
   def create_join_table!(model) #params  #link_type link_id
     type = model.link_type
     join_table_class = LINKS[type]
-    join_table_class.create!("#{type}_id" => model.link_id, "roll_table_id" => model.id)
+    if join_table_class != nil
+      join_table_class.create!("#{type}_id" => model.link_id, "roll_table_id" => model.id)
+    end
   end
 
   LINKS =  {
@@ -98,4 +125,14 @@ class RollTablesController < ApplicationController
       "field" => FieldsRollTable
       #"creature"
     }
+
+     PARENTS =  {
+      "quest" => Quest, 
+      #"villain" => FieldTable,
+      #"settting" => FieldTable,
+      #"objective" => FieldTable,
+      "field" => Field
+      #"creature"
+    }
+  
 end

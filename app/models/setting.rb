@@ -51,13 +51,14 @@ class Setting < Field
      end
       #The layout parameter should have rooms  room comp
 
-
-
+      # def hidden_keys
+      #   [ "setting_name"]
+      # end
 
       private
     def self.ai_values
       [ 
-        #"setting_name", "summary", "description", "layout", "dwellers",
+       # "setting_name"#, "summary", "description", "layout", "dwellers",
       #"secrets", "lore", "history", "hazards", "narrative_connections"
     ]
     end

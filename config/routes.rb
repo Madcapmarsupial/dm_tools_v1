@@ -20,18 +20,19 @@ Rails.application.routes.draw do
   
   #what is accesed through a quest
   resources :quests, only: [:create, :show, :new, :index, :update] do 
+    
     member do
       patch 'update_scene_list'
       patch 'generate'
       
     end
-
+    
     #resources :fields, only: [:new, :index]
+    resources :roll_tables, only: [:new, :index]
     resources :scenes, only: [:new, :index]
     resources :settings, only: [:new, :index]
     resources :objectives, only: [:new, :index]
     resources :villains, only: [:new, :index]
-      #resources :roll_tables, only: [:new, :index]
 
 
   end

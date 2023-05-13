@@ -1,12 +1,8 @@
 
-<!--list of existing scenes
-
-  
-
- -->
- this is depreciated
+<!--list of existing scenes -->
+SCENE LIST
 <ol>
- <%= render quest.scenes %>   <!--scenes/_scenes  is rendered for each scene-->
+ <%= render @scenes %>   <!--scenes/_scenes  is rendered for each scene-->
 
 <li>
 <form action=" <%=new_quest_scene_url(@quest.id)%>" method="get">
