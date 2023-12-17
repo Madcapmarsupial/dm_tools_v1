@@ -2,7 +2,6 @@
 <h3>Quest Overview</h3>
 <h3><%=@quest.name%></h3> 
 <li>
-  <%= link_to "Quest Info" %>#<br>
   <%= link_to "Scene List",  quest_scenes_url(@quest)%>
   <%= link_to 'Roll Tables', quest_roll_tables_url(quest_id: @quest.id, parent: "quest") %>
 </li>

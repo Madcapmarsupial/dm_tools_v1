@@ -7,30 +7,20 @@
   <body>
      <header>
       <h1>DM Tool Suite</h1>
-      <p>hello <%=current_user.email%>: Coins: <%=current_user.balance.to_i %></p>
-      <nav>
-        <ul>
-          <li><a href="#">Add More Coins</a></li>
-          <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>          
-        </ul>
-      </nav>
+      <p>Hello <%=current_user.email%>:</p>
+         <p> Coins: <%=current_user.balance.to_i %></p>
+        
     </header>
 
     <main>
       <section>
-        <h2>Welcome To Your Tool Suite!</h2>
+        <h2>Welcome to your tool suite!</h2>
         <p>Use our tools to generate a unique and exciting campaign for your next RPG adventure!</p>
-        <%= link_to "New Quest", new_quest_url, method: :get%> <br> <br>
-        <a href="#" class="btn">Create a Roll Table</a>
-        <a href="#" class="btn">Create a Monster</a>
-        <a href="#" class="btn">Create a Player Character</a>
-        <a href="#" class="btn">Create a Villain</a>
-        <a href="#" class="btn">Create a Setting</a>
-
-
-         <li><form action="<%=quests_url%>" method="get">
+          <%= link_to "New Quest", new_quest_url, method: :get%>
+          <br><li><form action="<%=quests_url%>" method="get">
             <input type="submit" value="Quest List">
-          </form></li>
+            </form>
+          </li>
 
 
         <%  quest = current_user.quests.last %>
@@ -38,6 +28,9 @@
         <p><%= "pick up where you left off"%></p>
         <%=link_to "#{quest.name}", quest_url(quest.id)  %>
         <%end %>
+        <br><%= link_to "Sign out", destroy_user_session_path, method: :delete %>
+
+
       </section>
     </main>
     <footer>
